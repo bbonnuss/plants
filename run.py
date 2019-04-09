@@ -11,6 +11,7 @@ class Scene():
     def __init__():
         self.inprocess = True
         self.click_pos = pygame.mouse.get_pos()
+        self.blackground = None
 
 
 class Main_menu(Scene):
@@ -21,8 +22,15 @@ class Shop_menu(Scene):
     Scene.__init__(self)
 
 
-class Shop_menu(Scene):
+class Storage_menu(Scene):
     Scene.__init__(self)
+
+
+class Achievement(Scene):
+    Scene.__init__(self)
+
+
+class 
 
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
