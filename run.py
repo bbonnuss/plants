@@ -7,7 +7,7 @@ from os.path import join
 
 
 # Class ========================== Class ========================== Class
-# resouce manager
+# resouce_manager ---------------- resouce_manager
 class Sound():
     def __init__(self):
         self.main_theme = None
@@ -16,14 +16,27 @@ class Image():
     def __init__(self):
         self.main_bg = None
         
+        
 # Menu --------------------------- Menu
 class Scene():
     def __init__(self):
         self.inprocess = True
         self.click_pos = pygame.mouse.get_pos()
-        self.blackground = Image().main_bg
-    
+
 # main menu
+class Main_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        run = True
+        while run:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+    
+# newgame
 class newgame_menu(Scene):
     def __init__(self):
         Scene.__init__(self)
@@ -35,9 +48,8 @@ class newgame_menu(Scene):
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
-
-# main menu
-class Main_menu(Scene):
+# loadgame
+class Load_menu(Scene):
     def __init__(self):
         Scene.__init__(self)
     
@@ -47,7 +59,6 @@ class Main_menu(Scene):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-
 
 # shop
 class Shop_menu(Scene):
@@ -55,12 +66,12 @@ class Shop_menu(Scene):
         Scene.__init__(self)
 
     def run(self):
-        while True:
+        run = True
+        while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-
+                    run = False
 
 # คลัง
 class Storage_menu(Scene):
@@ -68,12 +79,12 @@ class Storage_menu(Scene):
         Scene.__init__(self)
     
     def run(self):
-        while True:
+        run = True
+        while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-
+                    run = False
 
 # Achievement
 class Achievement_manu(Scene):
@@ -81,12 +92,12 @@ class Achievement_manu(Scene):
         Scene.__init__(self)
     
     def run(self):
-        while True:
+        run = True
+        while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-
+                    run = False
 
 # แปรรูป
 class Process_menu(Scene):
@@ -94,14 +105,15 @@ class Process_menu(Scene):
         Scene.__init__(self)
     
     def run(self):
-        while True:
+        run = True
+        while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    run = False
 
 
-# Player ------------------------- Menu
+# Mechanic ----------------------- Mechanic
 class Player():
     def __init__(self):
         self.money = 0
@@ -111,7 +123,6 @@ class Farmland():
     def __init__(self):
         self.size = 4
         
-# mechanic class
 class Plant():
     def __init__(self):
         self.type = None
@@ -134,6 +145,7 @@ def main():
     clock = pygame.time.Clock()
     run = True
     while run:
+        print ('main')
         # fps 
         clock.tick(30)
         
@@ -149,13 +161,17 @@ def main():
             main_menu.run()
 
         if selected == "new_game":
-            new_game = None
+            new_game = Newgame_menu
             new_game.run()
+
+        if selected == "continue":
+            load_menu = Load_menu()
+            load_menu.run()
 
         if selected == "credit":
             credit = None
             credit.run()
-            
+
         if selected == "exit":
             run = False
 
