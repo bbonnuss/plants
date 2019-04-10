@@ -233,8 +233,6 @@ def main():
 
             # Main_menu -------------- Main_menu
             mouse_pos = pygame.mouse.get_pos()
-            #print (mouse_pos)
-            #print (event)
 
             # ปุ่ม newgame
             newgame_a = (220,100)
