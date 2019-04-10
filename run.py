@@ -16,28 +16,15 @@ class Image():
     def __init__(self):
         self.main_bg = None
         
-        
+
 # Menu --------------------------- Menu
 class Scene():
     def __init__(self):
         self.inprocess = True
         self.click_pos = pygame.mouse.get_pos()
-
-# main menu
-class Main_menu(Scene):
-    def __init__(self):
-        Scene.__init__(self)
-    
-    def run(self):
-        run = True
-        while run:
-            # Exit game 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
     
 # newgame
-class newgame_menu(Scene):
+class Newgame_menu(Scene):
     def __init__(self):
         Scene.__init__(self)
     
@@ -46,7 +33,7 @@ class newgame_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    return "quit"
 
 # loadgame
 class Load_menu(Scene):
@@ -58,7 +45,20 @@ class Load_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    return "quit"
+
+# credit
+class Credit_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        run = True
+        while run:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return "quit"
 
 # shop
 class Shop_menu(Scene):
@@ -71,7 +71,7 @@ class Shop_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    return "quit"
 
 # คลัง
 class Storage_menu(Scene):
@@ -84,7 +84,7 @@ class Storage_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    return "quit"
 
 # Achievement
 class Achievement_manu(Scene):
@@ -97,7 +97,7 @@ class Achievement_manu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    return "quit"
 
 # แปรรูป
 class Process_menu(Scene):
@@ -110,7 +110,7 @@ class Process_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    return "quit"
 
 
 # Mechanic ----------------------- Mechanic
@@ -133,8 +133,7 @@ resolution = (720,480)
 game_window = pygame.display.set_mode(resolution)
 pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing  Vegetables ")
 
-# Menu Page=
-#bg = pygame.image.load(os.path.join('Game', 'bg.png'))
+
 game_window.fill((255,255,255))
 pygame.display.update()
 
@@ -145,7 +144,6 @@ def main():
     clock = pygame.time.Clock()
     run = True
     while run:
-        print ('main')
         # fps 
         clock.tick(30)
         
@@ -153,26 +151,25 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                
+
+        # Main_menu -------------- Main_menu
+        # input
+
         
         # selection
-        if selected == "main_menu":
-            main_menu = Main_menu()
-            main_menu.run()
-
         if selected == "new_game":
-            new_game = Newgame_menu
-            new_game.run()
+            new_game = Newgame_menu()
+            selected = new_game.run()
 
         if selected == "continue":
             load_menu = Load_menu()
-            load_menu.run()
+            selected = load_menu.run()
 
         if selected == "credit":
-            credit = None
-            credit.run()
+            credit = Credit_menu()
+            selected = credit.run()
 
-        if selected == "exit":
+        if selected == "quit":
             run = False
 
 
