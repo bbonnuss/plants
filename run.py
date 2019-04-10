@@ -9,38 +9,85 @@ from os.path import join
 # Class ========================== Class ========================== Class
 # resouce manager
 class Sound():
+    def __init__(self):
         self.main_theme = None
 
 class Image():
+    def __init__(self):
         self.main_bg = None
         
 # Menu --------------------------- Menu
 class Scene():
-    def __init__():
+    def __init__(self):
         self.inprocess = True
         self.click_pos = pygame.mouse.get_pos()
-        self.blackground = None
-        self.theme_song = None
+        self.blackground = Image().main_bg
+    
 
 # main menu
 class Main_menu(Scene):
-    Scene.__init__(self)
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # shop
 class Shop_menu(Scene):
-    Scene.__init__(self)
+    def __init__(self):
+        Scene.__init__(self)
+
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # คลัง
 class Storage_menu(Scene):
-    Scene.__init__(self)
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # Achievement
 class Achievement_manu(Scene):
-    Scene.__init__(self)
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # แปรรูป
 class Process_menu(Scene):
-    Scene.__init__(self)
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # Player ------------------------- Menu
 class Player():
@@ -49,13 +96,13 @@ class Player():
         self.player_farm = None
 
 class Farmland():
-    def __init__():
+    def __init__(self):
         self.size = 4
         
 # mechanic class
 class Plant():
     def __init__(self):
-        self.
+        self.type = None
 
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
@@ -71,17 +118,24 @@ pygame.display.update()
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
 
+    # First run
+    selected = "main_menu"
+
     while True:
+
         # Exit game 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
         
-        # MainMenu
-        pygame.image.load(join("File","main_menu_blackground.png")).convert_alpha()
-        pygame.display.update()
-        # control
+        # selection
+        if selected == "main_menu":
+            main_menu = Main_menu()
+            main_menu.run()
+        if selected == "achievement":
+            
+
 
         
-
+# RUN !
 main()
