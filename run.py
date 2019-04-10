@@ -4,6 +4,18 @@ import sys
 from os.path import join
 
 # Function ======================= Function ======================= Function
+# เช็คว่าตำแหน่งเมาส์ โดนปุ่มไหม
+def is_hit_box(position,box_a,box_b):
+    # position คือ ตำแหน่งเมาส์ (tuple 2 element)(จุด x,y)
+    # box_a คือ จุดมุมซ้ายบนของปุ่ม (tuple 2 element)(จุด x,y)
+    # box_b คือ จุดมุมขวาล่างของปุ่ม (tuple 2 element)(จุด x,y)
+
+    if box_a[0] < position[0] < box_b[0] : # ถ้า x อยู่ระหว่างนั้น
+        if box_a[1] < position[1] < box_b[1] :
+            return True
+    
+    return False
+    pass
 
 
 # Class ========================== Class ========================== Class
@@ -33,7 +45,8 @@ class Newgame_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "quit"
+                    return not run
+        return run
 
 # loadgame
 class Load_menu(Scene):
@@ -45,7 +58,8 @@ class Load_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "quit"
+                    return not run
+        return run
 
 # shop
 class Shop_menu(Scene):
@@ -60,7 +74,8 @@ class Shop_menu(Scene):
                 if event.type == pygame.QUIT:
                     # USING SAVE FUNCTION
                     # save()
-                    return "quit"
+                    return not run
+        return run
 
 # คลัง
 class Storage_menu(Scene):
@@ -75,7 +90,8 @@ class Storage_menu(Scene):
                 if event.type == pygame.QUIT:
                     # USING SAVE FUNCTION
                     # save()
-                    return "quit"
+                    return not run
+        return run
 
 # แปรรูป
 class Process_menu(Scene):
@@ -90,7 +106,8 @@ class Process_menu(Scene):
                 if event.type == pygame.QUIT:
                     # USING SAVE FUNCTION
                     # save()
-                    return "quit"
+                    return not run
+        return run
 
 # Achievement
 class Achievement_manu(Scene):
@@ -103,7 +120,8 @@ class Achievement_manu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "quit"
+                    return not run
+        return run
 
 # credit
 class Credit_menu(Scene):
@@ -116,7 +134,8 @@ class Credit_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "quit"
+                    return not run
+        return run
 
 
 # Mechanic ----------------------- Mechanic
@@ -126,7 +145,7 @@ class Player():
         self.player_farm = None
         self.inventory = Inventory()
 
-class Inventory(self):
+class Inventory():
     def __init__(self):
         # ผัก
         self.wheat = 0
@@ -172,7 +191,7 @@ class Plant():
     def __init__(self):
         self.type = None
 
-class 
+
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
 resolution = (720,480)
@@ -200,23 +219,34 @@ def main():
                 run = False
 
         # Main_menu -------------- Main_menu
-        
+        mouse_pos = pygame.mouse.get_pos()
+        print (mouse_pos)
 
-        
-        # selection
-        if selected == "new_game":
+        # ปุ่ม newgame
+        newgame_a = (300,100)
+        newgame_b = (500,200)
+        if is_hit_box(mouse_pos,newgame_a, newgame_b):
             new_game = Newgame_menu()
-            selected = new_game.run()
+            run = new_game.run()
 
-        if selected == "continue":
+        # ปุ่ม continue
+        continue_a = (300,100)
+        continue_b = (300,100)
+        if is_hit_box(mouse_pos,newgame_a, newgame_b):
             load_menu = Load_menu()
-            selected = load_menu.run()
+            run = load_menu.run()
 
-        if selected == "credit":
+        # ปุ่ม credit
+        credit_a = (300,100)
+        credit_b = (300,100)
+        if is_hit_box(mouse_pos,newgame_a, newgame_b):
             credit = Credit_menu()
-            selected = credit.run()
+            run = credit.run()
 
-        if selected == "quit":
+        # ปุ่ม quit
+        quit_a = (300,100)
+        quit_b = (300,100)
+        if is_hit_box(mouse_pos,newgame_a, newgame_b):
             run = False
 
 
