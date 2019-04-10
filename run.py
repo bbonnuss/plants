@@ -34,33 +34,7 @@ class Scene():
     def __init__(self):
         self.inprocess = True
         self.click_pos = pygame.mouse.get_pos()
-    
-# newgame
-class Newgame_menu(Scene):
-    def __init__(self):
-        Scene.__init__(self)
-    
-    def run(self):
-        while True:
-            # Exit game 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return not run
-        return run
-
-# loadgame
-class Load_menu(Scene):
-    def __init__(self):
-        Scene.__init__(self)
-    
-    def run(self):
-        while True:
-            # Exit game 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return not run
-        return run
-
+        
 # shop
 class Shop_menu(Scene):
     def __init__(self):
@@ -69,12 +43,13 @@ class Shop_menu(Scene):
     def run(self):
         run = True
         while run:
-            # Exit game 
             for event in pygame.event.get():
+                # Exit game 
                 if event.type == pygame.QUIT:
                     # USING SAVE FUNCTION
-                    # save()
+                    # save():
                     return not run
+                
         return run
 
 # คลัง
@@ -85,12 +60,13 @@ class Storage_menu(Scene):
     def run(self):
         run = True
         while run:
-            # Exit game 
             for event in pygame.event.get():
+                # Exit game 
                 if event.type == pygame.QUIT:
                     # USING SAVE FUNCTION
-                    # save()
+                    # save():
                     return not run
+                
         return run
 
 # แปรรูป
@@ -117,10 +93,47 @@ class Achievement_manu(Scene):
     def run(self):
         run = True
         while run:
-            # Exit game 
             for event in pygame.event.get():
+                # Exit game 
                 if event.type == pygame.QUIT:
                     return not run
+                if event.type == pygame.MOUSEBUTTONUP:
+                    break
+                
+        return run
+
+# newgame
+class Newgame_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        run = True
+        while run:
+            for event in pygame.event.get():
+                # Exit game 
+                if event.type == pygame.QUIT:
+                    return not run
+                if event.type == pygame.MOUSEBUTTONUP:
+                    break
+                
+        return run
+    
+# loadgame
+class Load_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        run = True
+        while run:
+            for event in pygame.event.get():
+                # Exit game 
+                if event.type == pygame.QUIT:
+                    return not run
+                if event.type == pygame.MOUSEBUTTONUP:
+                    break
+
         return run
 
 # credit
@@ -131,10 +144,13 @@ class Credit_menu(Scene):
     def run(self):
         run = True
         while run:
-            # Exit game 
             for event in pygame.event.get():
+                # Exit game 
                 if event.type == pygame.QUIT:
                     return not run
+                if event.type == pygame.MOUSEBUTTONUP:
+                    break
+                
         return run
 
 
@@ -196,7 +212,6 @@ class Plant():
 pygame.init()
 resolution = (800,600)
 game_window = pygame.display.set_mode(resolution)
-game_name = "Cute, Ginger, Cat-ting Stealing  Vegetables"
 pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 
 
@@ -218,37 +233,57 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-        # Main_menu -------------- Main_menu
-        mouse_pos = pygame.mouse.get_pos()
-        print (mouse_pos)
+            # Main_menu -------------- Main_menu
+            mouse_pos = pygame.mouse.get_pos()
+            #print (mouse_pos)
+            #print (event)
 
-        # ปุ่ม newgame
-        newgame_a = (220,100)
-        newgame_b = (500,200)
-        if is_hit_box(mouse_pos,newgame_a, newgame_b):
-            new_game = Newgame_menu()
-            #run = new_game.run()
+            # ปุ่ม newgame
+            newgame_a = (220,100)
+            newgame_b = (500,200)
+            if is_hit_box(mouse_pos,newgame_a, newgame_b):
+                # เรืองแสง (ถ้าว่างค่อยทำ)
+                growing = None
 
-        # ปุ่ม continue
-        continue_a = (220,100)
-        continue_b = (500,100)
-        if is_hit_box(mouse_pos,newgame_a, newgame_b):
-            load_menu = Load_menu()
-            #run = load_menu.run()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    print ('Log : Newgame')
+                    new_game = Newgame_menu()
+                    run = new_game.run()
 
-        # ปุ่ม credit
-        credit_a = (220,100)
-        credit_b = (500,100)
-        if is_hit_box(mouse_pos,newgame_a, newgame_b):
-            credit = Credit_menu()
-            #run = credit.run()
+            # ปุ่ม continue
+            continue_a = (220,100)
+            continue_b = (500,100)
+            if is_hit_box(mouse_pos,newgame_a, newgame_b):
+                # เรืองแสง (ถ้าว่างค่อยทำ)
+                growing = None
 
-        # ปุ่ม quit
-        quit_a = (220,100)
-        quit_b = (500,100)
-        if is_hit_box(mouse_pos,newgame_a, newgame_b):
-            #run = False
-            pass
+                if event.type == pygame.MOUSEBUTTONUP:
+                    print ('Log : Continue')
+                    load_menu = Load_menu()
+                    run = load_menu.run()
+
+            # ปุ่ม credit
+            credit_a = (220,100)
+            credit_b = (500,100)
+            if is_hit_box(mouse_pos,newgame_a, newgame_b):
+                print ('Log : Credit')
+                # เรืองแสง (ถ้าว่างค่อยทำ)
+                growing = None
+
+                if event.type == pygame.MOUSEBUTTONUP:
+                    credit = Credit_menu()
+                    run = credit.run()
+
+            # ปุ่ม exit
+            quit_a = (220,100)
+            quit_b = (500,100)
+            if is_hit_box(mouse_pos,newgame_a, newgame_b):
+                print ('Log : Exit')
+                # เรืองแสง (ถ้าว่างค่อยทำ)
+                growing = None
+
+                if event.type == pygame.MOUSEBUTTONUP:
+                    run = False
 
 
 
