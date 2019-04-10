@@ -23,6 +23,18 @@ class Scene():
         self.click_pos = pygame.mouse.get_pos()
         self.blackground = Image().main_bg
     
+# main menu
+class newgame_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        while True:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
 
 # main menu
 class Main_menu(Scene):
@@ -118,24 +130,39 @@ pygame.display.update()
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
 
-    # First run
     selected = "main_menu"
-
-    while True:
-
+    clock = pygame.time.Clock()
+    run = True
+    while run:
+        # fps 
+        clock.tick(30)
+        
         # Exit game 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                run = False
+                
         
         # selection
         if selected == "main_menu":
             main_menu = Main_menu()
             main_menu.run()
-        if selected == "achievement":
+
+        if selected == "new_game":
+            new_game = None
+            new_game.run()
+
+        if selected == "credit":
+            credit = None
+            credit.run()
             
+        if selected == "exit":
+            run = False
+
+
 
 
         
 # RUN !
 main()
+pygame.quit()
