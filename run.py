@@ -47,19 +47,6 @@ class Load_menu(Scene):
                 if event.type == pygame.QUIT:
                     return "quit"
 
-# credit
-class Credit_menu(Scene):
-    def __init__(self):
-        Scene.__init__(self)
-    
-    def run(self):
-        run = True
-        while run:
-            # Exit game 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return "quit"
-
 # shop
 class Shop_menu(Scene):
     def __init__(self):
@@ -71,6 +58,8 @@ class Shop_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    # USING SAVE FUNCTION
+                    # save()
                     return "quit"
 
 # คลัง
@@ -84,6 +73,23 @@ class Storage_menu(Scene):
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    # USING SAVE FUNCTION
+                    # save()
+                    return "quit"
+
+# แปรรูป
+class Process_menu(Scene):
+    def __init__(self):
+        Scene.__init__(self)
+    
+    def run(self):
+        run = True
+        while run:
+            # Exit game 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    # USING SAVE FUNCTION
+                    # save()
                     return "quit"
 
 # Achievement
@@ -99,8 +105,8 @@ class Achievement_manu(Scene):
                 if event.type == pygame.QUIT:
                     return "quit"
 
-# แปรรูป
-class Process_menu(Scene):
+# credit
+class Credit_menu(Scene):
     def __init__(self):
         Scene.__init__(self)
     
@@ -118,20 +124,61 @@ class Player():
     def __init__(self):
         self.money = 0
         self.player_farm = None
+        self.inventory = Inventory()
+
+class Inventory(self):
+    def __init__(self):
+        # ผัก
+        self.wheat = 0
+        self.wheat_seed = 0
+        self.cucumber = 0
+        self.cucumber_seed = 0
+        self.tomato = 0
+        self.tomato_seed = 0
+        self.potato = 0
+        self.potato_seed = 0
+        self.purplecabbage = 0
+        self.purplecabbage_seed = 0
+        # ผลไม้
+        self.orange = 0
+        self.orange_seed = 0
+        self.mango = 0
+        self.mango_seed = 0
+        self.apple = 0
+        self.apple_seed = 0
+        self.melon = 0
+        self.melon_seed = 0
+        self.grape = 0
+        self.grape_seed = 0
+        # แปรรูป
+        self.wheat_processed = 0
+        self.cucumber_processed = 0
+        self.tomato_processed = 0
+        self.potato_processed = 0
+        self.purplecabbage_processed = 0
+        
+        self.orange_processed = 0
+        self.mango_processed = 0
+        self.apple_processed = 0
+        self.melon_processed = 0
+        self.grape_processed = 0
 
 class Farmland():
     def __init__(self):
         self.size = 4
+
         
 class Plant():
     def __init__(self):
         self.type = None
 
+class 
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
 resolution = (720,480)
 game_window = pygame.display.set_mode(resolution)
-pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing  Vegetables ")
+game_name = "Cute, Ginger, Cat-ting Stealing  Vegetables"
+pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 
 
 game_window.fill((255,255,255))
@@ -153,7 +200,7 @@ def main():
                 run = False
 
         # Main_menu -------------- Main_menu
-        # input
+        
 
         
         # selection
