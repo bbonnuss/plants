@@ -194,7 +194,7 @@ class Plant():
 
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
-resolution = (720,480)
+resolution = (800,600)
 game_window = pygame.display.set_mode(resolution)
 game_name = "Cute, Ginger, Cat-ting Stealing  Vegetables"
 pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
@@ -223,31 +223,32 @@ def main():
         print (mouse_pos)
 
         # ปุ่ม newgame
-        newgame_a = (300,100)
+        newgame_a = (220,100)
         newgame_b = (500,200)
         if is_hit_box(mouse_pos,newgame_a, newgame_b):
             new_game = Newgame_menu()
-            run = new_game.run()
+            #run = new_game.run()
 
         # ปุ่ม continue
-        continue_a = (300,100)
-        continue_b = (300,100)
+        continue_a = (220,100)
+        continue_b = (500,100)
         if is_hit_box(mouse_pos,newgame_a, newgame_b):
             load_menu = Load_menu()
-            run = load_menu.run()
+            #run = load_menu.run()
 
         # ปุ่ม credit
-        credit_a = (300,100)
-        credit_b = (300,100)
+        credit_a = (220,100)
+        credit_b = (500,100)
         if is_hit_box(mouse_pos,newgame_a, newgame_b):
             credit = Credit_menu()
-            run = credit.run()
+            #run = credit.run()
 
         # ปุ่ม quit
-        quit_a = (300,100)
-        quit_b = (300,100)
+        quit_a = (220,100)
+        quit_b = (500,100)
         if is_hit_box(mouse_pos,newgame_a, newgame_b):
-            run = False
+            #run = False
+            pass
 
 
 
