@@ -25,7 +25,7 @@ class Sound():
 
 class Image():
     def __init__(self):
-        self.main_bg = None
+        self.main_bg = pygame.image.load(join('assets','image','stupid_bg.png')).convert()
         
 
 # Menu --------------------------- Menu
@@ -210,28 +210,42 @@ class Plant():
 # Launcher ======================= Launcher ======================= Launcher 
 pygame.init()
 resolution = (800,600)
-game_window = pygame.display.set_mode(resolution)
+window = pygame.display.set_mode(resolution)
 pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 
 
-game_window.fill((255,255,255))
+window.fill((255,255,255))
 pygame.display.update()
 
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
+    # background 
+    window.blit(Image().main_bg, (0, 0))
 
+    # newgame botton
+    pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
+    # continue botton
+    pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
+    # credit botton
+    pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
+    # exit botton
+    pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
+
+    pygame.display.update()
+    # loop per second 
     clock = pygame.time.Clock()
+
     run = True
     while run:
         # loop per second 
         clock.tick(30)
         
-        # Exit game 
+        # input - output
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-            # Main_menu -------------- Main_menu
+            # Botton ------------------------- Botton
             mouse_pos = pygame.mouse.get_pos()
 
             # ปุ่ม newgame
@@ -287,4 +301,6 @@ def main():
         
 # RUN !
 main()
+
+# EXIT !
 pygame.quit()
