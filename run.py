@@ -7,6 +7,13 @@ from os.path import join
 
 
 # Class ========================== Class ========================== Class
+# resouce manager
+class Sound():
+        self.main_theme = None
+
+class Image():
+        self.main_bg = None
+        
 # Menu --------------------------- Menu
 class Scene():
     def __init__():
@@ -33,7 +40,7 @@ class Achievement_manu(Scene):
 
 # แปรรูป
 class Process_menu(Scene):
-
+    Scene.__init__(self)
 
 # Player ------------------------- Menu
 class Player():
