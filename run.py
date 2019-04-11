@@ -24,7 +24,6 @@ class Sound():
         self.main_theme = None
         self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
         self.click = None
-        
 
 class Image():
     def __init__(self):
@@ -51,7 +50,7 @@ class Player_farm():
 
         
 # shop
-class Shop_menu(Scene):
+class Shop_menu():
     def __init__(self):
         self.inprocess = True
 
@@ -68,7 +67,7 @@ class Shop_menu(Scene):
         return run
 
 # คลัง
-class Storage_menu(Scene):
+class Storage_menu():
     def __init__(self):
         self.inprocess = True
     
@@ -85,7 +84,7 @@ class Storage_menu(Scene):
         return run
 
 # แปรรูป
-class Process_menu(Scene):
+class Process_menu():
     def __init__(self):
         self.inprocess = True
     
@@ -103,7 +102,7 @@ class Process_menu(Scene):
         return run
 
 # Achievement
-class Achievement_manu(Scene):
+class Achievement_manu():
     def __init__(self):
         self.inprocess = True
     
@@ -121,8 +120,97 @@ class Achievement_manu(Scene):
                 
         return run
 
+# main menu
+class Main_menu():
+    def __init__(self):
+        self.inprocess = True
+    
+    def run():
+        global sound_
+        global image_
+        # background 
+        window.blit(Image().main_bg, (0, 0))
+
+        # newgame botton
+        pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
+        # continue botton
+        pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
+        # credit botton
+        pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
+        # exit botton
+        pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
+
+        pygame.display.update()
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        run = True
+        while run:
+            # loop per second 
+            clock.tick(30)
+        
+            # input - output
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+                # Botton ------------------------- Botton
+                mouse_pos = pygame.mouse.get_pos()
+
+                # ปุ่ม newgame
+                newgame_a = (220,100)
+                newgame_b = (500,200)
+                if is_hit_box(mouse_pos,newgame_a, newgame_b):
+                    print ('Main_menu : Newgame')
+                    # เรืองแสง (ถ้าว่างค่อยทำ)(เอาภาพไอค่อนมาให้ได้ก่อน)
+                
+                    growing = None
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        sound_.click.play()
+                        new_game = Newgame_menu()
+                        run = new_game.run()
+
+                # ปุ่ม continue
+                continue_a = (220,200)
+                continue_b = (500,300)
+                if is_hit_box(mouse_pos,continue_a, continue_b):
+                    print ('Main_menu  : Continue')
+                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    growing = None
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        sound_.click.play()
+                        load_menu = Load_menu()
+                        run = load_menu.run()
+
+                # ปุ่ม credit
+                credit_a = (220,300)
+                credit_b = (500,400)
+                if is_hit_box(mouse_pos,credit_a, credit_b):
+                    print ('Main_menu  : Credit')
+                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    growing = None
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        sound_.click.play()
+                        credit = Credit_menu()
+                        run = credit.run()
+
+                # ปุ่ม exit
+                quit_a = (220,400)
+                quit_b = (500,500)
+                if is_hit_box(mouse_pos,quit_a, quit_b):
+                    print ('Main_menu  : Exit')
+                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    growing = None
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        sound_.click.play()
+                        run = False
+
 # newgame
-class Newgame_menu(Scene):
+class Newgame_menu():
     def __init__(self):
         self.inprocess = True
     
@@ -141,7 +229,7 @@ class Newgame_menu(Scene):
         return run
     
 # loadgame
-class Load_menu(Scene):
+class Load_menu():
     def __init__(self):
         self.inprocess = True
     
@@ -160,7 +248,7 @@ class Load_menu(Scene):
         return run
 
 # credit
-class Credit_menu(Scene):
+class Credit_menu():
     def __init__(self):
         self.inprocess = True
     
@@ -249,88 +337,7 @@ image_ = Image()
 
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
-    global sound_
-    global image_
-    # background 
-    window.blit(Image().main_bg, (0, 0))
-
-    # newgame botton
-    pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
-    # continue botton
-    pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
-    # credit botton
-    pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
-    # exit botton
-    pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
-
-    pygame.display.update()
-    # loop per second 
-    clock = pygame.time.Clock()
-
-    run = True
-    while run:
-        # loop per second 
-        clock.tick(30)
-        
-        # input - output
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-            # Botton ------------------------- Botton
-            mouse_pos = pygame.mouse.get_pos()
-
-            # ปุ่ม newgame
-            newgame_a = (220,100)
-            newgame_b = (500,200)
-            if is_hit_box(mouse_pos,newgame_a, newgame_b):
-                print ('Main_menu : Newgame')
-                # เรืองแสง (ถ้าว่างค่อยทำ)(เอาภาพไอค่อนมาให้ได้ก่อน)
-                
-                growing = None
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    sound_.click.play()
-                    new_game = Newgame_menu()
-                    run = new_game.run()
-
-            # ปุ่ม continue
-            continue_a = (220,200)
-            continue_b = (500,300)
-            if is_hit_box(mouse_pos,continue_a, continue_b):
-                print ('Main_menu  : Continue')
-                # เรืองแสง (ถ้าว่างค่อยทำ)
-                growing = None
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    sound_.click.play()
-                    load_menu = Load_menu()
-                    run = load_menu.run()
-
-            # ปุ่ม credit
-            credit_a = (220,300)
-            credit_b = (500,400)
-            if is_hit_box(mouse_pos,credit_a, credit_b):
-                print ('Main_menu  : Credit')
-                # เรืองแสง (ถ้าว่างค่อยทำ)
-                growing = None
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    sound_.click.play()
-                    credit = Credit_menu()
-                    run = credit.run()
-
-            # ปุ่ม exit
-            quit_a = (220,400)
-            quit_b = (500,500)
-            if is_hit_box(mouse_pos,quit_a, quit_b):
-                print ('Main_menu  : Exit')
-                # เรืองแสง (ถ้าว่างค่อยทำ)
-                growing = None
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    sound_.click.play()
-                    run = False
+    
 
 
 
