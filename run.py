@@ -32,11 +32,14 @@ class Image():
         
 
 # Menu --------------------------- Menu
+# หน้าฟาร์มของผู้เล่น
 class Player_farm():
     def __init__(self):
         self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -53,6 +56,8 @@ class Shop_menu(Scene):
         self.inprocess = True
 
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -65,9 +70,11 @@ class Shop_menu(Scene):
 # คลัง
 class Storage_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -80,9 +87,11 @@ class Storage_menu(Scene):
 # แปรรูป
 class Process_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             # Exit game 
@@ -96,9 +105,11 @@ class Process_menu(Scene):
 # Achievement
 class Achievement_manu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -113,9 +124,11 @@ class Achievement_manu(Scene):
 # newgame
 class Newgame_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -130,9 +143,11 @@ class Newgame_menu(Scene):
 # loadgame
 class Load_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -147,9 +162,11 @@ class Load_menu(Scene):
 # credit
 class Credit_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
     
     def run(self):
+        global sound_
+        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -166,7 +183,7 @@ class Credit_menu(Scene):
 class Player():
     def __init__(self):
         self.money = 0
-        self.player_farm = None
+        self.player_farm = Player_farm()
         self.inventory = Inventory()
 
 class Inventory():
