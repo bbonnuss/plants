@@ -35,7 +35,8 @@ class Image_():
 # หน้าฟาร์มของผู้เล่น
 class Player_farm():
     def __init__(self):
-        self.inprocess = True
+        self.player = Player()
+        self.inv = self.player.inventory.get_inv()
     
     def run(self):
         print ('Runing at Player_farm')
@@ -48,9 +49,11 @@ class Player_farm():
             # background 
             window.blit(Image_().farm_bg, (0, 0))
 
-            # botton
-            pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
-            
+            # ปุ่มรดน้ำ
+            pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
+            # ปุ่มยุ้งฉาง
+            pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
+
             pygame.display.update()
             
             # loop per second 
@@ -63,7 +66,7 @@ class Player_farm():
 
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
-
+                print( mouse_pos)
                 # ปุ่ม ออกไป main_menu
                 main_menu_a = (220,100)
                 main_menu_b = (500,200)
@@ -79,8 +82,35 @@ class Player_farm():
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                
+                # ปุ่ม รดน้ำ 
+                watering_a = (35,205)
+                watering_b = (90,270)
+                if is_hit_box(mouse_pos,watering_a, watering_b):
+                    print ('Player_farm : watering')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        Sound_().click.play()
+                        # รดน้ำอ่ะ (คาดว่าจะสร้างเป็น method ขึ้นมาหลังจากกดปุ่ม)
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+                
+                # ปุ่ม ยุ้งฉาง
+                watering_a = (35,205)
+                watering_b = (90,270)
+                if is_hit_box(mouse_pos,watering_a, watering_b):
+                    print ('Player_farm : watering')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        Sound_().click.play()
+                        return 'storage'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
                 # ปุ่ม exit
                 quit_a = (220,400)
                 quit_b = (500,500)
