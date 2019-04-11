@@ -109,10 +109,27 @@ class Player_farm():
                     if event.type == pygame.MOUSEBUTTONUP:
                         Sound_().click.play()
                         storage = Storage_menu(self.inv, self.money)
-                        self.inv = storage.run()
+                        self.inv, self.money = storage.run()
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
+                
+                # ปุ่ม ร้านค้า
+                shop_a = (35,320)
+                shop_b = (90,385)
+                if is_hit_box(mouse_pos,shop, shop):
+                    print ('Player_farm : shop')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        Sound_().click.play()
+                        shop = Shop_menu(self.inv, self.money)
+                        self.inv, self.money = shop.run()
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
                 # ปุ่ม exit
                 quit_a = (220,400)
                 quit_b = (500,500)
@@ -141,6 +158,9 @@ class Shop_menu():
                 # Exit game 
                 if event.type == pygame.QUIT:
                     print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+        
+        # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากร้านด้วย
+        return self.inventory, self.money
 
 # คลัง
 class Storage_menu():
@@ -156,8 +176,8 @@ class Storage_menu():
                 if event.type == pygame.QUIT:
                    print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
 
-        # คืนค่า self.inventory เมื่อผู้เล่นออกจากคลังด้วย
-        return self.inventory
+        # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
+        return self.inventory, self.money
 
 # แปรรูป
 class Process_menu():
@@ -172,6 +192,9 @@ class Process_menu():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+        
+        # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากหน้าแปรรูปด้วย
+        return self.inventory, self.money
 
 # Achievement
 class Achievement_manu():
