@@ -269,8 +269,8 @@ class Newgame_menu():
                 # Exit game 
                 if event.type == pygame.QUIT:
                     return 'exit'
-                if event.type == pygame.MOUSEBUTTONUP:
-                    return 'player_farm'
+                
+            return 'player_farm'
     
 # loadgame
 class Load_menu():
@@ -285,8 +285,8 @@ class Load_menu():
                 # Exit game 
                 if event.type == pygame.QUIT:
                     return 'exit'
-                if event.type == pygame.MOUSEBUTTONUP:
-                    return 'player_farm'
+    
+            return 'player_farm'
 
 # credit
 class Credit_menu():
@@ -314,40 +314,33 @@ class Player():
 
 class Inventory():
     def __init__(self):
-        # ผัก
-        self.wheat = 0
-        self.wheat_seed = 0
-        self.cucumber = 0
-        self.cucumber_seed = 0
-        self.tomato = 0
-        self.tomato_seed = 0
-        self.potato = 0
-        self.potato_seed = 0
-        self.purplecabbage = 0
-        self.purplecabbage_seed = 0
-        # ผลไม้
-        self.orange = 0
-        self.orange_seed = 0
-        self.mango = 0
-        self.mango_seed = 0
-        self.apple = 0
-        self.apple_seed = 0
-        self.melon = 0
-        self.melon_seed = 0
-        self.grape = 0
-        self.grape_seed = 0
-        # แปรรูป
-        self.wheat_processed = 0
-        self.cucumber_processed = 0
-        self.tomato_processed = 0
-        self.potato_processed = 0
-        self.purplecabbage_processed = 0
-        
-        self.orange_processed = 0
-        self.mango_processed = 0
-        self.apple_processed = 0
-        self.melon_processed = 0
-        self.grape_processed = 0
+        self._inventory = {'wheat': 0, 'wheat_seed': 0, 
+                    'cucumber': 0, 'cucumber_seed': 0, 
+                    'tomato': 0, 'tomato_seed': 0,
+                    'potato': 0,  'potato_seed': 0,
+                    'orange': 0, 'orange_seed': 0,
+                    'mango': 0, 'mango_seed': 0,
+                    'apple': 0, 'apple_seed': 0, 
+                    'melon': 0, 'melon_seed': 0, 
+                    'grape': 0, 'grape_seed': 0,
+                    'pug_process': 0,'fruit_process': 0 }
+    # add item to Inventory
+    def add(self, name, amout):
+        self._inventory[name] += amout
+    
+    # remove item from Inventory
+    def remove(self, name, amout):
+        self._inventory[name] -= amout
+    
+    # get Inventory (dict type)
+    def get_inv(self):
+        item_name = list(filter(lambda x : self._inventory[x] > 0, self._inventory))
+        inv = dict()
+        for key in item_name:
+            inv[key] = self._inventory[key]
+        return inv
+
+
 
 class Farmland():
     def __init__(self):
