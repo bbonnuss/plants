@@ -44,10 +44,7 @@ class Player_farm():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
-                
-        return run
-
+                    return 'exit'
         
 # shop
 class Shop_menu():
@@ -62,9 +59,7 @@ class Shop_menu():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
-                
-        return run
+                    return 'exit'
 
 # คลัง
 class Storage_menu():
@@ -79,9 +74,7 @@ class Storage_menu():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
-                
-        return run
+                   return 'exit'
 
 # แปรรูป
 class Process_menu():
@@ -96,10 +89,7 @@ class Process_menu():
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    # USING SAVE FUNCTION
-                    # save()
-                    return not run
-        return run
+                    return 'exit'
 
 # Achievement
 class Achievement_manu():
@@ -114,12 +104,10 @@ class Achievement_manu():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
+                    return 'exit'
                 if event.type == pygame.MOUSEBUTTONUP:
-                    return run
+                    pass
                 
-        return run
-
 # main menu
 class Main_menu():
     def __init__(self):
@@ -146,6 +134,8 @@ class Main_menu():
 
         run = True
         while run:
+
+
             # loop per second 
             clock.tick(30)
         
@@ -161,53 +151,63 @@ class Main_menu():
                 newgame_a = (220,100)
                 newgame_b = (500,200)
                 if is_hit_box(mouse_pos,newgame_a, newgame_b):
-                    print ('Main_menu : Newgame')
-                    # เรืองแสง (ถ้าว่างค่อยทำ)(เอาภาพไอค่อนมาให้ได้ก่อน)
-                
+                    
+                    # วาดปุ่มเรืองแสง
+                    pygame.display.update()
+
                     growing = None
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         sound_.click.play()
-                        new_game = Newgame_menu()
-                        run = new_game.run()
+                        return 'newgame'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
                 # ปุ่ม continue
                 continue_a = (220,200)
                 continue_b = (500,300)
                 if is_hit_box(mouse_pos,continue_a, continue_b):
-                    print ('Main_menu  : Continue')
+                    
                     # เรืองแสง (ถ้าว่างค่อยทำ)
-                    growing = None
+                    pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         sound_.click.play()
-                        load_menu = Load_menu()
-                        run = load_menu.run()
+                        return 'load'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
                 # ปุ่ม credit
                 credit_a = (220,300)
                 credit_b = (500,400)
                 if is_hit_box(mouse_pos,credit_a, credit_b):
-                    print ('Main_menu  : Credit')
+                   
                     # เรืองแสง (ถ้าว่างค่อยทำ)
-                    growing = None
+                    pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         sound_.click.play()
-                        credit = Credit_menu()
-                        run = credit.run()
+                        return 'credit'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
                 # ปุ่ม exit
                 quit_a = (220,400)
                 quit_b = (500,500)
                 if is_hit_box(mouse_pos,quit_a, quit_b):
-                    print ('Main_menu  : Exit')
+                    
                     # เรืองแสง (ถ้าว่างค่อยทำ)
-                    growing = None
+                    pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         sound_.click.play()
-                        run = False
+                        return 'exit'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
 # newgame
 class Newgame_menu():
@@ -337,12 +337,54 @@ image_ = Image()
 
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
-    
-
-
-
-
+    selected = 'main'
+    run = True
+    while run:
+        if selected == 'main':
+            main = Main_menu()
+            main.run()
         
+        if selected == 'newgame':
+            main = Newgame_menu()
+            main.run()
+        
+        if selected == 'load':
+            main = Load_menu()
+            main.run()
+        
+        if selected == 'credit':
+            main = Credit_menu()
+            main.run()
+        
+        if selected == 'player_farm':
+            main = Player_farm()
+            main.run()
+        
+        if selected == 'acheivement':
+            main = Achievement_manu()
+            main.run()
+        
+        if selected == 'shop':
+            main = Shop_menu()
+            main.run()
+
+        if selected == 'storage':
+            main = Storage_menu()
+            main.run()
+        
+        if selected == 'process':
+            main = Process_menu()
+            main.run()
+
+        if selected == 'shop':
+            main = Shop_menu()
+            main.run()
+
+        if selected == 'exit':
+            run = False
+            
+        
+
 # RUN !
 main()
 
