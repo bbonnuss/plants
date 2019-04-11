@@ -142,12 +142,14 @@ class Shop_menu():
         self.money = money
 
     def run(self):
+        window.fill((0,0,0))
+        pygame.display.update()
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+                    return self.inventory, self.money
         
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากร้านด้วย
         return self.inventory, self.money
@@ -159,12 +161,14 @@ class Storage_menu():
         self.money = money
 
     def run(self):
+        window.fill((255,255,255))
+        pygame.display.update()
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                   print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+                   return self.inventory, self.money
 
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
         return self.inventory, self.money
@@ -176,12 +180,14 @@ class Process_menu():
         self.money = money
     
     def run(self):
+        window.fill((255,255,255))
+        pygame.display.update()
         run = True
         while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+                    return self.inventory, self.money
         
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากหน้าแปรรูปด้วย
         return self.inventory, self.money
