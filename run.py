@@ -37,6 +37,7 @@ class Player_farm():
     def __init__(self):
         self.player = Player()
         self.inv = self.player.inventory.get_inv()
+        self.money = self.player.money
     
     def run(self):
         print ('Runing at Player_farm')
@@ -97,17 +98,18 @@ class Player_farm():
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
                 
-                # ปุ่ม ยุ้งฉาง
-                watering_a = (35,205)
-                watering_b = (90,270)
-                if is_hit_box(mouse_pos,watering_a, watering_b):
-                    print ('Player_farm : watering')
+                # ปุ่ม คลัง
+                storage_a = (35,320)
+                storage_b = (90,385)
+                if is_hit_box(mouse_pos,storage_a, storage_b):
+                    print ('Player_farm : storage')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
                         Sound_().click.play()
-                        return 'storage'
+                        storage = Storage_menu(self.inv, self.money)
+                        self.inv = storage.run()
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -128,48 +130,48 @@ class Player_farm():
         
 # shop
 class Shop_menu():
-    def __init__(self):
-        self.inprocess = True
+    def __init__(self,inventory, money):
+        self.inventory = inventory
+        self.money = money
 
     def run(self):
-        global sound_
-        global image_
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return 'exit'
+                    print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
 
 # คลัง
 class Storage_menu():
-    def __init__(self):
-        self.inprocess = True
-    
+    def __init__(self,inventory, money):
+        self.inventory = inventory
+        self.money = money
+
     def run(self):
-        global sound_
-        global image_
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                   return 'exit'
+                   print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
+
+        # คืนค่า self.inventory เมื่อผู้เล่นออกจากคลังด้วย
+        return self.inventory
 
 # แปรรูป
 class Process_menu():
-    def __init__(self):
-        self.inprocess = True
+    def __init__(self,inventory, money):
+        self.inventory = inventory
+        self.money = money
     
     def run(self):
-        global sound_
-        global image_
         run = True
         while run:
             # Exit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return 'exit'
+                    print('กรุณากลับไปหน้าฟาร์มก่อนออกเกม')
 
 # Achievement
 class Achievement_manu():
@@ -177,8 +179,6 @@ class Achievement_manu():
         self.inprocess = True
     
     def run(self):
-        global sound_
-        global image_
         run = True
         while run:
             for event in pygame.event.get():
@@ -421,18 +421,6 @@ def main():
         if selected == 'acheivement':
             acheivement = Achievement_manu()
             selected = acheivement.run()
-        
-        if selected == 'shop':
-            shop = Shop_menu()
-            selected = shop.run()
-
-        if selected == 'storage':
-            storage = Storage_menu()
-            selected = storage.run()
-        
-        if selected == 'process':
-            process = Process_menu()
-            selected = process.run()
 
         if selected == 'exit':
             run = False
