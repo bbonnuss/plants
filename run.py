@@ -28,6 +28,7 @@ class Sound_():
 class Image_():
     def __init__(self):
         self.main_bg = pygame.image.load(join('assets','image','stupid_bg.png')).convert()
+        self.farm_bg = pygame.image.load(join('assets','image','farm_bg.png')).convert()
         
 
 # Menu --------------------------- Menu
@@ -37,14 +38,63 @@ class Player_farm():
         self.inprocess = True
     
     def run(self):
-        global sound_
-        global image_
+        print ('Runing at Player_farm')
+
+        # loop per second 
+        clock = pygame.time.Clock()
         run = True
         while run:
+            # drawing page ------------------- drawing page
+            # background 
+            window.blit(Image_().farm_bg, (0, 0))
+
+            # botton
+            pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
+            
+            pygame.display.update()
+            
+            # loop per second 
+            clock.tick(30)
+        
+            # input - output
             for event in pygame.event.get():
-                # Exit game 
                 if event.type == pygame.QUIT:
                     return 'exit'
+
+                # Botton ------------------------- Botton
+                mouse_pos = pygame.mouse.get_pos()
+
+                # ปุ่ม ออกไป main_menu
+                main_menu_a = (220,100)
+                main_menu_b = (500,200)
+                if is_hit_box(mouse_pos,main_menu_a, main_menu_b):
+                    print ('Player_farm : main_menu')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        Sound_().click.play()
+                        return 'main'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                
+
+                # ปุ่ม exit
+                quit_a = (220,400)
+                quit_b = (500,500)
+                if is_hit_box(mouse_pos,quit_a, quit_b):
+                    print ('Main_menu : exit')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        Sound_().click.play()
+                        return 'exit'
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
         
 # shop
 class Shop_menu():
@@ -115,25 +165,25 @@ class Main_menu():
     
     def run(self):
         print ('Runing at Main_menu')
-        # background 
-        window.blit(Image_().main_bg, (0, 0))
-
-        # newgame botton
-        pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
-        # continue botton
-        pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
-        # credit botton
-        pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
-        # exit botton
-        pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
-
-        pygame.display.update()
+        
         # loop per second 
         clock = pygame.time.Clock()
-
         run = True
         while run:
+            # drawing page ------------------- drawing page
+            # background 
+            window.blit(Image_().main_bg, (0, 0))
 
+            # newgame botton
+            pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
+            # continue botton
+            pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
+            # credit botton
+            pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
+            # exit botton
+            pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
+
+            pygame.display.update()
 
             # loop per second 
             clock.tick(30)
