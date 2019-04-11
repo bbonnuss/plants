@@ -22,6 +22,8 @@ def is_hit_box(position,box_a,box_b):
 class Sound():
     def __init__(self):
         self.main_theme = None
+        self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
+        
 
 class Image():
     def __init__(self):
@@ -254,6 +256,7 @@ def main():
             if is_hit_box(mouse_pos,newgame_a, newgame_b):
                 print ('Main_menu : Newgame')
                 # เรืองแสง (ถ้าว่างค่อยทำ)
+                Sound().change_page.play()
                 growing = None
 
                 if event.type == pygame.MOUSEBUTTONUP:
