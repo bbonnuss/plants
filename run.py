@@ -362,7 +362,7 @@ class Player():
 
 class Inventory():
     def __init__(self):
-        self._inventory = {'wheat': 0, 'wheat_seed': 0, 
+        self.inventory = {'wheat': 0, 'wheat_seed': 0, 
                     'cucumber': 0, 'cucumber_seed': 0, 
                     'tomato': 0, 'tomato_seed': 0,
                     'potato': 0,  'potato_seed': 0,
@@ -374,30 +374,22 @@ class Inventory():
                     'pug_process': 0,'fruit_process': 0 }
     # add item to Inventory
     def add(self, name, amout):
-        self._inventory[name] += amout
+        self.inventory[name] += amout
     
     # remove item from Inventory
     def remove(self, name, amout):
-        self._inventory[name] -= amout
+        self.inventory[name] -= amout
     
-    # get Inventory (dict type)
     def get_inv(self):
-        item_name = list(filter(lambda x : self._inventory[x] > 0, self._inventory))
+        return self.inventory
+    
+    # get Inventory (dict type) อันนี้ให้ใช้กับ storage เพื่อแสดงผล
+    def get_inv_only_have(self):
+        item_name = list(filter(lambda x : self.inventory[x] > 0, self.inventory))
         inv = dict()
         for key in item_name:
-            inv[key] = self._inventory[key]
+            inv[key] = self.inventory[key]
         return inv
-
-
-
-class Farmland():
-    def __init__(self):
-        self.size = 4
-
-        
-class Plant():
-    def __init__(self):
-        self.type = None
 
 
 # Launcher ======================= Launcher ======================= Launcher 
