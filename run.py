@@ -32,15 +32,25 @@ class Image():
         
 
 # Menu --------------------------- Menu
-class Scene():
+class Player_farm():
     def __init__(self):
         self.inprocess = True
-        self.click_pos = pygame.mouse.get_pos()
+    
+    def run(self):
+        run = True
+        while run:
+            for event in pygame.event.get():
+                # Exit game 
+                if event.type == pygame.QUIT:
+                    return not run
+                
+        return run
+
         
 # shop
 class Shop_menu(Scene):
     def __init__(self):
-        Scene.__init__(self)
+        self.inprocess = True
 
     def run(self):
         run = True
@@ -48,8 +58,6 @@ class Shop_menu(Scene):
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    # USING SAVE FUNCTION
-                    # save():
                     return not run
                 
         return run
@@ -65,8 +73,6 @@ class Storage_menu(Scene):
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    # USING SAVE FUNCTION
-                    # save():
                     return not run
                 
         return run
