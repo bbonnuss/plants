@@ -23,6 +23,7 @@ class Sound():
     def __init__(self):
         self.main_theme = None
         self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
+        self.click = None
         
 
 class Image():
@@ -219,8 +220,14 @@ pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 window.fill((255,255,255))
 pygame.display.update()
 
+# init resouce manager
+sound_ = Sound()
+image_ = Image()
+
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
+    global sound_
+    global image_
     # background 
     window.blit(Image().main_bg, (0, 0))
 
@@ -255,11 +262,12 @@ def main():
             newgame_b = (500,200)
             if is_hit_box(mouse_pos,newgame_a, newgame_b):
                 print ('Main_menu : Newgame')
-                # เรืองแสง (ถ้าว่างค่อยทำ)
-                Sound().change_page.play()
+                # เรืองแสง (ถ้าว่างค่อยทำ)(เอาภาพไอค่อนมาให้ได้ก่อน)
+                
                 growing = None
 
                 if event.type == pygame.MOUSEBUTTONUP:
+                    sound_.click.play()
                     new_game = Newgame_menu()
                     run = new_game.run()
 
@@ -272,6 +280,7 @@ def main():
                 growing = None
 
                 if event.type == pygame.MOUSEBUTTONUP:
+                    sound_.click.play()
                     load_menu = Load_menu()
                     run = load_menu.run()
 
@@ -284,6 +293,7 @@ def main():
                 growing = None
 
                 if event.type == pygame.MOUSEBUTTONUP:
+                    sound_.click.play()
                     credit = Credit_menu()
                     run = credit.run()
 
@@ -296,6 +306,7 @@ def main():
                 growing = None
 
                 if event.type == pygame.MOUSEBUTTONUP:
+                    sound_.click.play()
                     run = False
 
 
