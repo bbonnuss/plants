@@ -19,13 +19,13 @@ def is_hit_box(position,box_a,box_b):
 
 # Class ========================== Class ========================== Class
 # resouce_manager ---------------- resouce_manager
-class Sound():
+class Sound_():
     def __init__(self):
         self.main_theme = None
         self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
-        self.click = None
+        self.click = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
 
-class Image():
+class Image_():
     def __init__(self):
         self.main_bg = pygame.image.load(join('assets','image','stupid_bg.png')).convert()
         
@@ -113,11 +113,10 @@ class Main_menu():
     def __init__(self):
         self.inprocess = True
     
-    def run():
-        global sound_
-        global image_
+    def run(self):
+        print ('Runing at Main_menu')
         # background 
-        window.blit(Image().main_bg, (0, 0))
+        window.blit(Image_().main_bg, (0, 0))
 
         # newgame botton
         pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
@@ -142,7 +141,7 @@ class Main_menu():
             # input - output
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    return 'exit'
 
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
@@ -151,14 +150,12 @@ class Main_menu():
                 newgame_a = (220,100)
                 newgame_b = (500,200)
                 if is_hit_box(mouse_pos,newgame_a, newgame_b):
-                    
-                    # วาดปุ่มเรืองแสง
+                    print ('Main_menu : newgame')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    growing = None
-
                     if event.type == pygame.MOUSEBUTTONUP:
-                        sound_.click.play()
+                        Sound_().click.play()
                         return 'newgame'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -168,12 +165,12 @@ class Main_menu():
                 continue_a = (220,200)
                 continue_b = (500,300)
                 if is_hit_box(mouse_pos,continue_a, continue_b):
-                    
-                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    print ('Main_menu : continue')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        sound_.click.play()
+                        Sound_().click.play()
                         return 'load'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -183,12 +180,12 @@ class Main_menu():
                 credit_a = (220,300)
                 credit_b = (500,400)
                 if is_hit_box(mouse_pos,credit_a, credit_b):
-                   
-                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    print ('Main_menu : credit')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        sound_.click.play()
+                        Sound_().click.play()
                         return 'credit'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -198,12 +195,12 @@ class Main_menu():
                 quit_a = (220,400)
                 quit_b = (500,500)
                 if is_hit_box(mouse_pos,quit_a, quit_b):
-                    
-                    # เรืองแสง (ถ้าว่างค่อยทำ)
+                    print ('Main_menu : exit')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        sound_.click.play()
+                        Sound_().click.play()
                         return 'exit'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -215,18 +212,15 @@ class Newgame_menu():
         self.inprocess = True
     
     def run(self):
-        global sound_
-        global image_
+        print ('Runing at Newgame_menu')
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
+                    return 'exit'
                 if event.type == pygame.MOUSEBUTTONUP:
-                    return run
-                
-        return run
+                    return 'player_farm'
     
 # loadgame
 class Load_menu():
@@ -234,18 +228,15 @@ class Load_menu():
         self.inprocess = True
     
     def run(self):
-        global sound_
-        global image_
+        print ('Runing at Load_menu')
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
+                    return 'exit'
                 if event.type == pygame.MOUSEBUTTONUP:
-                    return run
-
-        return run
+                    return 'player_farm'
 
 # credit
 class Credit_menu():
@@ -253,18 +244,15 @@ class Credit_menu():
         self.inprocess = True
     
     def run(self):
-        global sound_
-        global image_
+        print ('Runing at Credit_menu')
         run = True
         while run:
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return not run
+                    return 'exit'
                 if event.type == pygame.MOUSEBUTTONUP:
-                    return run
-                
-        return run
+                    return 'main'
 
 
 # Mechanic ----------------------- Mechanic
@@ -331,54 +319,47 @@ pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 window.fill((255,255,255))
 pygame.display.update()
 
-# init resouce manager
-sound_ = Sound()
-image_ = Image()
-
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
+    print ('Runing at Main()')
     selected = 'main'
     run = True
     while run:
         if selected == 'main':
             main = Main_menu()
-            main.run()
+            selected = main.run()
         
         if selected == 'newgame':
-            main = Newgame_menu()
-            main.run()
+            newgame = Newgame_menu()
+            selected = newgame.run()
         
         if selected == 'load':
-            main = Load_menu()
-            main.run()
+            load = Load_menu()
+            selected = load.run()
         
         if selected == 'credit':
-            main = Credit_menu()
-            main.run()
+            credit = Credit_menu()
+            selected = credit.run()
         
         if selected == 'player_farm':
-            main = Player_farm()
-            main.run()
+            player_farm = Player_farm()
+            selected = player_farm.run()
         
         if selected == 'acheivement':
-            main = Achievement_manu()
-            main.run()
+            acheivement = Achievement_manu()
+            selected = acheivement.run()
         
         if selected == 'shop':
-            main = Shop_menu()
-            main.run()
+            shop = Shop_menu()
+            selected = shop.run()
 
         if selected == 'storage':
-            main = Storage_menu()
-            main.run()
+            storage = Storage_menu()
+            selected = storage.run()
         
         if selected == 'process':
-            main = Process_menu()
-            main.run()
-
-        if selected == 'shop':
-            main = Shop_menu()
-            main.run()
+            process = Process_menu()
+            selected = process.run()
 
         if selected == 'exit':
             run = False
