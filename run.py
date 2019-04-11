@@ -54,6 +54,8 @@ class Player_farm():
             pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
             # ปุ่มยุ้งฉาง
             pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
+            # ปุ่มร้านค้า
+            pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
 
             pygame.display.update()
             
@@ -115,9 +117,9 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่ม ร้านค้า
-                shop_a = (35,320)
-                shop_b = (90,385)
-                if is_hit_box(mouse_pos,shop, shop):
+                shop_a = (430, 20)
+                shop_b = (580,140)
+                if is_hit_box(mouse_pos,shop_a, shop_b):
                     print ('Player_farm : shop')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -362,7 +364,6 @@ class Credit_menu():
 class Player():
     def __init__(self):
         self.money = 0
-        self.player_farm = Player_farm()
         self.inventory = Inventory()
 
 class Inventory():
