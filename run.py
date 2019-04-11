@@ -56,6 +56,9 @@ class Player_farm():
             pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
             # ปุ่มร้านค้า
             pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
+            # ปุ่มออกเกม
+            pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
+
 
             pygame.display.update()
             
@@ -71,8 +74,8 @@ class Player_farm():
                 mouse_pos = pygame.mouse.get_pos()
                 print( mouse_pos)
                 # ปุ่ม ออกไป main_menu
-                main_menu_a = (220,100)
-                main_menu_b = (500,200)
+                main_menu_a = (390,500)
+                main_menu_b = (480,570)
                 if is_hit_box(mouse_pos,main_menu_a, main_menu_b):
                     print ('Player_farm : main_menu')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
@@ -128,21 +131,6 @@ class Player_farm():
                         Sound_().click.play()
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
-
-                # ปุ่ม exit
-                quit_a = (220,400)
-                quit_b = (500,500)
-                if is_hit_box(mouse_pos,quit_a, quit_b):
-                    print ('Main_menu : exit')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
-
-                    if event.type == pygame.MOUSEBUTTONUP:
-                        Sound_().click.play()
-                        return 'exit'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
