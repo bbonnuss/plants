@@ -38,30 +38,28 @@ class Player_farm():
         self.player = Player()
         self.inv = self.player.inventory.get_inv()
         self.money = self.player.money
+        self.farmland = self.player.farmland
+
+        self.shop_button = ((430, 20),(580,140))
+        self.storage_button = ((35,320),(90,385))
+        self.watering_button = ((35,205),(90,270))
+        self.mainmenu_button = ((390,500),(480,570))
+        self.save_button = ((0,0),(0,0))
+        self.saveexit_button = ((0,0),(0,0))
+
+        self.
     
     def run(self):
         print ('Runing at Player_farm')
 
         # loop per second 
         clock = pygame.time.Clock()
+
         run = True
         while run:
-            # drawing page ------------------- drawing page
-            # background 
-            window.blit(Image_().farm_bg, (0, 0))
 
-            # ปุ่มรดน้ำ
-            pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
-            # ปุ่มยุ้งฉาง
-            pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
-            # ปุ่มร้านค้า
-            pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
-            # ปุ่มออกเกม
-            pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
+            self.draw_bg()
 
-
-            pygame.display.update()
-            
             # loop per second 
             clock.tick(30)
         
@@ -73,10 +71,9 @@ class Player_farm():
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
                 print( mouse_pos)
-                # ปุ่ม ออกไป main_menu
-                main_menu_a = (390,500)
-                main_menu_b = (480,570)
-                if is_hit_box(mouse_pos,main_menu_a, main_menu_b):
+
+                # ปุ่ม ออกไป main_menu]
+                if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
                     print ('Player_farm : main_menu')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -89,9 +86,7 @@ class Player_farm():
                     pygame.display.update()
 
                 # ปุ่ม รดน้ำ 
-                watering_a = (35,205)
-                watering_b = (90,270)
-                if is_hit_box(mouse_pos,watering_a, watering_b):
+                if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
                     print ('Player_farm : watering')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -104,9 +99,7 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่ม คลัง
-                storage_a = (35,320)
-                storage_b = (90,385)
-                if is_hit_box(mouse_pos,storage_a, storage_b):
+                if is_hit_box(mouse_pos,self.storage_button[0], self.storage_button[1]):
                     print ('Player_farm : storage')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -120,9 +113,7 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่ม ร้านค้า
-                shop_a = (430, 20)
-                shop_b = (580,140)
-                if is_hit_box(mouse_pos,shop_a, shop_b):
+                if is_hit_box(mouse_pos,self.shop_button[0], self.shop_button[1]):
                     print ('Player_farm : shop')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -134,7 +125,38 @@ class Player_farm():
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
+    
+    def watering(self):
+        run = True
+        while run:
+            for event in pygame.event.get():
+                # Exit game 
+                if event.type == pygame.QUIT:
+                    return self.inventory, self.money
+                
+                # click to watering
+                mouse_pos = pygame.mouse.get_pos()
+
+
+    def button(self):
         
+        pass
+    
+    def draw_bg(self):
+        # background 
+        window.blit(Image_().farm_bg, (0, 0))
+
+        # ปุ่มรดน้ำ
+        pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
+        # ปุ่มยุ้งฉาง
+        pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
+        # ปุ่มร้านค้า
+        pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
+        # ปุ่มออกเกม
+        pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
+
+        pygame.display.update()
+
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
@@ -359,6 +381,7 @@ class Player():
     def __init__(self):
         self.money = 0
         self.inventory = Inventory()
+        self.farmland = None
 
 class Inventory():
     def __init__(self):
@@ -372,6 +395,7 @@ class Inventory():
                     'melon': 0, 'melon_seed': 0, 
                     'grape': 0, 'grape_seed': 0,
                     'pug_process': 0,'fruit_process': 0 }
+    
     # add item to Inventory
     def add(self, name, amout):
         self.inventory[name] += amout
