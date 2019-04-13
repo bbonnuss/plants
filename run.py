@@ -46,8 +46,12 @@ class Player_farm():
         self.mainmenu_button = ((390,500),(480,570))
         self.save_button = ((0,0),(0,0))
         self.saveexit_button = ((0,0),(0,0))
-
-        self.
+        
+        self.farmland_position = [[(145,180),(310,300)],    # ซ้ายบน
+                                [(520,170),(690,290)],      # ขวาบน
+                                [(160,180),(340,480)],      # ล่างซ้าย
+                                [(540,360),(690,470)]]      # ล่างขวา
+        
     
     def run(self):
         print ('Runing at Player_farm')
@@ -132,7 +136,7 @@ class Player_farm():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return self.inventory, self.money
+                    return self.inv, self.money
                 
                 # click to watering
                 mouse_pos = pygame.mouse.get_pos()
