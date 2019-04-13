@@ -472,7 +472,7 @@ class Wheat():
         self.crops_state3 = Image_().wheat_state3
         self.crops_state4 = Image_().wheat_state4
         self.sale_price = 10
-        self.seed_price = 'not defined'
+        self.seed_price = 10
 
 class Cucumber():
     def __init__(self):
@@ -482,7 +482,7 @@ class Cucumber():
         self.crops_state3 = Image_().cucumber_state3
         self.crops_state4 = Image_().cucumber_state4
         self.sale_price = 30
-        self.seed_price = 'not defined'
+        self.seed_price = 10
 
 class Tomato():
     def __init__(self):
@@ -492,7 +492,7 @@ class Tomato():
         self.crops_state3 = Image_().tomato_state3
         self.crops_state4 = Image_().tomato_state4
         self.sale_price = 50
-        self.seed_price = 'not defined'
+        self.seed_price = 10
 
 class Potato():
     def __init__(self):
@@ -502,7 +502,7 @@ class Potato():
         self.crops_state3 = Image_().potato_state3
         self.crops_state4 = Image_().potato_state4
         self.sale_price = 70
-        self.seed_price = 'not defined'
+        self.seed_price = 10
 
 class Redcabbage():
     def __init__(self):
@@ -512,7 +512,7 @@ class Redcabbage():
         self.crops_state3 = Image_().redcabbage_state3
         self.crops_state4 = Image_().redcabbage_state4
         self.sale_price = 100
-        self.seed_price = 'not defined'
+        self.seed_price = 10
 
 class Orange():
     def __init__(self):
@@ -522,7 +522,7 @@ class Orange():
         self.crops_state3 = Image_().orange_state3
         self.crops_state4 = Image_().orange_state4
         self.sale_price = 50
-        self.seed_price = 'not defined'
+        self.seed_price = 20
 
 class Mango():
     def __init__(self):
@@ -532,7 +532,7 @@ class Mango():
         self.crops_state3 = Image_().mango_state3
         self.crops_state4 = Image_().mango_state4
         self.sale_price = 150
-        self.seed_price = 'not defined'
+        self.seed_price = 20
 
 class Apple():
     def __init__(self):
@@ -542,7 +542,7 @@ class Apple():
         self.crops_state3 = Image_().apple_state3
         self.crops_state4 = Image_().apple_state4
         self.sale_price = 350
-        self.seed_price = 'not defined'
+        self.seed_price = 20
 
 class Melon():
     def __init__(self):
@@ -552,7 +552,7 @@ class Melon():
         self.crops_state3 = Image_().melon_state3
         self.crops_state4 = Image_().melon_state4
         self.sale_price = 400
-        self.seed_price = 'not defined'
+        self.seed_price = 20
 
 class Grape():
     def __init__(self):
@@ -562,7 +562,7 @@ class Grape():
         self.crops_state3 = Image_().grape_state3
         self.crops_state4 = Image_().grape_state4
         self.sale_price = 500
-        self.seed_price = 'not defined'
+        self.seed_price = 20
 
 
 
