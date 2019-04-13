@@ -27,8 +27,51 @@ class Sound_():
 
 class Image_():
     def __init__(self):
+        # background
         self.main_bg = pygame.image.load(join('assets','image','stupid_bg.png')).convert()
         self.farm_bg = pygame.image.load(join('assets','image','farm_bg.png')).convert()
+        
+        # crops growing state
+        self.wheat_state1 = None
+        self.wheat_state2 = None
+        self.wheat_state3 = None
+        self.wheat_state4 = None
+        self.cucumber_state1 = None
+        self.cucumber_state2 = None
+        self.cucumber_state3 = None
+        self.cucumber_state4 = None
+        self.tomato_state1 = None
+        self.tomato_state2 = None
+        self.tomato_state3 = None
+        self.tomato_state4 = None
+        self.potato_state1 = None
+        self.potato_state2 = None
+        self.potato_state3 = None
+        self.potato_state4 = None
+        self.redcabbage_state1 = None
+        self.redcabbage_state2 = None
+        self.redcabbage_state3 = None
+        self.redcabbage_state4 = None
+        self.orange_state1 = None
+        self.orange_state2 = None
+        self.orange_state3 = None
+        self.orange_state4 = None
+        self.mango_state1 = None
+        self.mango_state2 = None
+        self.mango_state3 = None
+        self.mango_state4 = None
+        self.apple_state1 = None
+        self.apple_state2 = None
+        self.apple_state3 = None
+        self.apple_state4 = None
+        self.melon_state1 = None
+        self.melon_state2 = None
+        self.melon_state3 = None
+        self.melon_state4 = None
+        self.grape_state1 = None
+        self.grape_state2 = None
+        self.grape_state3 = None
+        self.grape_state4 = None
         
 
 # Menu --------------------------- Menu
@@ -393,6 +436,7 @@ class Inventory():
                     'cucumber': 0, 'cucumber_seed': 0, 
                     'tomato': 0, 'tomato_seed': 0,
                     'potato': 0,  'potato_seed': 0,
+                    'redcabbage': 0, 'redcabbage_seed':0,
                     'orange': 0, 'orange_seed': 0,
                     'mango': 0, 'mango_seed': 0,
                     'apple': 0, 'apple_seed': 0, 
@@ -418,6 +462,108 @@ class Inventory():
         for key in item_name:
             inv[key] = self.inventory[key]
         return inv
+
+# Crops -------------------------- Crops
+class Wheat():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().wheat_state1
+        self.crops_state2 = Image_().wheat_state2
+        self.crops_state3 = Image_().wheat_state3
+        self.crops_state4 = Image_().wheat_state4
+        self.sale_price = 10
+        self.seed_price = 'not defined'
+
+class Cucumber():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().cucumber_state1
+        self.crops_state2 = Image_().cucumber_state2
+        self.crops_state3 = Image_().cucumber_state3
+        self.crops_state4 = Image_().cucumber_state4
+        self.sale_price = 30
+        self.seed_price = 'not defined'
+
+class Tomato():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().tomato_state1
+        self.crops_state2 = Image_().tomato_state2
+        self.crops_state3 = Image_().tomato_state3
+        self.crops_state4 = Image_().tomato_state4
+        self.sale_price = 50
+        self.seed_price = 'not defined'
+
+class Potato():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().potato_state1
+        self.crops_state2 = Image_().potato_state2
+        self.crops_state3 = Image_().potato_state3
+        self.crops_state4 = Image_().potato_state4
+        self.sale_price = 70
+        self.seed_price = 'not defined'
+
+class Redcabbage():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().redcabbage_state1
+        self.crops_state2 = Image_().redcabbage_state2
+        self.crops_state3 = Image_().redcabbage_state3
+        self.crops_state4 = Image_().redcabbage_state4
+        self.sale_price = 100
+        self.seed_price = 'not defined'
+
+class Orange():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().orange_state1
+        self.crops_state2 = Image_().orange_state2
+        self.crops_state3 = Image_().orange_state3
+        self.crops_state4 = Image_().orange_state4
+        self.sale_price = 50
+        self.seed_price = 'not defined'
+
+class Mango():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().mango_state1
+        self.crops_state2 = Image_().mango_state2
+        self.crops_state3 = Image_().mango_state3
+        self.crops_state4 = Image_().mango_state4
+        self.sale_price = 150
+        self.seed_price = 'not defined'
+
+class Apple():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().apple_state1
+        self.crops_state2 = Image_().apple_state2
+        self.crops_state3 = Image_().apple_state3
+        self.crops_state4 = Image_().apple_state4
+        self.sale_price = 350
+        self.seed_price = 'not defined'
+
+class Melon():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().melon_state1
+        self.crops_state2 = Image_().melon_state2
+        self.crops_state3 = Image_().melon_state3
+        self.crops_state4 = Image_().melon_state4
+        self.sale_price = 400
+        self.seed_price = 'not defined'
+
+class Grape():
+    def __init__(self):
+        self.growing_time = 1 # growing_time per 1 state (sec)
+        self.crops_state1 = Image_().grape_state1
+        self.crops_state2 = Image_().grape_state2
+        self.crops_state3 = Image_().grape_state3
+        self.crops_state4 = Image_().grape_state4
+        self.sale_price = 500
+        self.seed_price = 'not defined'
+
 
 
 # Launcher ======================= Launcher ======================= Launcher 
