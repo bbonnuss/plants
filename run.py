@@ -115,6 +115,10 @@ class Player_farm():
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    click = True
+                else:
+                    click = False
                 print( mouse_pos)
 
                 # exit
@@ -123,20 +127,33 @@ class Player_farm():
 
                 # farmland system ---------------- farmland system
                 # top left
-                if is_hit_box(self.farmland_position[0][0], self.farmland_position[0][1]):
-                    crops_index = farmland_check_crops(self.farmland_position[0], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmland_position[0][0], self.farmland_position[0][1]):
+                    index_and_pos = self.farmland_check_crops(self.farmland_position[0], mouse_pos)
+                    if click and index_and_pos != None:
+                        x = self.farmland[0].crops[index_and_pos[0]]
+                        print(x)
 
                 # top right
-                if is_hit_box(self.farmland_position[1][0], self.farmland_position[1][1]):
-                    crops_index = farmland_check_crops(self.farmland_position[1], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmland_position[1][0], self.farmland_position[1][1]):
+                    index_and_pos = self.farmland_check_crops(self.farmland_position[1], mouse_pos)
+                    if click and index_and_pos != None:
+                        x = self.farmland[1].crops[index_and_pos[0]]
+                        print(x)
                 
                 # down left
-                if is_hit_box(self.farmland_position[2][0], self.farmland_position[2][1]):
-                    crops_index = farmland_check_crops(self.farmland_position[2], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmland_position[2][0], self.farmland_position[2][1]):
+                    index_and_pos = self.farmland_check_crops(self.farmland_position[2], mouse_pos)
+                    if click and index_and_pos != None:
+                        x = self.farmland[2].crops[index_and_pos[0]]
+                        print(x)
                 
                 # down right
-                if is_hit_box(self.farmland_position[3][0], self.farmland_position[3][1]):
-                    crops_index = farmland_check_crops(self.farmland_position[3], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmland_position[3][0], self.farmland_position[3][1]):
+                    index_and_pos = self.farmland_check_crops(self.farmland_position[3], mouse_pos)
+                    if click and index_and_pos != None:
+                        x = self.farmland[3].crops[index_and_pos[0]]
+                        print(x)
+                
 
                 # Botton ------------------------- Botton
                 
@@ -147,7 +164,7 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if click:
                         Sound_().click.play()
                         return 'main'
                 else:
@@ -160,7 +177,7 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if click:
                         Sound_().click.play()
                         # รดน้ำอ่ะ (คาดว่าจะสร้างเป็น method ขึ้นมาหลังจากกดปุ่ม)
                 else:
@@ -173,7 +190,7 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if click:
                         Sound_().click.play()
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money = storage.run()
@@ -187,7 +204,7 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if click:
                         Sound_().click.play()
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
@@ -210,6 +227,7 @@ class Player_farm():
     def farmland_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
         # โดนที่ ถ้าเป็น ถ้าต้นa:return 0, ต้นb:return 1, ......
+        # และ return ตำแหน่ง
         
         # farm = [(145,180),(310,300)]
         if is_hit_box(mouse_pos,farm[0], farm[1]):
@@ -223,28 +241,29 @@ class Player_farm():
             b = mid_point # (mid x ,mid y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม a มาแสดงผล
-                return 0
+                return 0, (a, b)
 
             # farm  b
             a = (mid_point[0], start_point[1]) # (mid x ,start y)
             b = (final_point[0], mid_point[1]) # (final x, mid y) 
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม b มาแสดงผล
-                return 1
+                return 1, (a, b)
 
             # farm  c
             a = (start_point[0], mid_point[1]) # (start x, mid y) 
             b = (mid_point[0], final_point[1]) # (mid x, final y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม c มาแสดงผล
-                return 2
+                return 2, (a, b)
 
             # farm  d
             a = mid_point # (mid x ,mid y)
             b = final_point #(final x, final y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม d มาแสดงผล
-                return 3
+                return 3, (a, b)
+            return None
     
     def draw_bg(self):
         # background 
@@ -261,6 +280,9 @@ class Player_farm():
 
         pygame.display.update()
 
+    def draw_crops_info(self, position):
+        pass
+    
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
@@ -485,7 +507,7 @@ class Player():
     def __init__(self):
         self.money = 0
         self.inventory = Inventory()
-        self.farmland = None
+        self.farmland = [Farmland(), Farmland(), Farmland(), Farmland()]
 
 class Inventory():
     def __init__(self):
@@ -519,6 +541,11 @@ class Inventory():
         for key in item_name:
             inv[key] = self.inventory[key]
         return inv
+
+class Farmland():
+    def __init__(self):
+        self.watering_remaining = None # เวลาที่คงเหลือ
+        self.crops = ['a', 'b', 'c', 'd']
 
 # Crops -------------------------- Crops
 class Wheat():
