@@ -92,7 +92,7 @@ class Player_farm():
         
         self.farmland_position = [[(145,180),(310,300)],    # ซ้ายบน
                                 [(520,170),(690,290)],      # ขวาบน
-                                [(160,180),(340,480)],      # ล่างซ้าย
+                                [(160,380),(340,480)],      # ล่างซ้าย
                                 [(540,360),(690,470)]]      # ล่างขวา
         
     
@@ -104,7 +104,7 @@ class Player_farm():
 
         run = True
         while run:
-
+            # วาดพื้นหลัง
             self.draw_bg()
 
             # loop per second 
@@ -112,12 +112,197 @@ class Player_farm():
         
             # input - output
             for event in pygame.event.get():
+
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                print( mouse_pos)
+
+                # exit
                 if event.type == pygame.QUIT:
                     return 'exit'
 
+                # farmland system ---------------- farmland system
+                # top left
+                farm = self.farmland_position[0] # [(145,180),(310,300)]
+                if is_hit_box(mouse_pos,farm[0], farm[1]):
+                    # assign valuable
+                    start_point = farm[0]
+                    mid_point = (farm[0][0]+farm[1][0])/2,(farm[0][1]+farm[1][1])/2# (เฉลี่ย x,เฉลี่ย y)
+                    final_point = farm[1]
+
+                    # farm 1 a
+                    a = start_point # (start x ,start y)
+                    b = mid_point # (mid x ,mid y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 1a มาแสดงผล
+                        print ('1a')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 1 b
+                    a = (mid_point[0], start_point[1]) # (mid x ,start y)
+                    b = (final_point[0], mid_point[1]) # (final x, mid y) 
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 1b มาแสดงผล
+                        print ('1b')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 1 c
+                    a = (start_point[0], mid_point[1]) # (start x, mid y) 
+                    b = (mid_point[0], final_point[1]) # (mid x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 1c มาแสดงผล
+                        print ('1c')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 1 d
+                    a = mid_point # (mid x ,mid y)
+                    b = final_point #(final x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 1d มาแสดงผล
+                        print ('1d')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                # top right
+                farm = self.farmland_position[1]
+                if is_hit_box(mouse_pos,farm[0], farm[1]):
+                    # assign valuable
+                    start_point = farm[0]
+                    mid_point = (farm[0][0]+farm[1][0])/2,(farm[0][1]+farm[1][1])/2# (เฉลี่ย x,เฉลี่ย y)
+                    final_point = farm[1]
+
+                    # farm 2 a
+                    a = start_point # (start x ,start y)
+                    b = mid_point # (mid x ,mid y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 2a มาแสดงผล
+                        print ('2a')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 2 b
+                    a = (mid_point[0], start_point[1]) # (mid x ,start y)
+                    b = (final_point[0], mid_point[1]) # (final x, mid y) 
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 2b มาแสดงผล
+                        print ('2b')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 2 c
+                    a = (start_point[0], mid_point[1]) # (start x, mid y) 
+                    b = (mid_point[0], final_point[1]) # (mid x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 2c มาแสดงผล
+                        print ('2c')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 2 d
+                    a = mid_point # (mid x ,mid y)
+                    b = final_point #(final x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 2d มาแสดงผล
+                        print ('2d')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                
+                # down left
+                farm = self.farmland_position[2]
+                if is_hit_box(mouse_pos,farm[0], farm[1]):
+                    # assign valuable
+                    start_point = farm[0]
+                    mid_point = (farm[0][0]+farm[1][0])/2,(farm[0][1]+farm[1][1])/2# (เฉลี่ย x,เฉลี่ย y)
+                    final_point = farm[1]
+
+                    # farm 3 a
+                    a = start_point # (start x ,start y)
+                    b = mid_point # (mid x ,mid y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 3a มาแสดงผล
+                        print ('3a')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 3 b
+                    a = (mid_point[0], start_point[1]) # (mid x ,start y)
+                    b = (final_point[0], mid_point[1]) # (final x, mid y) 
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 3b มาแสดงผล
+                        print ('3b')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 3 c
+                    a = (start_point[0], mid_point[1]) # (start x, mid y) 
+                    b = (mid_point[0], final_point[1]) # (mid x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 3c มาแสดงผล
+                        print ('3c')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 3 d
+                    a = mid_point # (mid x ,mid y)
+                    b = final_point #(final x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 3d มาแสดงผล
+                        print ('3d')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                
+                # down right
+                farm = self.farmland_position[3]
+                if is_hit_box(mouse_pos,farm[0], farm[1]):
+                    # assign valuable
+                    start_point = farm[0]
+                    mid_point = (farm[0][0]+farm[1][0])/2,(farm[0][1]+farm[1][1])/2# (เฉลี่ย x,เฉลี่ย y)
+                    final_point = farm[1]
+
+                    # farm 4 a
+                    a = start_point # (start x ,start y)
+                    b = mid_point # (mid x ,mid y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 4a มาแสดงผล
+                        print ('4a')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 4 b
+                    a = (mid_point[0], start_point[1]) # (mid x ,start y)
+                    b = (final_point[0], mid_point[1]) # (final x, mid y) 
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 4b มาแสดงผล
+                        print ('4b')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 4 c
+                    a = (start_point[0], mid_point[1]) # (start x, mid y) 
+                    b = (mid_point[0], final_point[1]) # (mid x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 4c มาแสดงผล
+                        print ('4c')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+                    # farm 4 d
+                    a = mid_point # (mid x ,mid y)
+                    b = final_point #(final x, final y)
+                    if is_hit_box(mouse_pos,a, b):  
+                        #f ดึงข้อมูล ฟาร์ม 4d มาแสดงผล
+                        print ('4d')
+                        # ถ้าคลิกตอนโตแล้ว เก็บเกี่ยว
+                        pass
+
+
                 # Botton ------------------------- Botton
-                mouse_pos = pygame.mouse.get_pos()
-                print( mouse_pos)
+                
 
                 # ปุ่ม ออกไป main_menu]
                 if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
