@@ -83,7 +83,7 @@ class Player_farm():
         self.money = self.player.money
         self.farmplot = self.player.farmplot
         self.load_time = 0
-        self.time = self.load_time
+        self.time = self.load_time + pygame.time.get_ticks()
 
         self.shop_button = ((430, 20),(580,140))
         self.storage_button = ((35,320),(90,385))
@@ -103,15 +103,19 @@ class Player_farm():
 
         # loop per second 
         clock = pygame.time.Clock()
-
+        enter_farm_time = pygame.time.get_ticks()
         run = True
         while run:
             # วาดพื้นหลัง
             self.draw_bg()
+
             # loop per second 
             clock.tick(60)
-            print (pygame.time.get_ticks(),type(pygame.time.get_ticks()))
-            print(self.time# input - output
+
+            # clock update (clock is millisec)
+            self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
+
+            # input - output
             for event in pygame.event.get():
 
                 # pointer
