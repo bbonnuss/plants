@@ -216,6 +216,9 @@ class Player_farm():
     def watering(self):
         run = True
         while run:
+            # clock update (clock is millisec)
+            self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
+            
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
