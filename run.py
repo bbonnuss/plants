@@ -194,27 +194,43 @@ class Player_farm():
                 # farmplot system ---------------- farmplot system
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[0].farmland[index_and_pos[0]].crop.name)
-
+                    index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
+                    if click and (index != None):
+                        if watering:
+                            Sound_().click.play()
+                            self.farmplot[0].farmland[index].watering = True
+                            
+                        else:
+                            print(self.farmplot[0].farmland[index].crop.name)
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[1].farmland[index_and_pos[0]].crop.name)
+                    index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
+                    if click and (index != None):
+                        if watering:
+                            Sound_().click.play()
+                            self.farmplot[1].farmland[index].watering = True
+                        else:
+                            print(self.farmplot[1].farmland[index].crop.name)
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[2].farmland[index_and_pos[0]].crop.name)
+                    index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
+                    if click and (index != None):
+                        if watering:
+                            Sound_().click.play()
+                            self.farmplot[2].farmland[index].watering = True
+                        else:    
+                            print(self.farmplot[2].farmland[index].crop.name)
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[3].farmland[index_and_pos[0]].crop.name)
+                    index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
+                    if click and (index != None):
+                        if watering:
+                            Sound_().click.play()
+                            self.farmplot[3].farmland[index].watering = True
+                        else:
+                            print(self.farmplot[3].farmland[index].crop.name)
                 
 
     def farmplot_check_crops(self, farm, mouse_pos):
@@ -234,28 +250,28 @@ class Player_farm():
             b = mid_point # (mid x ,mid y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม a มาแสดงผล
-                return 0, (a, b)
+                return 0
 
             # farm  b
             a = (mid_point[0], start_point[1]) # (mid x ,start y)
             b = (final_point[0], mid_point[1]) # (final x, mid y) 
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม b มาแสดงผล
-                return 1, (a, b)
+                return 1
 
             # farm  c
             a = (start_point[0], mid_point[1]) # (start x, mid y) 
             b = (mid_point[0], final_point[1]) # (mid x, final y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม c มาแสดงผล
-                return 2, (a, b)
+                return 2
 
             # farm  d
             a = mid_point # (mid x ,mid y)
             b = final_point #(final x, final y)
             if is_hit_box(mouse_pos,a, b):  
                 #f ดึงข้อมูล ฟาร์ม d มาแสดงผล
-                return 3, (a, b)
+                return 3
             return None
     
     def draw_bg(self):
