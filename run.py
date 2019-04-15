@@ -81,7 +81,9 @@ class Player_farm():
         self.player = Player()
         self.inv = self.player.inventory.get_inv()
         self.money = self.player.money
-        self.farmland = self.player.farmland
+        self.farmplot = self.player.farmplot
+        self.load_time = 0
+        self.time = self.load_time
 
         self.shop_button = ((430, 20),(580,140))
         self.storage_button = ((35,320),(90,385))
@@ -90,7 +92,7 @@ class Player_farm():
         self.save_button = ((0,0),(0,0))
         self.saveexit_button = ((0,0),(0,0))
         
-        self.farmland_position = [[(145,180),(310,300)],    # ซ้ายบน
+        self.farmplot_position = [[(145,180),(310,300)],    # ซ้ายบน
                                 [(520,170),(690,290)],      # ขวาบน
                                 [(160,380),(340,480)],      # ล่างซ้าย
                                 [(540,360),(690,470)]]      # ล่างขวา
@@ -106,11 +108,10 @@ class Player_farm():
         while run:
             # วาดพื้นหลัง
             self.draw_bg()
-
             # loop per second 
-            clock.tick(30)
-        
-            # input - output
+            clock.tick(60)
+            print (pygame.time.get_ticks(),type(pygame.time.get_ticks()))
+            print(self.time# input - output
             for event in pygame.event.get():
 
                 # pointer
@@ -125,34 +126,30 @@ class Player_farm():
                 if event.type == pygame.QUIT:
                     return 'exit'
 
-                # farmland system ---------------- farmland system
+                # farmplot system ---------------- farmplot system
                 # top left
-                if is_hit_box(mouse_pos, self.farmland_position[0][0], self.farmland_position[0][1]):
-                    index_and_pos = self.farmland_check_crops(self.farmland_position[0], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if click and index_and_pos != None:
-                        x = self.farmland[0].crops[index_and_pos[0]]
-                        print(x)
+                        print(self.farmplot[0].farmland[index_and_pos[0]].crop.name)
 
                 # top right
-                if is_hit_box(mouse_pos, self.farmland_position[1][0], self.farmland_position[1][1]):
-                    index_and_pos = self.farmland_check_crops(self.farmland_position[1], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if click and index_and_pos != None:
-                        x = self.farmland[1].crops[index_and_pos[0]]
-                        print(x)
+                        print(self.farmplot[1].farmland[index_and_pos[0]].crop.name)
                 
                 # down left
-                if is_hit_box(mouse_pos, self.farmland_position[2][0], self.farmland_position[2][1]):
-                    index_and_pos = self.farmland_check_crops(self.farmland_position[2], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if click and index_and_pos != None:
-                        x = self.farmland[2].crops[index_and_pos[0]]
-                        print(x)
+                        print(self.farmplot[2].farmland[index_and_pos[0]].crop.name)
                 
                 # down right
-                if is_hit_box(mouse_pos, self.farmland_position[3][0], self.farmland_position[3][1]):
-                    index_and_pos = self.farmland_check_crops(self.farmland_position[3], mouse_pos)
+                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if click and index_and_pos != None:
-                        x = self.farmland[3].crops[index_and_pos[0]]
-                        print(x)
+                        print(self.farmplot[3].farmland[index_and_pos[0]].crop.name)
                 
 
                 # Botton ------------------------- Botton
@@ -220,11 +217,52 @@ class Player_farm():
                 if event.type == pygame.QUIT:
                     return self.inv, self.money
                 
+                # ปุ่ม ยกเลิกรดน้ำ 
+                if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
+                    print ('Player_farm : watering')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
+                    if click:
+                        Sound_().click.play()
+                        # รดน้ำอ่ะ (คาดว่าจะสร้างเป็น method ขึ้นมาหลังจากกดปุ่ม)
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
+
                 # click to watering
                 mouse_pos = pygame.mouse.get_pos()
 
+                # top left
+                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
+                    if click and index_and_pos != None:
+                        print(self.farmplot[0].farmland[index_and_pos[0]].watering)
+                        self.farmplot[0].farmland[index_and_pos[0]].watering = True
 
-    def farmland_check_crops(self, farm, mouse_pos):
+                # top right
+                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
+                    if click and index_and_pos != None:
+                        print(self.farmplot[1].farmland[index_and_pos[0]].watering)
+                        self.farmplot[1].farmland[index_and_pos[0]].watering = True
+
+                # down left
+                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
+                    if click and index_and_pos != None:
+                        print(self.farmplot[2].farmland[index_and_pos[0]].watering)
+                        self.farmplot[2].farmland[index_and_pos[0]].watering = True
+                
+                # down right
+                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
+                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
+                    if click and index_and_pos != None:
+                        print(self.farmplot[3].farmland[index_and_pos[0]].watering)
+                        self.farmplot[3].farmland[index_and_pos[0]].watering = True
+
+
+    def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
         # โดนที่ ถ้าเป็น ถ้าต้นa:return 0, ต้นb:return 1, ......
         # และ return ตำแหน่ง
@@ -507,7 +545,7 @@ class Player():
     def __init__(self):
         self.money = 0
         self.inventory = Inventory()
-        self.farmland = [Farmland(), Farmland(), Farmland(), Farmland()]
+        self.farmplot = [Farmplot(), Farmplot(), Farmplot(), Farmplot()]
 
 class Inventory():
     def __init__(self):
@@ -542,14 +580,20 @@ class Inventory():
             inv[key] = self.inventory[key]
         return inv
 
+class Farmplot():
+    def __init__(self):
+        self.farmland = [Farmland(), Farmland(), Farmland(), Farmland()]
+
 class Farmland():
     def __init__(self):
-        self.watering_remaining = None # เวลาที่คงเหลือ
-        self.crops = ['a', 'b', 'c', 'd']
+        self.crop = Empty()
+        self.watering = False
+        
 
 # Crops -------------------------- Crops
 class Wheat():
     def __init__(self):
+        self.name = 'Wheat'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().wheat_state1
         self.crops_state2 = Image_().wheat_state2
@@ -560,6 +604,7 @@ class Wheat():
 
 class Cucumber():
     def __init__(self):
+        self.name = 'Cucumber'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().cucumber_state1
         self.crops_state2 = Image_().cucumber_state2
@@ -570,6 +615,7 @@ class Cucumber():
 
 class Tomato():
     def __init__(self):
+        self.name = 'Tomato'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().tomato_state1
         self.crops_state2 = Image_().tomato_state2
@@ -580,6 +626,7 @@ class Tomato():
 
 class Potato():
     def __init__(self):
+        self.name = 'Potato'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().potato_state1
         self.crops_state2 = Image_().potato_state2
@@ -590,6 +637,7 @@ class Potato():
 
 class Redcabbage():
     def __init__(self):
+        self.name = 'Redcabbage'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().redcabbage_state1
         self.crops_state2 = Image_().redcabbage_state2
@@ -600,6 +648,7 @@ class Redcabbage():
 
 class Orange():
     def __init__(self):
+        self.name = 'Orange'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().orange_state1
         self.crops_state2 = Image_().orange_state2
@@ -610,6 +659,7 @@ class Orange():
 
 class Mango():
     def __init__(self):
+        self.name = 'Mango'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().mango_state1
         self.crops_state2 = Image_().mango_state2
@@ -620,6 +670,7 @@ class Mango():
 
 class Apple():
     def __init__(self):
+        self.name = 'Apple'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().apple_state1
         self.crops_state2 = Image_().apple_state2
@@ -630,6 +681,7 @@ class Apple():
 
 class Melon():
     def __init__(self):
+        self.name = 'Melon'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().melon_state1
         self.crops_state2 = Image_().melon_state2
@@ -640,6 +692,7 @@ class Melon():
 
 class Grape():
     def __init__(self):
+        self.name = 'Grape'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.crops_state1 = Image_().grape_state1
         self.crops_state2 = Image_().grape_state2
@@ -648,6 +701,10 @@ class Grape():
         self.sale_price = 500
         self.seed_price = 70
 
+class Empty():
+    def __init__(self):
+        self.name = None
+        
 
 
 # Launcher ======================= Launcher ======================= Launcher 
