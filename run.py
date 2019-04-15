@@ -103,7 +103,11 @@ class Player_farm():
 
         # loop per second 
         clock = pygame.time.Clock()
+
+        # clock
         enter_farm_time = pygame.time.get_ticks()
+
+        watering = False
         run = True
         while run:
             # วาดพื้นหลัง
@@ -114,7 +118,7 @@ class Player_farm():
 
             # clock update (clock is millisec)
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
-
+            print (watering)
             # input - output
             for event in pygame.event.get():
 
@@ -124,38 +128,12 @@ class Player_farm():
                     click = True
                 else:
                     click = False
-                print( mouse_pos)
 
                 # exit
                 if event.type == pygame.QUIT:
                     return 'exit'
 
-                # farmplot system ---------------- farmplot system
-                # top left
-                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[0].farmland[index_and_pos[0]].crop.name)
-
-                # top right
-                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[1].farmland[index_and_pos[0]].crop.name)
                 
-                # down left
-                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[2].farmland[index_and_pos[0]].crop.name)
-                
-                # down right
-                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
-                    index_and_pos = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
-                    if click and index_and_pos != None:
-                        print(self.farmplot[3].farmland[index_and_pos[0]].crop.name)
-                
-
                 # Botton ------------------------- Botton
                 
 
@@ -180,7 +158,7 @@ class Player_farm():
 
                     if click:
                         Sound_().click.play()
-                        # รดน้ำอ่ะ (คาดว่าจะสร้างเป็น method ขึ้นมาหลังจากกดปุ่ม)
+                        watering = not watering
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -212,62 +190,32 @@ class Player_farm():
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
-    
-    def watering(self):
-        run = True
-        while run:
-            # clock update (clock is millisec)
-            self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
-            
-            for event in pygame.event.get():
-                # Exit game 
-                if event.type == pygame.QUIT:
-                    return self.inv, self.money
-                
-                # ปุ่ม ยกเลิกรดน้ำ 
-                if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
-                    print ('Player_farm : watering')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
-                    if click:
-                        Sound_().click.play()
-                        # รดน้ำอ่ะ (คาดว่าจะสร้างเป็น method ขึ้นมาหลังจากกดปุ่ม)
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
-
-                # click to watering
-                mouse_pos = pygame.mouse.get_pos()
-
+                # farmplot system ---------------- farmplot system
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
                     index_and_pos = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if click and index_and_pos != None:
-                        print(self.farmplot[0].farmland[index_and_pos[0]].watering)
-                        self.farmplot[0].farmland[index_and_pos[0]].watering = True
+                        print(self.farmplot[0].farmland[index_and_pos[0]].crop.name)
 
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index_and_pos = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if click and index_and_pos != None:
-                        print(self.farmplot[1].farmland[index_and_pos[0]].watering)
-                        self.farmplot[1].farmland[index_and_pos[0]].watering = True
-
+                        print(self.farmplot[1].farmland[index_and_pos[0]].crop.name)
+                
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
                     index_and_pos = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if click and index_and_pos != None:
-                        print(self.farmplot[2].farmland[index_and_pos[0]].watering)
-                        self.farmplot[2].farmland[index_and_pos[0]].watering = True
+                        print(self.farmplot[2].farmland[index_and_pos[0]].crop.name)
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
                     index_and_pos = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if click and index_and_pos != None:
-                        print(self.farmplot[3].farmland[index_and_pos[0]].watering)
-                        self.farmplot[3].farmland[index_and_pos[0]].watering = True
-
+                        print(self.farmplot[3].farmland[index_and_pos[0]].crop.name)
+                
 
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
