@@ -118,7 +118,16 @@ class Player_farm():
 
             # clock update (clock is millisec)
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
-            print (watering)
+            
+            # set water dry again
+            plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
+            for plot in plot_list:
+                stats = self.check_crops_status(plot)
+                if stats[2] is not None:
+                    if stats[1] and (stats[2] < self.time): # ถ้าฟาร์มชื้น และ เกินเวลาคงเหลือ
+                        self.set_dry(plot)
+                        print (plot, ' Dry !!!!')
+
             # input - output
             for event in pygame.event.get():
 
@@ -132,7 +141,6 @@ class Player_farm():
                 # exit
                 if event.type == pygame.QUIT:
                     return 'exit'
-
                 
                 # Botton ------------------------- Botton
                 
@@ -198,19 +206,20 @@ class Player_farm():
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            self.farmplot[0].farmland[index].watering = True
-                            
+                            self.set_wet('1'+str(index))
+                            print (self.check_crops_status('1'+str(index)))
                         else:
-                            print(self.farmplot[0].farmland[index].crop.name)
+                            print (self.check_crops_status('1'+str(index)))
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            self.farmplot[1].farmland[index].watering = True
+                            self.set_wet('2'+str(index))
+                            print (self.check_crops_status('2'+str(index)))
                         else:
-                            print(self.farmplot[1].farmland[index].crop.name)
+                            print (self.check_crops_status('2'+str(index)))
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
@@ -218,9 +227,10 @@ class Player_farm():
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            self.farmplot[2].farmland[index].watering = True
+                            self.set_wet('3'+str(index))
+                            print (self.check_crops_status('3'+str(index)))
                         else:    
-                            print(self.farmplot[2].farmland[index].crop.name)
+                            print (self.check_crops_status('3'+str(index)))
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
@@ -228,15 +238,67 @@ class Player_farm():
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            self.farmplot[3].farmland[index].watering = True
+                            self.set_wet('4'+str(index))
+                            print (self.check_crops_status('4'+str(index)))
                         else:
-                            print(self.farmplot[3].farmland[index].crop.name)
+                            print (self.check_crops_status('4'+str(index)))
                 
+            
+    def set_dry(self, plot):
+        if plot[1] == 'a':
+            land = 0
+        elif plot[1] == 'b':
+            land = 1
+        elif plot[1] == 'c':
+            land = 2
+        elif plot[1] == 'd':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].watering = False
+        self.farmplot[int(plot[0]) - 1].farmland[land].dry_time = None
+    
+    def set_wet(self, plot):
+        if plot[1] == 'a':
+            land = 0
+        elif plot[1] == 'b':
+            land = 1
+        elif plot[1] == 'c':
+            land = 2
+        elif plot[1] == 'd':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].watering = True
+        self.farmplot[int(plot[0]) - 1].farmland[land].dry_time = self.time + 3000
+
+    def check_crops_status(self, plot):
+        # method นี้ return [ชื่อ, สถานะการรดน้ำ, เวลาฟาร์มแห้ง, state ปัจจุบัน]
+        if plot[1] == 'a':
+            land = 0
+        elif plot[1] == 'b':
+            land = 1
+        elif plot[1] == 'c':
+            land = 2
+        elif plot[1] == 'd':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        name = self.farmplot[int(plot[0]) - 1].farmland[land].crop.name
+        watering = self.farmplot[int(plot[0]) - 1].farmland[land].watering
+        dry_time = self.farmplot[int(plot[0]) - 1].farmland[land].dry_time
+        if name is None:
+            state = None
+        else:
+            state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.now_state
+        return [name, watering, dry_time, state]
 
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
         # โดนที่ ถ้าเป็น ถ้าต้นa:return 0, ต้นb:return 1, ......
-        # และ return ตำแหน่ง
         
         # farm = [(145,180),(310,300)]
         if is_hit_box(mouse_pos,farm[0], farm[1]):
@@ -559,6 +621,7 @@ class Farmland():
     def __init__(self):
         self.crop = Empty()
         self.watering = False
+        self.dry_time = None
         
 
 # Crops -------------------------- Crops
@@ -566,6 +629,7 @@ class Wheat():
     def __init__(self):
         self.name = 'Wheat'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().wheat_state1
         self.crops_state2 = Image_().wheat_state2
         self.crops_state3 = Image_().wheat_state3
@@ -577,6 +641,7 @@ class Cucumber():
     def __init__(self):
         self.name = 'Cucumber'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().cucumber_state1
         self.crops_state2 = Image_().cucumber_state2
         self.crops_state3 = Image_().cucumber_state3
@@ -588,6 +653,7 @@ class Tomato():
     def __init__(self):
         self.name = 'Tomato'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().tomato_state1
         self.crops_state2 = Image_().tomato_state2
         self.crops_state3 = Image_().tomato_state3
@@ -599,6 +665,7 @@ class Potato():
     def __init__(self):
         self.name = 'Potato'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().potato_state1
         self.crops_state2 = Image_().potato_state2
         self.crops_state3 = Image_().potato_state3
@@ -610,6 +677,7 @@ class Redcabbage():
     def __init__(self):
         self.name = 'Redcabbage'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().redcabbage_state1
         self.crops_state2 = Image_().redcabbage_state2
         self.crops_state3 = Image_().redcabbage_state3
@@ -621,6 +689,7 @@ class Orange():
     def __init__(self):
         self.name = 'Orange'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().orange_state1
         self.crops_state2 = Image_().orange_state2
         self.crops_state3 = Image_().orange_state3
@@ -632,6 +701,7 @@ class Mango():
     def __init__(self):
         self.name = 'Mango'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().mango_state1
         self.crops_state2 = Image_().mango_state2
         self.crops_state3 = Image_().mango_state3
@@ -643,6 +713,7 @@ class Apple():
     def __init__(self):
         self.name = 'Apple'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().apple_state1
         self.crops_state2 = Image_().apple_state2
         self.crops_state3 = Image_().apple_state3
@@ -654,6 +725,7 @@ class Melon():
     def __init__(self):
         self.name = 'Melon'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().melon_state1
         self.crops_state2 = Image_().melon_state2
         self.crops_state3 = Image_().melon_state3
@@ -665,6 +737,7 @@ class Grape():
     def __init__(self):
         self.name = 'Grape'
         self.growing_time = 1 # growing_time per 1 state (sec)
+        self.now_state = 1
         self.crops_state1 = Image_().grape_state1
         self.crops_state2 = Image_().grape_state2
         self.crops_state3 = Image_().grape_state3
