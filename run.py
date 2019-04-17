@@ -102,22 +102,34 @@ class Player_farm():
     
     def run(self):
         print ('Runing at Player_farm')
-
+        global loaded_image
+        global loaded_sound
         # loop per second 
         clock = pygame.time.Clock()
 
         # clock
         enter_farm_time = pygame.time.get_ticks()
-        
+
+        # วาดพื้นหลัง
+        self.draw_bg()
+        seeding = False
         watering = False
         run = True
         while run:
-            # วาดพื้นหลัง
-            #self.draw_bg()
 
             # loop per second 
-            clock.tick(60)
-            print (pygame.mouse.get_pos())
+            clock.tick(40)
+
+            # debuging display
+            if seeding:
+                print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
+            elif watering:
+                #print (pygame.mouse.get_pos(),'STATUS = WATERING')
+                pass
+            else:
+                pass
+                #print (pygame.mouse.get_pos(),'STATUS = None')
+
             # clock update (clock is millisec)
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
             
@@ -128,8 +140,11 @@ class Player_farm():
                 if stats[2] is not None:
                     if stats[1] and (stats[2] < self.time): # ถ้าฟาร์มชื้น และ เกินเวลาคงเหลือ
                         self.set_dry(plot)
+                        self.draw_farmland(plot, False)
                         print (plot, ' Dry !!!!')
             
+            # set crops growing to next state
+
             # growth system
 
             # input - output
@@ -185,6 +200,7 @@ class Player_farm():
                         Sound_().click.play()
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money = storage.run()
+                        self.draw_bg()
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -199,6 +215,7 @@ class Player_farm():
                         Sound_().click.play()
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
+                        self.draw_bg()
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -207,22 +224,21 @@ class Player_farm():
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
-                    if click and (index != None):
-                        if watering:
-                            Sound_().click.play()
-                            #self.set_wet('1'+str(index))
-                            print (self.check_crops_status('1'+str(index)))
-                        else:
-                            print (self.check_crops_status('1'+str(index)))
+                    if click and (index != None) and watering:
+                        self.set_wet('1'+str(index))
+                        self.draw_farmland('1'+str(index), True)
+                        print (self.check_crops_status('1'+str(index)))
+                    if click and (index != None) and seeding:
+                        self.set_crops('1'+str(index), seed)
                         
-                        #if seeding[0]
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            #self.set_wet('2'+str(index))
+                            self.set_wet('2'+str(index))
+                            self.draw_farmland('2'+str(index), True)
                             print (self.check_crops_status('2'+str(index)))
                         else:
                             print (self.check_crops_status('2'+str(index)))
@@ -233,7 +249,8 @@ class Player_farm():
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            #self.set_wet('3'+str(index))
+                            self.set_wet('3'+str(index))
+                            self.draw_farmland('3'+str(index), True)
                             print (self.check_crops_status('3'+str(index)))
                         else:    
                             print (self.check_crops_status('3'+str(index)))
@@ -244,11 +261,13 @@ class Player_farm():
                     if click and (index != None):
                         if watering:
                             Sound_().click.play()
-                            #self.set_wet('4'+str(index))
+                            self.set_wet('4'+str(index))
+                            self.draw_farmland('4'+str(index), True)
                             print (self.check_crops_status('4'+str(index)))
                         else:
                             print (self.check_crops_status('4'+str(index)))
-                
+    def set_crops(self, plot, seed):
+        pass
             
     def set_dry(self, plot):
         if plot[1] == 'a':
@@ -344,6 +363,8 @@ class Player_farm():
     
 
     def draw_bg(self):
+        global loaded_image
+        global loaded_sound
         # background 
         window.blit(Image_().farm_bg, (0, 0))
         
@@ -355,11 +376,11 @@ class Player_farm():
 
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
         pic = pygame.transform.scale(Image_().dry_farm, farm_scale)
-        for spot in self.farmplot_position:
-            window.blit(pic, (spot))
-            window.blit(pic, (spot[0][0]+farm_scale[0] , spot[0][1]))
-            window.blit(pic, (spot[0][0], spot[0][1]+farm_scale[1]))
-            window.blit(pic, (spot[0][0]+farm_scale[0], spot[0][1]+farm_scale[1]))
+        for plot in self.farmplot_position:
+            window.blit(pic, (plot[0]))
+            window.blit(pic, (plot[0][0]+farm_scale[0] , plot[0][1]))
+            window.blit(pic, (plot[0][0], plot[0][1]+farm_scale[1]))
+            window.blit(pic, (plot[0][0]+farm_scale[0], plot[0][1]+farm_scale[1]))
 
 
         # ปุ่มรดน้ำ
@@ -373,8 +394,38 @@ class Player_farm():
         
         pygame.display.update()
 
-    def draw_crops_info(self, position):
-        pass
+    def draw_farmland(self, plot, watering=False):
+        global loaded_image
+        global loaded_sound
+        # farmland
+        if plot[0] == '1' or plot[0] == 'a':
+            index = 0
+        elif plot[0] == '2' or plot[0] == 'b':
+            index = 1
+        elif plot[0] == '3' or plot[0] == 'c':
+            index = 2
+        elif plot[0] == '4' or plot[0] == 'd':
+            index = 3
+        a = self.farmplot_position[index][0][0]
+        b = self.farmplot_position[index][0][1]
+        x = self.farmplot_position[index][1][0]
+        y = self.farmplot_position[index][1][1]
+
+        farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
+        if watering:
+            farmland_image = pygame.transform.scale(Image_().wet_farm, farm_scale)
+        else:
+            farmland_image = pygame.transform.scale(Image_().dry_farm, farm_scale)
+        print ('DRAWFARMLAND ', plot)
+        if plot[1] == 'a' or plot[1] == '0':
+            window.blit(farmland_image, (self.farmplot_position[index][0]))
+            print 
+        elif plot[1] == 'b' or plot[1] == '1':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]))
+        elif plot[1] == 'c' or plot[1] == '2':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]))
+        elif plot[1] == 'd' or plot[1] == '3':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
     
 # shop
 class Shop_menu():
@@ -455,26 +506,23 @@ class Main_menu():
     
     def run(self):
         print ('Runing at Main_menu')
-        
-        # loop per second 
+        # drawing page ------------------- drawing page
+        # background 
+        window.blit(Image_().main_bg, (0, 0))
+        # newgame botton
+        pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
+        # continue botton
+        pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
+        # credit botton
+        pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
+        # exit botton
+        pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
+
+        pygame.display.update()
+
         clock = pygame.time.Clock()
         run = True
         while run:
-            # drawing page ------------------- drawing page
-            # background 
-            window.blit(Image_().main_bg, (0, 0))
-
-            # newgame botton
-            pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
-            # continue botton
-            pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
-            # credit botton
-            pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
-            # exit botton
-            pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
-
-            pygame.display.update()
-
             # loop per second 
             clock.tick(30)
         
@@ -552,6 +600,8 @@ class Newgame_menu():
         self.inprocess = True
     
     def run(self):
+        global loaded_image
+        global loaded_sound
         print ('Runing at Newgame_menu')
         run = True
         while run:
@@ -782,9 +832,13 @@ pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
 
 window.fill((255,255,255))
 pygame.display.update()
+loaded_image = Image_()
+loaded_sound = Sound_()
 
 # Main Loop ====================== Main Loop ====================== Main Loop 
 def main():
+    global loaded_image
+    global loaded_sound
     print ('Runing at Main()')
     selected = 'main'
     run = True
