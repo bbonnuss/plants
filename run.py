@@ -342,7 +342,7 @@ class Player_farm():
                 return 3
             return None
     
-    
+
     def draw_bg(self):
         # background 
         window.blit(Image_().farm_bg, (0, 0))
