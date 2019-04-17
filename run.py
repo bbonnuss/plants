@@ -153,9 +153,13 @@ class Player_farm():
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    click = True
+                    clickup = True
                 else:
-                    click = False
+                    clickup = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
                 
                 # exit
                 if event.type == pygame.QUIT:
@@ -170,8 +174,8 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if click:
-                        Sound_().click.play()
+                    if clickdown:
+                        loaded_sound.click.play()
                         return 'main'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -183,8 +187,8 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if click:
-                        Sound_().click.play()
+                    if clickdown:
+                        loaded_sound.click.play()
                         watering = not watering
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -196,8 +200,8 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if click:
-                        Sound_().click.play()
+                    if clickdown:
+                        loaded_sound.click.play()
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money = storage.run()
                         self.draw_bg()
@@ -211,8 +215,8 @@ class Player_farm():
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if click:
-                        Sound_().click.play()
+                    if clickdown:
+                        loaded_sound.click.play()
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
                         self.draw_bg()
@@ -224,19 +228,19 @@ class Player_farm():
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
-                    if click and (index != None) and watering:
+                    if clickdown and (index != None) and watering:
                         self.set_wet('1'+str(index))
                         self.draw_farmland('1'+str(index), True)
                         print (self.check_crops_status('1'+str(index)))
-                    if click and (index != None) and seeding:
+                    if clickdown and (index != None) and seeding:
                         self.set_crops('1'+str(index), seed)
                         
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
-                    if click and (index != None):
+                    if clickdown and (index != None):
                         if watering:
-                            Sound_().click.play()
+                            loaded_sound.click.play()
                             self.set_wet('2'+str(index))
                             self.draw_farmland('2'+str(index), True)
                             print (self.check_crops_status('2'+str(index)))
@@ -246,9 +250,9 @@ class Player_farm():
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
-                    if click and (index != None):
+                    if clickdown and (index != None):
                         if watering:
-                            Sound_().click.play()
+                            loaded_sound.click.play()
                             self.set_wet('3'+str(index))
                             self.draw_farmland('3'+str(index), True)
                             print (self.check_crops_status('3'+str(index)))
@@ -258,9 +262,9 @@ class Player_farm():
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
-                    if click and (index != None):
+                    if clickdown and (index != None):
                         if watering:
-                            Sound_().click.play()
+                            loaded_sound.click.play()
                             self.set_wet('4'+str(index))
                             self.draw_farmland('4'+str(index), True)
                             print (self.check_crops_status('4'+str(index)))
@@ -366,7 +370,7 @@ class Player_farm():
         global loaded_image
         global loaded_sound
         # background 
-        window.blit(Image_().farm_bg, (0, 0))
+        window.blit(loaded_image.farm_bg, (0, 0))
         
         # farmland
         a = self.farmplot_position[0][0][0]
@@ -375,7 +379,7 @@ class Player_farm():
         y = self.farmplot_position[0][1][1]
 
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
-        pic = pygame.transform.scale(Image_().dry_farm, farm_scale)
+        pic = pygame.transform.scale(loaded_image.dry_farm, farm_scale)
         for plot in self.farmplot_position:
             window.blit(pic, (plot[0]))
             window.blit(pic, (plot[0][0]+farm_scale[0] , plot[0][1]))
@@ -413,9 +417,9 @@ class Player_farm():
 
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
         if watering:
-            farmland_image = pygame.transform.scale(Image_().wet_farm, farm_scale)
+            farmland_image = pygame.transform.scale(loaded_image.wet_farm, farm_scale)
         else:
-            farmland_image = pygame.transform.scale(Image_().dry_farm, farm_scale)
+            farmland_image = pygame.transform.scale(loaded_image.dry_farm, farm_scale)
         print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
             window.blit(farmland_image, (self.farmplot_position[index][0]))
@@ -508,7 +512,7 @@ class Main_menu():
         print ('Runing at Main_menu')
         # drawing page ------------------- drawing page
         # background 
-        window.blit(Image_().main_bg, (0, 0))
+        window.blit(loaded_image.main_bg, (0, 0))
         # newgame botton
         pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
         # continue botton
@@ -543,7 +547,7 @@ class Main_menu():
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        Sound_().click.play()
+                        loaded_sound.click.play()
                         return 'newgame'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -558,7 +562,7 @@ class Main_menu():
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        Sound_().click.play()
+                        loaded_sound.click.play()
                         return 'load'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -573,7 +577,7 @@ class Main_menu():
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        Sound_().click.play()
+                        loaded_sound.click.play()
                         return 'credit'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -588,7 +592,7 @@ class Main_menu():
                     pygame.display.update()
 
                     if event.type == pygame.MOUSEBUTTONUP:
-                        Sound_().click.play()
+                        loaded_sound.click.play()
                         return 'exit'
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -702,10 +706,10 @@ class Wheat():
         self.name = 'Wheat'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().wheat_state1
-        self.crops_state2 = Image_().wheat_state2
-        self.crops_state3 = Image_().wheat_state3
-        self.crops_state4 = Image_().wheat_state4
+        self.crops_state1 = loaded_image.wheat_state1
+        self.crops_state2 = loaded_image.wheat_state2
+        self.crops_state3 = loaded_image.wheat_state3
+        self.crops_state4 = loaded_image.wheat_state4
         self.sale_price = 10
         self.seed_price = 5
 
@@ -714,10 +718,10 @@ class Cucumber():
         self.name = 'Cucumber'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().cucumber_state1
-        self.crops_state2 = Image_().cucumber_state2
-        self.crops_state3 = Image_().cucumber_state3
-        self.crops_state4 = Image_().cucumber_state4
+        self.crops_state1 = loaded_image.cucumber_state1
+        self.crops_state2 = loaded_image.cucumber_state2
+        self.crops_state3 = loaded_image.cucumber_state3
+        self.crops_state4 = loaded_image.cucumber_state4
         self.sale_price = 30
         self.seed_price = 10
 
@@ -726,10 +730,10 @@ class Tomato():
         self.name = 'Tomato'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().tomato_state1
-        self.crops_state2 = Image_().tomato_state2
-        self.crops_state3 = Image_().tomato_state3
-        self.crops_state4 = Image_().tomato_state4
+        self.crops_state1 = loaded_image.tomato_state1
+        self.crops_state2 = loaded_image.tomato_state2
+        self.crops_state3 = loaded_image.tomato_state3
+        self.crops_state4 = loaded_image.tomato_state4
         self.sale_price = 50
         self.seed_price = 15
 
@@ -738,10 +742,10 @@ class Potato():
         self.name = 'Potato'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().potato_state1
-        self.crops_state2 = Image_().potato_state2
-        self.crops_state3 = Image_().potato_state3
-        self.crops_state4 = Image_().potato_state4
+        self.crops_state1 = loaded_image.potato_state1
+        self.crops_state2 = loaded_image.potato_state2
+        self.crops_state3 = loaded_image.potato_state3
+        self.crops_state4 = loaded_image.potato_state4
         self.sale_price = 70
         self.seed_price = 20
 
@@ -750,10 +754,10 @@ class Redcabbage():
         self.name = 'Redcabbage'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().redcabbage_state1
-        self.crops_state2 = Image_().redcabbage_state2
-        self.crops_state3 = Image_().redcabbage_state3
-        self.crops_state4 = Image_().redcabbage_state4
+        self.crops_state1 = loaded_image.redcabbage_state1
+        self.crops_state2 = loaded_image.redcabbage_state2
+        self.crops_state3 = loaded_image.redcabbage_state3
+        self.crops_state4 = loaded_image.redcabbage_state4
         self.sale_price = 100
         self.seed_price = 25
 
@@ -762,10 +766,10 @@ class Orange():
         self.name = 'Orange'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().orange_state1
-        self.crops_state2 = Image_().orange_state2
-        self.crops_state3 = Image_().orange_state3
-        self.crops_state4 = Image_().orange_state4
+        self.crops_state1 = loaded_image.orange_state1
+        self.crops_state2 = loaded_image.orange_state2
+        self.crops_state3 = loaded_image.orange_state3
+        self.crops_state4 = loaded_image.orange_state4
         self.sale_price = 50
         self.seed_price = 30
 
@@ -774,10 +778,10 @@ class Mango():
         self.name = 'Mango'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().mango_state1
-        self.crops_state2 = Image_().mango_state2
-        self.crops_state3 = Image_().mango_state3
-        self.crops_state4 = Image_().mango_state4
+        self.crops_state1 = loaded_image.mango_state1
+        self.crops_state2 = loaded_image.mango_state2
+        self.crops_state3 = loaded_image.mango_state3
+        self.crops_state4 = loaded_image.mango_state4
         self.sale_price = 150
         self.seed_price = 40
 
@@ -786,10 +790,10 @@ class Apple():
         self.name = 'Apple'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().apple_state1
-        self.crops_state2 = Image_().apple_state2
-        self.crops_state3 = Image_().apple_state3
-        self.crops_state4 = Image_().apple_state4
+        self.crops_state1 = loaded_image.apple_state1
+        self.crops_state2 = loaded_image.apple_state2
+        self.crops_state3 = loaded_image.apple_state3
+        self.crops_state4 = loaded_image.apple_state4
         self.sale_price = 350
         self.seed_price = 50
 
@@ -798,10 +802,10 @@ class Melon():
         self.name = 'Melon'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().melon_state1
-        self.crops_state2 = Image_().melon_state2
-        self.crops_state3 = Image_().melon_state3
-        self.crops_state4 = Image_().melon_state4
+        self.crops_state1 = loaded_image.melon_state1
+        self.crops_state2 = loaded_image.melon_state2
+        self.crops_state3 = loaded_image.melon_state3
+        self.crops_state4 = loaded_image.melon_state4
         self.sale_price = 400
         self.seed_price = 60
 
@@ -810,10 +814,10 @@ class Grape():
         self.name = 'Grape'
         self.growing_time = 1 # growing_time per 1 state (sec)
         self.now_state = 1
-        self.crops_state1 = Image_().grape_state1
-        self.crops_state2 = Image_().grape_state2
-        self.crops_state3 = Image_().grape_state3
-        self.crops_state4 = Image_().grape_state4
+        self.crops_state1 = loaded_image.grape_state1
+        self.crops_state2 = loaded_image.grape_state2
+        self.crops_state3 = loaded_image.grape_state3
+        self.crops_state4 = loaded_image.grape_state4
         self.sale_price = 500
         self.seed_price = 70
 
