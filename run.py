@@ -188,7 +188,6 @@ class Player_farm():
                     pygame.display.update()
 
                     if clickdown:
-                        loaded_sound.click.play()
                         watering = not watering
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -201,7 +200,6 @@ class Player_farm():
                     pygame.display.update()
 
                     if clickdown:
-                        loaded_sound.click.play()
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money = storage.run()
                         self.draw_bg()
@@ -216,71 +214,112 @@ class Player_farm():
                     pygame.display.update()
 
                     if clickdown:
-                        loaded_sound.click.play()
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
                         self.draw_bg()
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
+                
+                # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
+
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if clickdown and (index != None) and watering:
-                        self.set_wet('1'+str(index))
-                        self.draw_farmland('1'+str(index), True)
-                        print (self.check_crops_status('1'+str(index)))
-                    if clickdown and (index != None) and seeding:
-                        self.set_crops('1'+str(index), seed)
+                        if watering:
+                            self.set_wet('1'+str(index))
+                            self.draw_farmland('1'+str(index), True)
+                            print (self.check_crops_status('1'+str(index)))
+                        if seeding:
+                            self.set_crops('1'+str(index), seed)
+                            seeding = False
                         
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if clickdown and (index != None):
                         if watering:
-                            loaded_sound.click.play()
                             self.set_wet('2'+str(index))
                             self.draw_farmland('2'+str(index), True)
                             print (self.check_crops_status('2'+str(index)))
-                        else:
-                            print (self.check_crops_status('2'+str(index)))
+                        if seeding:
+                            self.set_crops('2'+str(index), seed)
+                            seeding = False
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if clickdown and (index != None):
                         if watering:
-                            loaded_sound.click.play()
                             self.set_wet('3'+str(index))
                             self.draw_farmland('3'+str(index), True)
                             print (self.check_crops_status('3'+str(index)))
-                        else:    
-                            print (self.check_crops_status('3'+str(index)))
+                        if seeding:
+                            self.set_crops('3'+str(index), seed)
+                            seeding = False
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if clickdown and (index != None):
                         if watering:
-                            loaded_sound.click.play()
                             self.set_wet('4'+str(index))
                             self.draw_farmland('4'+str(index), True)
                             print (self.check_crops_status('4'+str(index)))
-                        else:
-                            print (self.check_crops_status('4'+str(index)))
-    def set_crops(self, plot, seed):
-        pass
+                        if seeding:
+                            self.set_crops('3'+str(index), seed)
+                            seeding = False
+    
+    def set_crops(self, plot, seed_name):
+        # plot เป็น str มี 2 อักษร คือ เลข และ a-d
+        # seed_name เป็น str ที่เป๋็นชื่อของพืช
+        if seed_name == 'wheat':
+            seed = Wheat()
+        elif seed_name == 'cucumber':
+            seed = Cucumber()
+        elif seed_name == 'tomato':
+            seed = Tomato()
+        elif seed_name == 'potato':
+            seed = Potato()
+        elif seed_name == 'redcabbage':
+            seed = Redcabbage()
+        elif seed_name == 'orange':
+            seed = Orange()
+        elif seed_name == 'mango':
+            seed = Mango()
+        elif seed_name == 'apple':
+            seed = Apple()
+        elif seed_name == 'melon':
+            seed = Melon()
+        elif seed_name == 'grape':
+            seed = Grape()
+        else :
+            seed = Empty()
+
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop = seed
             
     def set_dry(self, plot):
-        if plot[1] == 'a':
+        if plot[1] == 'a' or plot[1] == '0':
             land = 0
-        elif plot[1] == 'b':
+        elif plot[1] == 'b' or plot[1] == '1':
             land = 1
-        elif plot[1] == 'c':
+        elif plot[1] == 'c' or plot[1] == '2':
             land = 2
-        elif plot[1] == 'd':
+        elif plot[1] == 'd' or plot[1] == '3':
             land = 3
         else:
             land = int(plot[1])
@@ -289,13 +328,13 @@ class Player_farm():
         self.farmplot[int(plot[0]) - 1].farmland[land].dry_time = None
     
     def set_wet(self, plot):
-        if plot[1] == 'a':
+        if plot[1] == 'a' or plot[1] == '0':
             land = 0
-        elif plot[1] == 'b':
+        elif plot[1] == 'b' or plot[1] == '1':
             land = 1
-        elif plot[1] == 'c':
+        elif plot[1] == 'c' or plot[1] == '2':
             land = 2
-        elif plot[1] == 'd':
+        elif plot[1] == 'd' or plot[1] == '3':
             land = 3
         else:
             land = int(plot[1])
@@ -305,13 +344,13 @@ class Player_farm():
 
     def check_crops_status(self, plot):
         # method นี้ return [ชื่อ, สถานะการรดน้ำ, เวลาฟาร์มแห้ง, state ปัจจุบัน]
-        if plot[1] == 'a':
+        if plot[1] == 'a' or plot[1] == '0':
             land = 0
-        elif plot[1] == 'b':
+        elif plot[1] == 'b' or plot[1] == '1':
             land = 1
-        elif plot[1] == 'c':
+        elif plot[1] == 'c' or plot[1] == '2':
             land = 2
-        elif plot[1] == 'd':
+        elif plot[1] == 'd' or plot[1] == '3':
             land = 3
         else:
             land = int(plot[1])
@@ -365,7 +404,6 @@ class Player_farm():
                 return 3
             return None
     
-
     def draw_bg(self):
         global loaded_image
         global loaded_sound
