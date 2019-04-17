@@ -124,7 +124,7 @@ class Player_farm():
 
             # debuging display
             if seeding:
-                #print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
+                print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
                 pass
             elif watering:
                 print (pygame.mouse.get_pos(),'STATUS = WATERING')
@@ -238,11 +238,12 @@ class Player_farm():
 
                             if self.inv.item_dict[seed_name+'_seed'] > 0:
                                 seeding = True
+                                print ('Select the plot that you want to plant it')
                             else:
                                 seeding = False
                                 seed_name = None
                                 print ('You don\'t have enough seed to plant it')
-                    if clickdown and seeding: # ถ้าคลิกตอนกำลังเลือกแปลง = ยกเลิกการปลูก
+                    elif clickdown and seeding: # ถ้าคลิกตอนกำลังเลือกแปลง = ยกเลิกการปลูก
                         seeding = False
                         seed_name = None
                         print ('You cancle to plant that seed')
@@ -261,6 +262,7 @@ class Player_farm():
                             self.draw_farmland('1'+str(index), True)
                             print (self.check_crops_status('1'+str(index)))
                         if seeding:
+                            self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('1'+str(index), seed_name)
                             seeding = False
                             seed_name = None
@@ -274,7 +276,8 @@ class Player_farm():
                             self.draw_farmland('2'+str(index), True)
                             print (self.check_crops_status('2'+str(index)))
                         if seeding:
-                            self.set_crops('2'+str(index), seed)
+                            self.inv.remove(seed_name+'_seed', 1)
+                            self.set_crops('2'+str(index), seed_name)
                             seeding = False
                 
                 # down left
@@ -286,7 +289,8 @@ class Player_farm():
                             self.draw_farmland('3'+str(index), True)
                             print (self.check_crops_status('3'+str(index)))
                         if seeding:
-                            self.set_crops('3'+str(index), seed)
+                            self.inv.remove(seed_name+'_seed', 1)
+                            self.set_crops('3'+str(index), seed_name)
                             seeding = False
                 
                 # down right
@@ -298,7 +302,8 @@ class Player_farm():
                             self.draw_farmland('4'+str(index), True)
                             print (self.check_crops_status('4'+str(index)))
                         if seeding:
-                            self.set_crops('3'+str(index), seed)
+                            self.inv.remove(seed_name+'_seed', 1)
+                            self.set_crops('3'+str(index), seed_name)
                             seeding = False
     
     def set_crops(self, plot, seed_name):
