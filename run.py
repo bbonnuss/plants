@@ -430,6 +430,7 @@ class Player_farm():
             window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]))
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
+        pygame.display.update()
     
 # shop
 class Shop_menu():
