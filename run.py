@@ -1,6 +1,7 @@
 # Import ========================= Import ========================= Import
 import pygame
 import sys
+import math
 from os.path import join
 
 # Function ======================= Function ======================= Function
@@ -81,7 +82,7 @@ class Image_():
 class Player_farm():
     def __init__(self):
         self.player = Player()
-        self.inv = self.player.inventory.get_inv()
+        self.inv = self.player.inventory
         self.money = self.player.money
         self.farmplot = self.player.farmplot
         self.load_time = 0
@@ -91,6 +92,7 @@ class Player_farm():
         self.storage_button = ((35,320),(90,385))
         self.watering_button = ((35,205),(90,270))
         self.mainmenu_button = ((390,500),(480,570))
+        self.seedselection_button = ((715,150),(770,500))
         self.save_button = ((0,0),(0,0))
         self.saveexit_button = ((0,0),(0,0))
         
@@ -122,13 +124,15 @@ class Player_farm():
 
             # debuging display
             if seeding:
-                print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
+                #print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
+                pass
             elif watering:
-                #print (pygame.mouse.get_pos(),'STATUS = WATERING')
-                pass
+                print (pygame.mouse.get_pos(),'STATUS = WATERING')
+                
             else:
-                pass
                 #print (pygame.mouse.get_pos(),'STATUS = None')
+                pass
+
 
             # clock update (clock is millisec)
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
@@ -222,7 +226,30 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
+                if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1]):
+                    print ('Player_farm : Seed Selection')
+                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
+                    if clickdown and (not seeding): # ถ้าคลิกตอนไม่ปลูก
+                        seed_name = self.seed_index(mouse_pos)
+                        print ('Select: %s'%seed_name)
+                        if seed_name is not None:
+
+                            if self.inv.item_dict[seed_name+'_seed'] > 0:
+                                seeding = True
+                            else:
+                                seeding = False
+                                seed_name = None
+                                print ('You don\'t have enough seed to plant it')
+                    if clickdown and seeding: # ถ้าคลิกตอนกำลังเลือกแปลง = ยกเลิกการปลูก
+                        seeding = False
+                        seed_name = None
+                        print ('You cancle to plant that seed')
+
+                else:
+                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
+                    pygame.display.update()
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
@@ -234,8 +261,9 @@ class Player_farm():
                             self.draw_farmland('1'+str(index), True)
                             print (self.check_crops_status('1'+str(index)))
                         if seeding:
-                            self.set_crops('1'+str(index), seed)
+                            self.set_crops('1'+str(index), seed_name)
                             seeding = False
+                            seed_name = None
                         
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
@@ -404,6 +432,34 @@ class Player_farm():
                 return 3
             return None
     
+    def seed_index(self, mouse_pos):
+        # method นี้ return ชื่อ ของผัก ที่กดบนปุ่มเลือก seed
+        length = (self.seedselection_button[0][1] - self.seedselection_button[1][1]) / 10
+        box = math.ceil((self.seedselection_button[0][1] - mouse_pos[1]) / length)
+        if box == 1:
+            return 'wheat'
+        if box == 2:
+            return 'cucumber'
+        if box == 3:
+            return 'tomato'
+        if box == 4:
+            return 'potato'
+        if box == 5:
+            return 'redcabbage'
+        if box == 6:
+            return 'orange'
+        if box == 7:
+            return 'mango'
+        if box == 8:
+            return 'apple'
+        if box == 9:
+            return 'melon'
+        if box == 10:
+            return 'grape'
+        else:
+            print ('SEED_INDEX : ',box)
+            return None
+            
     def draw_bg(self):
         global loaded_image
         global loaded_sound
@@ -433,7 +489,9 @@ class Player_farm():
         pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
         # ปุ่มออกเกม
         pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
-        
+        # ปุ้มเลือก seed
+        pygame.draw.rect(window, (150,150,0),[715,150, 55, 350], 3)
+
         pygame.display.update()
 
     def draw_farmland(self, plot, watering=False):
@@ -470,6 +528,8 @@ class Player_farm():
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
         pygame.display.update()
     
+    def draw_pop_up_msg(self, msg, position):
+        pass
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
@@ -697,7 +757,7 @@ class Player():
 
 class Inventory():
     def __init__(self):
-        self.inventory = {'wheat': 0, 'wheat_seed': 0, 
+        self.item_dict = {'wheat': 0, 'wheat_seed': 4, 
                     'cucumber': 0, 'cucumber_seed': 0, 
                     'tomato': 0, 'tomato_seed': 0,
                     'potato': 0,  'potato_seed': 0,
@@ -711,21 +771,21 @@ class Inventory():
     
     # add item to Inventory
     def add(self, name, amout):
-        self.inventory[name] += amout
+        self.item_dict[name] += amout
     
     # remove item from Inventory
     def remove(self, name, amout):
-        self.inventory[name] -= amout
+        self.item_dict[name] -= amout
     
     def get_inv(self):
-        return self.inventory
+        return self.item_dict
     
     # get Inventory (dict type) อันนี้ให้ใช้กับ storage เพื่อแสดงผล
     def get_inv_only_have(self):
-        item_name = list(filter(lambda x : self.inventory[x] > 0, self.inventory))
+        item_name = list(filter(lambda x : self.item_dict[x] > 0, self.item_dict))
         inv = dict()
         for key in item_name:
-            inv[key] = self.inventory[key]
+            inv[key] = self.item_dict[key]
         return inv
 
 class Farmplot():
