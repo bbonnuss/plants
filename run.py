@@ -268,21 +268,27 @@ class Player_farm():
                     if (index != None):
                         print(seeding , self.check_crops_status('1'+str(index))[0])
                     if clickdown and (index != None):
+                        crops_status = self.check_crops_status('1'+str(index))
                         if watering:
                             print ('watering : ', '1'+str(index))
                             self.set_wet('1'+str(index))
                             self.draw_farmland('1'+str(index), True)
-                        if seeding and self.check_crops_status('1'+str(index))[0] is None:
+                        elif seeding and crops_status[0] is None:
                             print ('seeding :', '1'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('1'+str(index), seed_name)
                 
                             seeding = False
                             seed_name = None
-                        if seeding and self.check_crops_status('1'+str(index))[0] is not None:
+                        elif seeding and crops_status[0] is not None:
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
+                        elif crops_status[5]:
+                            self.inv.add(crops_status[0], 1)
+                            self.set_crops('1'+str(index), 'empty')
+
+
                         
                         
                 # top right
@@ -291,20 +297,24 @@ class Player_farm():
                     if (index != None):
                         print(seeding , self.check_crops_status('2'+str(index))[0])
                     if clickdown and (index != None):
+                        crops_status = self.check_crops_status('2'+str(index))
                         if watering:
                             print ('watering : ', '2'+str(index))
                             self.set_wet('2'+str(index))
                             self.draw_farmland('2'+str(index), True)
-                        if seeding and self.check_crops_status('2'+str(index))[0] is None:
+                        elif seeding and crops_status[0] is None:
                             print ('seeding :', '2'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('2'+str(index), seed_name)
                             seeding = False
                             seed_name = None
-                        if seeding and self.check_crops_status('2'+str(index))[0] is not None:
+                        elif seeding and crops_status[0] is not None:
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
+                        elif crops_status[5]:
+                            self.inv.add(crops_status[0], 1)
+                            self.set_crops('2'+str(index), 'empty')
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
@@ -312,20 +322,24 @@ class Player_farm():
                     if (index != None):
                         print(seeding , self.check_crops_status('3'+str(index))[0])
                     if clickdown and (index != None):
+                        crops_status = self.check_crops_status('3'+str(index))
                         if watering:
                             print ('watering : ', '3'+str(index))
                             self.set_wet('3'+str(index))
                             self.draw_farmland('3'+str(index), True)
-                        if seeding and self.check_crops_status('3'+str(index))[0] is None:
+                        elif seeding and crops_status[0] is None:
                             print ('seeding :', '3'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('3'+str(index), seed_name)
                             seeding = False
                             seed_name = None
-                        if seeding and self.check_crops_status('3'+str(index))[0] is not None:
+                        elif seeding and crops_status[0] is not None:
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
+                        elif crops_status[5]:
+                            self.inv.add(crops_status[0], 1)
+                            self.set_crops('3'+str(index), 'empty')
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
@@ -333,20 +347,24 @@ class Player_farm():
                     if (index != None):
                         print(seeding , self.check_crops_status('4'+str(index))[0])
                     if clickdown and (index != None):
+                        crops_status = self.check_crops_status('4'+str(index))
                         if watering:
                             print ('watering : ', '4'+str(index))
                             self.set_wet('4'+str(index))
                             self.draw_farmland('4'+str(index), True)
-                        if seeding and self.check_crops_status('4'+str(index))[0] is None:
+                        elif seeding and crops_status[0] is None:
                             print ('seeding :', '4'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('4'+str(index), seed_name)
                             seeding = False
                             seed_name = None
-                        if seeding and self.check_crops_status('4'+str(index))[0] is not None:
+                        elif seeding and crops_status[0] is not None:
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
+                        elif crops_status[5]:
+                            self.inv.add(crops_status[0], 1)
+                            self.set_crops('4'+str(index), 'empty')
     
     def set_crops(self, plot, seed_name):
         # plot เป็น str มี 2 อักษร คือ เลข และ a-d
@@ -419,7 +437,7 @@ class Player_farm():
         self.farmplot[int(plot[0]) - 1].farmland[land].dry_time = self.time + 3000
 
     def check_crops_status(self, plot):
-        # method นี้ return [ชื่อ, สถานะการรดน้ำ, เวลาฟาร์มแห้ง, state ปัจจุบัน, ]
+        # method นี้ return [ชื่อ, สถานะการรดน้ำ, เวลาฟาร์มแห้ง, state ปัจจุบัน, remaining_growth_time, harvestable?]
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
         elif plot[1] == 'b' or plot[1] == '1':
@@ -438,7 +456,10 @@ class Player_farm():
             state = None
         else:
             state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.now_state
-        return [name, watering, dry_time, state, ]
+        remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time
+        harvest = remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
+
+        return [name, watering, dry_time, state, remaining_growth_time, harvest]
     
     def grow_up_by_plot(self, plot):
         if plot[1] == 'a' or plot[1] == '0':
@@ -955,6 +976,7 @@ class Mango():
         self.name = 'Mango'
         self.growing_time = 8000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
+        self.harvestable = False
         self.now_state = 1
         self.crops_state1 = loaded_image.mango_state1
         self.crops_state2 = loaded_image.mango_state2
@@ -968,6 +990,7 @@ class Apple():
         self.name = 'Apple'
         self.growing_time = 10000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
+        self.harvestable = False
         self.now_state = 1
         self.crops_state1 = loaded_image.apple_state1
         self.crops_state2 = loaded_image.apple_state2
@@ -981,6 +1004,7 @@ class Melon():
         self.name = 'Melon'
         self.growing_time = 12000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
+        self.harvestable = False
         self.now_state = 1
         self.crops_state1 = loaded_image.melon_state1
         self.crops_state2 = loaded_image.melon_state2
@@ -994,6 +1018,7 @@ class Grape():
         self.name = 'Grape'
         self.growing_time = 15000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
+        self.harvestable = False
         self.now_state = 1
         self.crops_state1 = loaded_image.grape_state1
         self.crops_state2 = loaded_image.grape_state2
@@ -1006,6 +1031,7 @@ class Empty():
     def __init__(self):
         self.name = None
         self.growing_time = None
+        self.harvestable = False
         self.remaining_growth_time = None
         self.now_state = None
         self.crops_state1 = None
@@ -1071,3 +1097,6 @@ main()
 
 # EXIT !
 pygame.quit()
+
+
+# ขออภัยที่โค้ดอาจจะรก หรือมีการ print มากมาย แต่ถ้าไม่มีมันทำไม่ได้! ภาพเอย เสียงเอย ยังไม่มีมาสักอย่าง ก็มีแต่ การ print นี่ละที่จะเป็น output ให้แก้บัค
