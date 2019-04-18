@@ -138,7 +138,7 @@ class Player_farm():
             previous_time = self.time
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
             
-            # ระบบ อัพเกต/จัดการฟาร์ม
+            # ระบบ อัพเดตฟาร์ม/จัดการฟาร์ม
             plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
             for plot in plot_list:
                 stats = self.check_crops_status(plot)
@@ -151,12 +151,12 @@ class Player_farm():
 
                 # set crops growing to next state
                 if stats[4] is not None:
+                    print ('plot ',plot, ' stats ',stats,' stats4 ',stats[4])
                     if stats[4] <= 0:# เพิ่ม state
                         self.grow_up_by_plot(plot)
                     
+                    
 
-                        
-            for 
 
             # growth system
 
@@ -235,7 +235,7 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
-                if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1]):
+                if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1])and not watering: # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
                     print ('Player_farm : Seed Selection')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
@@ -266,7 +266,7 @@ class Player_farm():
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if (index != None):
-                        print(seeding , self.check_crops_status('1'+str(index))[0])
+                        print(self.check_crops_status('1'+str(index)))
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
                         if watering:
@@ -295,7 +295,7 @@ class Player_farm():
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if (index != None):
-                        print(seeding , self.check_crops_status('2'+str(index))[0])
+                        print(self.check_crops_status('2'+str(index)))
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
                         if watering:
@@ -320,7 +320,7 @@ class Player_farm():
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if (index != None):
-                        print(seeding , self.check_crops_status('3'+str(index))[0])
+                        print(self.check_crops_status('3'+str(index)))
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
                         if watering:
@@ -345,7 +345,7 @@ class Player_farm():
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if (index != None):
-                        print(seeding , self.check_crops_status('4'+str(index))[0])
+                        print(self.check_crops_status('4'+str(index)))
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
                         if watering:
@@ -457,7 +457,7 @@ class Player_farm():
         else:
             state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.now_state
         remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time
-        harvest = remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
+        harvest =  self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
 
         return [name, watering, dry_time, state, remaining_growth_time, harvest]
     
@@ -473,7 +473,7 @@ class Player_farm():
         else:
             land = int(plot[1])
 
-        self.farmplot[int(plot[0]) - 1].farmland[land].crop.Grow_up()
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop.grow_up()
 
 
     def farmplot_check_crops(self, farm, mouse_pos):
@@ -899,7 +899,14 @@ class Wheat():
         self.seed_price = 5
     
     def grow_up(self):
-        pass
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
+         
 
 class Cucumber():
     def __init__(self):
@@ -914,6 +921,15 @@ class Cucumber():
         self.crops_state4 = loaded_image.cucumber_state4
         self.sale_price = 30
         self.seed_price = 10
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Tomato():
     def __init__(self):
@@ -928,6 +944,15 @@ class Tomato():
         self.crops_state4 = loaded_image.tomato_state4
         self.sale_price = 50
         self.seed_price = 15
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Potato():
     def __init__(self):
@@ -942,6 +967,15 @@ class Potato():
         self.crops_state4 = loaded_image.potato_state4
         self.sale_price = 70
         self.seed_price = 20
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Redcabbage():
     def __init__(self):
@@ -956,6 +990,15 @@ class Redcabbage():
         self.crops_state4 = loaded_image.redcabbage_state4
         self.sale_price = 100
         self.seed_price = 25
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Orange():
     def __init__(self):
@@ -970,6 +1013,15 @@ class Orange():
         self.crops_state4 = loaded_image.orange_state4
         self.sale_price = 50
         self.seed_price = 30
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Mango():
     def __init__(self):
@@ -984,6 +1036,15 @@ class Mango():
         self.crops_state4 = loaded_image.mango_state4
         self.sale_price = 150
         self.seed_price = 40
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Apple():
     def __init__(self):
@@ -998,6 +1059,15 @@ class Apple():
         self.crops_state4 = loaded_image.apple_state4
         self.sale_price = 350
         self.seed_price = 50
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Melon():
     def __init__(self):
@@ -1012,6 +1082,15 @@ class Melon():
         self.crops_state4 = loaded_image.melon_state4
         self.sale_price = 400
         self.seed_price = 60
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Grape():
     def __init__(self):
@@ -1026,6 +1105,15 @@ class Grape():
         self.crops_state4 = loaded_image.grape_state4
         self.sale_price = 500
         self.seed_price = 70
+    
+    def grow_up(self):
+        # ถ้าโตพร้อมเก็บ
+        if now_state == 4:
+            now_state = None
+            self.harvestable = True
+        else:   
+            now_state += 1
+            remaining_growth_time = self.growing_time
 
 class Empty():
     def __init__(self):
