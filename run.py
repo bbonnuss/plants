@@ -151,9 +151,14 @@ class Player_farm():
 
                 # set crops growing to next state
                 if stats[4] is not None:
-                    print ('plot ',plot, ' stats ',stats,' stats4 ',stats[4])
+                    # ถ้ามีเวลาคงเหลือ ลดเวลารอลง ถ้ารดน้ำไว้
+                    if stats[1] and not stats[5]:
+                        time_decrease = self.time - previous_time
+                        self.growing_by_plot(plot, time_decrease)
+                    
                     if stats[4] <= 0:# เพิ่ม state
                         self.grow_up_by_plot(plot)
+                    
                     
                     
 
@@ -162,7 +167,7 @@ class Player_farm():
 
             # input - output
             for event in pygame.event.get():
-
+                print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -460,7 +465,20 @@ class Player_farm():
         harvest =  self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
 
         return [name, watering, dry_time, state, remaining_growth_time, harvest]
-    
+    def growing_by_plot(self, plot, time_decrease):
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time -= time_decrease
+        
     def grow_up_by_plot(self, plot):
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
@@ -855,14 +873,14 @@ class Inventory():
     
     # add item to Inventory
     def add(self, name, amout):
-        self.item_dict[name] += amout
+        self.item_dict[name.lower()] += amout
     
     # remove item from Inventory
     def remove(self, name, amout):
-        self.item_dict[name] -= amout
+        self.item_dict[name.lower()] -= amout
     
     def get_inv(self):
-        return self.item_dict
+        return dict(self.item_dict)
     
     # get Inventory (dict type) อันนี้ให้ใช้กับ storage เพื่อแสดงผล
     def get_inv_only_have(self):
@@ -900,12 +918,12 @@ class Wheat():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
          
 
 class Cucumber():
@@ -924,12 +942,12 @@ class Cucumber():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Tomato():
     def __init__(self):
@@ -947,12 +965,12 @@ class Tomato():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Potato():
     def __init__(self):
@@ -970,12 +988,12 @@ class Potato():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Redcabbage():
     def __init__(self):
@@ -993,12 +1011,12 @@ class Redcabbage():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Orange():
     def __init__(self):
@@ -1016,12 +1034,12 @@ class Orange():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Mango():
     def __init__(self):
@@ -1039,12 +1057,12 @@ class Mango():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Apple():
     def __init__(self):
@@ -1062,12 +1080,12 @@ class Apple():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Melon():
     def __init__(self):
@@ -1085,13 +1103,12 @@ class Melon():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
-
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 class Grape():
     def __init__(self):
         self.name = 'Grape'
@@ -1108,12 +1125,12 @@ class Grape():
     
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
-        if now_state == 4:
+        if self.now_state == 4:
             now_state = None
             self.harvestable = True
         else:   
-            now_state += 1
-            remaining_growth_time = self.growing_time
+            self.now_state += 1
+            self.remaining_growth_time = self.growing_time
 
 class Empty():
     def __init__(self):
