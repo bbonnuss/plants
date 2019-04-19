@@ -919,7 +919,7 @@ class Wheat():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -943,7 +943,7 @@ class Cucumber():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -966,7 +966,7 @@ class Tomato():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -989,7 +989,7 @@ class Potato():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1012,7 +1012,7 @@ class Redcabbage():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1035,7 +1035,7 @@ class Orange():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1058,7 +1058,7 @@ class Mango():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1081,7 +1081,7 @@ class Apple():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1104,7 +1104,7 @@ class Melon():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
@@ -1126,7 +1126,7 @@ class Grape():
     def grow_up(self):
         # ถ้าโตพร้อมเก็บ
         if self.now_state == 4:
-            now_state = None
+            self.now_state = None
             self.harvestable = True
         else:   
             self.now_state += 1
