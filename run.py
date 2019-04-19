@@ -624,6 +624,9 @@ class Player_farm():
             print ('SEED_INDEX : ',box)
             return None
             
+    def save(self, profile_name):
+        pass
+
     def draw_bg(self):
         global loaded_image
         global loaded_sound
@@ -644,8 +647,7 @@ class Player_farm():
         pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
         # ปุ้มเลือก seed
         pygame.draw.rect(window, (150,150,0),[715,150, 55, 350], 3)
-
-
+        
     def draw_farmland(self, plot, watering=False):
         global loaded_image
         global loaded_sound
@@ -664,19 +666,20 @@ class Player_farm():
         x = self.farmplot_position[index][1][0]
         y = self.farmplot_position[index][1][1]
 
+        farmland_overlap = 50
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
-        farmland_image = pygame.transform.scale(stats[6], farm_scale)
+        farmland_image = pygame.transform.scale(stats[6], (farm_scale[0],farm_scale[1]+farmland_overlap))
         
         #print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
-            window.blit(farmland_image, (self.farmplot_position[index][0]))
+            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]-farmland_overlap))
             print 
         elif plot[1] == 'b' or plot[1] == '1':
-            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]))
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]-farmland_overlap))
         elif plot[1] == 'c' or plot[1] == '2':
-            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]))
+            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
         elif plot[1] == 'd' or plot[1] == '3':
-            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
 
     def draw_pop_up_msg(self, msg, position):
         pass
@@ -953,7 +956,7 @@ class Wheat():
         self.growing_time = 1000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.wheat_state1_wet
         self.crops_state2_wet = loaded_image.wheat_state2_wet
         self.crops_state3_wet = loaded_image.wheat_state3_wet
@@ -970,6 +973,7 @@ class Wheat():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -983,7 +987,7 @@ class Cucumber():
         self.growing_time = 2000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.cucumber_state1_wet
         self.crops_state2_wet = loaded_image.cucumber_state2_wet
         self.crops_state3_wet = loaded_image.cucumber_state3_wet
@@ -1000,6 +1004,7 @@ class Cucumber():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1012,7 +1017,7 @@ class Tomato():
         self.growing_time = 3000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.tomato_state1_wet
         self.crops_state2_wet = loaded_image.tomato_state2_wet
         self.crops_state3_wet = loaded_image.tomato_state3_wet
@@ -1029,6 +1034,7 @@ class Tomato():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1041,7 +1047,7 @@ class Potato():
         self.growing_time = 5000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.potato_state1_wet
         self.crops_state2_wet = loaded_image.potato_state2_wet
         self.crops_state3_wet = loaded_image.potato_state3_wet
@@ -1058,6 +1064,7 @@ class Potato():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1070,7 +1077,7 @@ class Redcabbage():
         self.growing_time = 6000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.redcabbage_state1_wet
         self.crops_state2_wet = loaded_image.redcabbage_state2_wet
         self.crops_state3_wet = loaded_image.redcabbage_state3_wet
@@ -1087,6 +1094,7 @@ class Redcabbage():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1099,7 +1107,7 @@ class Orange():
         self.growing_time = 7000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.orange_state1_wet
         self.crops_state2_wet = loaded_image.orange_state2_wet
         self.crops_state3_wet = loaded_image.orange_state3_wet
@@ -1116,6 +1124,7 @@ class Orange():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1128,7 +1137,7 @@ class Mango():
         self.growing_time = 8000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.mango_state1_wet
         self.crops_state2_wet = loaded_image.mango_state2_wet
         self.crops_state3_wet = loaded_image.mango_state3_wet
@@ -1146,6 +1155,7 @@ class Mango():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1158,7 +1168,7 @@ class Apple():
         self.growing_time = 10000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.apple_state1_wet
         self.crops_state2_wet = loaded_image.apple_state2_wet
         self.crops_state3_wet = loaded_image.apple_state3_wet
@@ -1177,6 +1187,7 @@ class Apple():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1189,7 +1200,7 @@ class Melon():
         self.growing_time = 12000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.melon_state1_wet
         self.crops_state2_wet = loaded_image.melon_state2_wet
         self.crops_state3_wet = loaded_image.melon_state3_wet
@@ -1206,6 +1217,7 @@ class Melon():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
@@ -1218,7 +1230,7 @@ class Grape():
         self.growing_time = 15000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
-        self.now_state = 1
+        self.now_state = 2
         self.crops_state1_wet = loaded_image.grape_state1_wet
         self.crops_state2_wet = loaded_image.grape_state2_wet
         self.crops_state3_wet = loaded_image.grape_state3_wet
@@ -1235,6 +1247,7 @@ class Grape():
         if self.now_state == 4:
             self.now_state = None
             self.harvestable = True
+            self.remaining_growth_time = None
         else:   
             self.now_state += 1
             self.remaining_growth_time = self.growing_time + self.remaining_growth_time
