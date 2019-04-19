@@ -35,14 +35,14 @@ class Image_():
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert()
         # crops growing state
-        self.wheat_state1_wet = pygame.image.load(join('assets','image','wheat1_wet.png')).convert()
-        self.wheat_state2_wet = pygame.image.load(join('assets','image','wheat2_wet.png')).convert()
-        self.wheat_state3_wet = pygame.image.load(join('assets','image','wheat3_wet.png')).convert()
-        self.wheat_state4_wet = pygame.image.load(join('assets','image','wheat4_wet.png')).convert()
-        self.cucumber_state1_wet = pygame.image.load(join('assets','image','cucumber1_wet.png')).convert()
-        self.cucumber_state2_wet = pygame.image.load(join('assets','image','cucumber2_wet.png')).convert()
-        self.cucumber_state3_wet = pygame.image.load(join('assets','image','cucumber3_wet.png')).convert()
-        self.cucumber_state4_wet = pygame.image.load(join('assets','image','cucumber4_wet.png')).convert()
+        self.wheat_state1_wet = None#pygame.image.load(join('assets','image','wheat1_wet.png')).convert()
+        self.wheat_state2_wet = None#pygame.image.load(join('assets','image','wheat2_wet.png')).convert()
+        self.wheat_state3_wet = None#pygame.image.load(join('assets','image','wheat3_wet.png')).convert()
+        self.wheat_state4_wet = None#pygame.image.load(join('assets','image','wheat4_wet.png')).convert()
+        self.cucumber_state1_wet = None#pygame.image.load(join('assets','image','cucumber1_wet.png')).convert()
+        self.cucumber_state2_wet = None#pygame.image.load(join('assets','image','cucumber2_wet.png')).convert()
+        self.cucumber_state3_wet = None#pygame.image.load(join('assets','image','cucumber3_wet.png')).convert()
+        self.cucumber_state4_wet = None#pygame.image.load(join('assets','image','cucumber4_wet.png')).convert()
         self.tomato_state1_wet = None
         self.tomato_state2_wet = None
         self.tomato_state3_wet = None
@@ -187,7 +187,6 @@ class Player_farm():
                 if stats[2] is not None:
                     if stats[1] and (stats[2] < self.time): # ถ้าฟาร์มชื้น และ เกินเวลาคงเหลือ
                         self.set_dry(plot)
-                        self.draw_farmland(plot, False)
                         print (plot, ' Dry !!!!')
 
                 # set crops growing to next state
