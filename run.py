@@ -31,7 +31,7 @@ class Image_():
     def __init__(self):
         #pygame.display.set_caption("FARMER & THIEF : "+"Loading..."+"image")
         # background
-        self.main_bg = pygame.image.load(join('assets','image','stupid_bg.png')).convert()
+        self.main_bg = pygame.image.load(join('assets','image','main_bg.png')).convert()
         self.farm_bg = pygame.image.load(join('assets','image','farm_bg.png')).convert()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert()
@@ -758,16 +758,11 @@ class Main_menu():
         self.inprocess = True
     
     def run(self):
-        pygame.display.set_caption("FARMER & THIEF : "+"Main_menu")
+        global resolution
+        pygame.display.set_caption("FARMER & THIEF : "+"Main Menu")
         # drawing page ------------------- drawing page
         # background 
-        window.blit(loaded_image.main_bg, (0, 0))
-        # newgame botton
-        pygame.draw.rect(window, (150,0,150),[220, 100, 380, 100], 3)
-        # continue botton
-        pygame.draw.rect(window, (0,150,150),[220, 200, 380, 100], 3)
-        # credit botton
-        pygame.draw.rect(window, (150,150,0),[220, 300, 380, 100], 3)
+        window.blit(pygame.transform.scale(loaded_image.main_bg, resolution), (0, 0))
         # exit botton
         pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
 
@@ -786,10 +781,10 @@ class Main_menu():
 
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
-
+                print (mouse_pos)
                 # ปุ่ม newgame
-                newgame_a = (220,100)
-                newgame_b = (500,200)
+                newgame_a = (0,0)
+                newgame_b = (0,0)
                 if is_hit_box(mouse_pos,newgame_a, newgame_b):
                     print ('Main_menu : newgame')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
@@ -803,8 +798,8 @@ class Main_menu():
                     pygame.display.update()
 
                 # ปุ่ม continue
-                continue_a = (220,200)
-                continue_b = (500,300)
+                continue_a = (560, 270)
+                continue_b = (780,375)
                 if is_hit_box(mouse_pos,continue_a, continue_b):
                     print ('Main_menu : continue')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
@@ -818,8 +813,8 @@ class Main_menu():
                     pygame.display.update()
 
                 # ปุ่ม credit
-                credit_a = (220,300)
-                credit_b = (500,400)
+                credit_a = (240,65)
+                credit_b = (610,250)
                 if is_hit_box(mouse_pos,credit_a, credit_b):
                     print ('Main_menu : credit')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
