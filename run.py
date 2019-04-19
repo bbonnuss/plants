@@ -35,46 +35,87 @@ class Image_():
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert()
         # crops growing state
-        self.wheat_state1 = None
-        self.wheat_state2 = None
-        self.wheat_state3 = None
-        self.wheat_state4 = None
-        self.cucumber_state1 = None
-        self.cucumber_state2 = None
-        self.cucumber_state3 = None
-        self.cucumber_state4 = None
-        self.tomato_state1 = None
-        self.tomato_state2 = None
-        self.tomato_state3 = None
-        self.tomato_state4 = None
-        self.potato_state1 = None
-        self.potato_state2 = None
-        self.potato_state3 = None
-        self.potato_state4 = None
-        self.redcabbage_state1 = None
-        self.redcabbage_state2 = None
-        self.redcabbage_state3 = None
-        self.redcabbage_state4 = None
-        self.orange_state1 = None
-        self.orange_state2 = None
-        self.orange_state3 = None
-        self.orange_state4 = None
-        self.mango_state1 = None
-        self.mango_state2 = None
-        self.mango_state3 = None
-        self.mango_state4 = None
-        self.apple_state1 = None
-        self.apple_state2 = None
-        self.apple_state3 = None
-        self.apple_state4 = None
-        self.melon_state1 = None
-        self.melon_state2 = None
-        self.melon_state3 = None
-        self.melon_state4 = None
-        self.grape_state1 = None
-        self.grape_state2 = None
-        self.grape_state3 = None
-        self.grape_state4 = None
+        self.wheat_state1_wet = None
+        self.wheat_state2_wet = None
+        self.wheat_state3_wet = None
+        self.wheat_state4_wet = None
+        self.cucumber_state1_wet = None
+        self.cucumber_state2_wet = None
+        self.cucumber_state3_wet = None
+        self.cucumber_state4_wet = None
+        self.tomato_state1_wet = None
+        self.tomato_state2_wet = None
+        self.tomato_state3_wet = None
+        self.tomato_state4_wet = None
+        self.potato_state1_wet = None
+        self.potato_state2_wet = None
+        self.potato_state3_wet = None
+        self.potato_state4_wet = None
+        self.redcabbage_state1_wet = None
+        self.redcabbage_state2_wet = None
+        self.redcabbage_state3_wet = None
+        self.redcabbage_state4_wet = None
+        self.orange_state1_wet = None
+        self.orange_state2_wet = None
+        self.orange_state3_wet = None
+        self.orange_state4_wet = None
+        self.mango_state1_wet = None
+        self.mango_state2_wet = None
+        self.mango_state3_wet = None
+        self.mango_state4_wet = None
+        self.apple_state1_wet = None
+        self.apple_state2_wet = None
+        self.apple_state3_wet = None
+        self.apple_state4_wet = None
+        self.melon_state1_wet = None
+        self.melon_state2_wet = None
+        self.melon_state3_wet = None
+        self.melon_state4_wet = None
+        self.grape_state1_wet = None
+        self.grape_state2_wet = None
+        self.grape_state3_wet = None
+        self.grape_state4_wet = None
+
+        self.wheat_state1_dry = None
+        self.wheat_state2_dry = None
+        self.wheat_state3_dry = None
+        self.wheat_state4_dry = None
+        self.cucumber_state1_dry = None
+        self.cucumber_state2_dry = None
+        self.cucumber_state3_dry = None
+        self.cucumber_state4_dry = None
+        self.tomato_state1_dry = None
+        self.tomato_state2_dry = None
+        self.tomato_state3_dry = None
+        self.tomato_state4_dry = None
+        self.potato_state1_dry = None
+        self.potato_state2_dry = None
+        self.potato_state3_dry = None
+        self.potato_state4_dry = None
+        self.redcabbage_state1_dry = None
+        self.redcabbage_state2_dry = None
+        self.redcabbage_state3_dry = None
+        self.redcabbage_state4_dry = None
+        self.orange_state1_dry = None
+        self.orange_state2_dry = None
+        self.orange_state3_dry = None
+        self.orange_state4_dry = None
+        self.mango_state1_dry = None
+        self.mango_state2_dry = None
+        self.mango_state3_dry = None
+        self.mango_state4_dry = None
+        self.apple_state1_dry = None
+        self.apple_state2_dry = None
+        self.apple_state3_dry = None
+        self.apple_state4_dry = None
+        self.melon_state1_dry = None
+        self.melon_state2_dry = None
+        self.melon_state3_dry = None
+        self.melon_state4_dry = None
+        self.grape_state1_dry = None
+        self.grape_state2_dry = None
+        self.grape_state3_dry = None
+        self.grape_state4_dry = None
         
 
 # Menu --------------------------- Menu
@@ -158,12 +199,6 @@ class Player_farm():
                     
                     if stats[4] <= 0:# เพิ่ม state
                         self.grow_up_by_plot(plot)
-                    
-                    
-                    
-
-
-            # growth system
 
             # input - output
             for event in pygame.event.get():
@@ -465,6 +500,7 @@ class Player_farm():
         harvest =  self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
 
         return [name, watering, dry_time, state, remaining_growth_time, harvest]
+    
     def growing_by_plot(self, plot, time_decrease):
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
@@ -859,16 +895,16 @@ class Player():
 
 class Inventory():
     def __init__(self):
-        self.item_dict = {'wheat': 0, 'wheat_seed': 4, 
-                    'cucumber': 0, 'cucumber_seed': 0, 
-                    'tomato': 0, 'tomato_seed': 0,
-                    'potato': 0,  'potato_seed': 0,
-                    'redcabbage': 0, 'redcabbage_seed':0,
-                    'orange': 0, 'orange_seed': 0,
-                    'mango': 0, 'mango_seed': 0,
-                    'apple': 0, 'apple_seed': 0, 
-                    'melon': 0, 'melon_seed': 0, 
-                    'grape': 0, 'grape_seed': 0,
+        self.item_dict = {'wheat': 0, 'wheat_seed': 2, 
+                    'cucumber': 0, 'cucumber_seed': 2, 
+                    'tomato': 0, 'tomato_seed': 2,
+                    'potato': 0,  'potato_seed': 2,
+                    'redcabbage': 0, 'redcabbage_seed':2,
+                    'orange': 0, 'orange_seed': 2,
+                    'mango': 0, 'mango_seed': 2,
+                    'apple': 0, 'apple_seed': 2, 
+                    'melon': 0, 'melon_seed': 2, 
+                    'grape': 0, 'grape_seed': 2,
                     'pug_process': 0,'fruit_process': 0 }
     
     # add item to Inventory
@@ -904,15 +940,21 @@ class Farmland():
 # Crops -------------------------- Crops
 class Wheat():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Wheat'
         self.growing_time = 1000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.wheat_state1
-        self.crops_state2 = loaded_image.wheat_state2
-        self.crops_state3 = loaded_image.wheat_state3
-        self.crops_state4 = loaded_image.wheat_state4
+        self.crops_state1 = loaded_image.wheat_state1_wet
+        self.crops_state2 = loaded_image.wheat_state2_wet
+        self.crops_state3 = loaded_image.wheat_state3_wet
+        self.crops_state4 = loaded_image.wheat_state4_wet
+        self.crops_state1 = loaded_image.wheat_state1_dry
+        self.crops_state2 = loaded_image.wheat_state2_dry
+        self.crops_state3 = loaded_image.wheat_state3_dry
+        self.crops_state4 = loaded_image.wheat_state4_dry
         self.sale_price = 10
         self.seed_price = 5
     
@@ -928,15 +970,21 @@ class Wheat():
 
 class Cucumber():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Cucumber'
         self.growing_time = 2000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.cucumber_state1
-        self.crops_state2 = loaded_image.cucumber_state2
-        self.crops_state3 = loaded_image.cucumber_state3
-        self.crops_state4 = loaded_image.cucumber_state4
+        self.crops_state1 = loaded_image.cucumber_state1_wet
+        self.crops_state2 = loaded_image.cucumber_state2_wet
+        self.crops_state3 = loaded_image.cucumber_state3_wet
+        self.crops_state4 = loaded_image.cucumber_state4_wet
+        self.crops_state1 = loaded_image.cucumber_state1_dry
+        self.crops_state2 = loaded_image.cucumber_state2_dry
+        self.crops_state3 = loaded_image.cucumber_state3_dry
+        self.crops_state4 = loaded_image.cucumber_state4_dry
         self.sale_price = 30
         self.seed_price = 10
     
@@ -951,15 +999,21 @@ class Cucumber():
 
 class Tomato():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Tomato'
         self.growing_time = 3000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.tomato_state1
-        self.crops_state2 = loaded_image.tomato_state2
-        self.crops_state3 = loaded_image.tomato_state3
-        self.crops_state4 = loaded_image.tomato_state4
+        self.crops_state1 = loaded_image.tomato_state1_wet
+        self.crops_state2 = loaded_image.tomato_state2_wet
+        self.crops_state3 = loaded_image.tomato_state3_wet
+        self.crops_state4 = loaded_image.tomato_state4_wet
+        self.crops_state1 = loaded_image.tomato_state1_dry
+        self.crops_state2 = loaded_image.tomato_state2_dry
+        self.crops_state3 = loaded_image.tomato_state3_dry
+        self.crops_state4 = loaded_image.tomato_state4_dry
         self.sale_price = 50
         self.seed_price = 15
     
@@ -974,15 +1028,21 @@ class Tomato():
 
 class Potato():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Potato'
         self.growing_time = 5000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.potato_state1
-        self.crops_state2 = loaded_image.potato_state2
-        self.crops_state3 = loaded_image.potato_state3
-        self.crops_state4 = loaded_image.potato_state4
+        self.crops_state1 = loaded_image.potato_state1_wet
+        self.crops_state2 = loaded_image.potato_state2_wet
+        self.crops_state3 = loaded_image.potato_state3_wet
+        self.crops_state4 = loaded_image.potato_state4_wet
+        self.crops_state1 = loaded_image.potato_state1_dry
+        self.crops_state2 = loaded_image.potato_state2_dry
+        self.crops_state3 = loaded_image.potato_state3_dry
+        self.crops_state4 = loaded_image.potato_state4_dry
         self.sale_price = 70
         self.seed_price = 20
     
@@ -997,15 +1057,21 @@ class Potato():
 
 class Redcabbage():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Redcabbage'
         self.growing_time = 6000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.redcabbage_state1
-        self.crops_state2 = loaded_image.redcabbage_state2
-        self.crops_state3 = loaded_image.redcabbage_state3
-        self.crops_state4 = loaded_image.redcabbage_state4
+        self.crops_state1 = loaded_image.redcabbage_state1_wet
+        self.crops_state2 = loaded_image.redcabbage_state2_wet
+        self.crops_state3 = loaded_image.redcabbage_state3_wet
+        self.crops_state4 = loaded_image.redcabbage_state4_wet
+        self.crops_state1 = loaded_image.redcabbage_state1_dry
+        self.crops_state2 = loaded_image.redcabbage_state2_dry
+        self.crops_state3 = loaded_image.redcabbage_state3_dry
+        self.crops_state4 = loaded_image.redcabbage_state4_dry
         self.sale_price = 100
         self.seed_price = 25
     
@@ -1020,15 +1086,21 @@ class Redcabbage():
 
 class Orange():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Orange'
         self.growing_time = 7000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.orange_state1
-        self.crops_state2 = loaded_image.orange_state2
-        self.crops_state3 = loaded_image.orange_state3
-        self.crops_state4 = loaded_image.orange_state4
+        self.crops_state1 = loaded_image.orange_state1_wet
+        self.crops_state2 = loaded_image.orange_state2_wet
+        self.crops_state3 = loaded_image.orange_state3_wet
+        self.crops_state4 = loaded_image.orange_state4_wet
+        self.crops_state1 = loaded_image.orange_state1_dry
+        self.crops_state2 = loaded_image.orange_state2_dry
+        self.crops_state3 = loaded_image.orange_state3_dry
+        self.crops_state4 = loaded_image.orange_state4_dry
         self.sale_price = 50
         self.seed_price = 30
     
@@ -1043,15 +1115,22 @@ class Orange():
 
 class Mango():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Mango'
         self.growing_time = 8000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.mango_state1
-        self.crops_state2 = loaded_image.mango_state2
-        self.crops_state3 = loaded_image.mango_state3
-        self.crops_state4 = loaded_image.mango_state4
+        self.crops_state1 = loaded_image.mango_state1_wet
+        self.crops_state2 = loaded_image.mango_state2_wet
+        self.crops_state3 = loaded_image.mango_state3_wet
+        self.crops_state4 = loaded_image.mango_state4_wet
+        self.crops_state1 = loaded_image.mango_state1_dry
+        self.crops_state2 = loaded_image.mango_state2_dry
+        self.crops_state3 = loaded_image.mango_state3_dry
+        self.crops_state4 = loaded_image.mango_state4_dry
+        
         self.sale_price = 150
         self.seed_price = 40
     
@@ -1066,15 +1145,23 @@ class Mango():
 
 class Apple():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Apple'
         self.growing_time = 10000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.apple_state1
-        self.crops_state2 = loaded_image.apple_state2
-        self.crops_state3 = loaded_image.apple_state3
-        self.crops_state4 = loaded_image.apple_state4
+        self.crops_state1 = loaded_image.apple_state1_wet
+        self.crops_state2 = loaded_image.apple_state2_wet
+        self.crops_state3 = loaded_image.apple_state3_wet
+        self.crops_state4 = loaded_image.apple_state4_wet
+        self.crops_state1 = loaded_image.apple_state1_dry
+        self.crops_state2 = loaded_image.apple_state2_dry
+        self.crops_state3 = loaded_image.apple_state3_dry
+        self.crops_state4 = loaded_image.apple_state4_dry
+        
+        
         self.sale_price = 350
         self.seed_price = 50
     
@@ -1089,15 +1176,21 @@ class Apple():
 
 class Melon():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Melon'
         self.growing_time = 12000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.melon_state1
-        self.crops_state2 = loaded_image.melon_state2
-        self.crops_state3 = loaded_image.melon_state3
-        self.crops_state4 = loaded_image.melon_state4
+        self.crops_state1 = loaded_image.melon_state1_wet
+        self.crops_state2 = loaded_image.melon_state2_wet
+        self.crops_state3 = loaded_image.melon_state3_wet
+        self.crops_state4 = loaded_image.melon_state4_wet
+        self.crops_state1 = loaded_image.melon_state1_dry
+        self.crops_state2 = loaded_image.melon_state2_dry
+        self.crops_state3 = loaded_image.melon_state3_dry
+        self.crops_state4 = loaded_image.melon_state4_dry
         self.sale_price = 400
         self.seed_price = 60
     
@@ -1111,15 +1204,21 @@ class Melon():
             self.remaining_growth_time = self.growing_time
 class Grape():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = 'Grape'
         self.growing_time = 15000 # growing_time per 1 state (sec)
         self.remaining_growth_time = None
         self.harvestable = False
         self.now_state = 1
-        self.crops_state1 = loaded_image.grape_state1
-        self.crops_state2 = loaded_image.grape_state2
-        self.crops_state3 = loaded_image.grape_state3
-        self.crops_state4 = loaded_image.grape_state4
+        self.crops_state1 = loaded_image.grape_state1_wet
+        self.crops_state2 = loaded_image.grape_state2_wet
+        self.crops_state3 = loaded_image.grape_state3_wet
+        self.crops_state4 = loaded_image.grape_state4_wet
+        self.crops_state1 = loaded_image.grape_state1_dry
+        self.crops_state2 = loaded_image.grape_state2_dry
+        self.crops_state3 = loaded_image.grape_state3_dry
+        self.crops_state4 = loaded_image.grape_state4_dry
         self.sale_price = 500
         self.seed_price = 70
     
@@ -1134,15 +1233,16 @@ class Grape():
 
 class Empty():
     def __init__(self):
+        global loaded_image
+        global loaded_sound
         self.name = None
         self.growing_time = None
         self.harvestable = False
         self.remaining_growth_time = None
         self.now_state = None
-        self.crops_state1 = None
-        self.crops_state2 = None
-        self.crops_state3 = None
-        self.crops_state4 = None
+        self.crops_state4_wet = loaded_image.wet_farm
+        self.crops_state4_dry = loaded_image.dry_farm
+
         self.sale_price = None
         self.seed_price = None
         
