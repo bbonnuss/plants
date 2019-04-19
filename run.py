@@ -675,7 +675,7 @@ class Player_farm():
         y = self.farmplot_position[index][1][1]
 
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
-        farmland_image = stats[6]
+        farmland_image = pygame.transform.scale(stats[6], farm_scale)
         
         print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
@@ -688,7 +688,16 @@ class Player_farm():
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
         pygame.display.update()
-    
+
+
+
+        farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
+        pic = pygame.transform.scale(loaded_image.dry_farm, farm_scale)
+        for plot in self.farmplot_position:
+            window.blit(pic, (plot[0]))
+            window.blit(pic, (plot[0][0]+farm_scale[0] , plot[0][1]))
+            window.blit(pic, (plot[0][0], plot[0][1]+farm_scale[1]))
+            window.blit(pic, (plot[0][0]+farm_scale[0], plot[0][1]+farm_scale[1]))
     def draw_pop_up_msg(self, msg, position):
         pass
 # shop
