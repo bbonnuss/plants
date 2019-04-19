@@ -187,6 +187,7 @@ class Player_farm():
                 if stats[2] is not None:
                     if stats[1] and (stats[2] < self.time): # ถ้าฟาร์มชื้น และ เกินเวลาคงเหลือ
                         self.set_dry(plot)
+                        self.draw_farmland(plot, False)
                         print (plot, ' Dry !!!!')
 
                 # set crops growing to next state
