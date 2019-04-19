@@ -36,86 +36,86 @@ class Image_():
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert()
         # crops growing state
         self.wheat_state1_wet = None#pygame.image.load(join('assets','image','wheat1_wet.png')).convert()
-        self.wheat_state2_wet = None#pygame.image.load(join('assets','image','wheat2_wet.png')).convert()
-        self.wheat_state3_wet = None#pygame.image.load(join('assets','image','wheat3_wet.png')).convert()
-        self.wheat_state4_wet = None#pygame.image.load(join('assets','image','wheat4_wet.png')).convert()
+        self.wheat_state2_wet = pygame.image.load(join('assets','image','wheat2_wet.png')).convert()
+        self.wheat_state3_wet = pygame.image.load(join('assets','image','wheat3_wet.png')).convert()
+        self.wheat_state4_wet = pygame.image.load(join('assets','image','wheat4_wet.png')).convert()
         self.cucumber_state1_wet = None#pygame.image.load(join('assets','image','cucumber1_wet.png')).convert()
-        self.cucumber_state2_wet = None#pygame.image.load(join('assets','image','cucumber2_wet.png')).convert()
-        self.cucumber_state3_wet = None#pygame.image.load(join('assets','image','cucumber3_wet.png')).convert()
-        self.cucumber_state4_wet = None#pygame.image.load(join('assets','image','cucumber4_wet.png')).convert()
-        self.tomato_state1_wet = None
-        self.tomato_state2_wet = None
-        self.tomato_state3_wet = None
-        self.tomato_state4_wet = None
-        self.potato_state1_wet = None
-        self.potato_state2_wet = None
-        self.potato_state3_wet = None
-        self.potato_state4_wet = None
-        self.redcabbage_state1_wet = None
-        self.redcabbage_state2_wet = None
-        self.redcabbage_state3_wet = None
-        self.redcabbage_state4_wet = None
-        self.orange_state1_wet = None
-        self.orange_state2_wet = None
-        self.orange_state3_wet = None
-        self.orange_state4_wet = None
-        self.mango_state1_wet = None
-        self.mango_state2_wet = None
-        self.mango_state3_wet = None
-        self.mango_state4_wet = None
-        self.apple_state1_wet = None
-        self.apple_state2_wet = None
-        self.apple_state3_wet = None
-        self.apple_state4_wet = None
-        self.melon_state1_wet = None
-        self.melon_state2_wet = None
-        self.melon_state3_wet = None
-        self.melon_state4_wet = None
-        self.grape_state1_wet = None
-        self.grape_state2_wet = None
-        self.grape_state3_wet = None
-        self.grape_state4_wet = None
+        self.cucumber_state2_wet = pygame.image.load(join('assets','image','cucumber2_wet.png')).convert()
+        self.cucumber_state3_wet = pygame.image.load(join('assets','image','cucumber3_wet.png')).convert()
+        self.cucumber_state4_wet = pygame.image.load(join('assets','image','cucumber4_wet.png')).convert()
+        self.tomato_state1_wet = None#pygame.image.load(join('assets','image','tomato1_wet.png')).convert()
+        self.tomato_state2_wet = pygame.image.load(join('assets','image','tomato2_wet.png')).convert()
+        self.tomato_state3_wet = pygame.image.load(join('assets','image','tomato3_wet.png')).convert()
+        self.tomato_state4_wet = pygame.image.load(join('assets','image','tomato4_wet.png')).convert()
+        self.potato_state1_wet = None#pygame.image.load(join('assets','image','potato1_wet.png')).convert()
+        self.potato_state2_wet = pygame.image.load(join('assets','image','potato2_wet.png')).convert()
+        self.potato_state3_wet = pygame.image.load(join('assets','image','potato3_wet.png')).convert()
+        self.potato_state4_wet = pygame.image.load(join('assets','image','potato4_wet.png')).convert()
+        self.redcabbage_state1_wet = None##pygame.image.load(join('assets','image','redcabbage1_wet.png')).convert()
+        self.redcabbage_state2_wet = pygame.image.load(join('assets','image','redcabbage2_wet.png')).convert()
+        self.redcabbage_state3_wet = pygame.image.load(join('assets','image','redcabbage3_wet.png')).convert()
+        self.redcabbage_state4_wet = pygame.image.load(join('assets','image','redcabbage4_wet.png')).convert()
+        self.orange_state1_wet = None##pygame.image.load(join('assets','image','orange1_wet.png')).convert()
+        self.orange_state2_wet = pygame.image.load(join('assets','image','orange2_wet.png')).convert()
+        self.orange_state3_wet = pygame.image.load(join('assets','image','orange3_wet.png')).convert()
+        self.orange_state4_wet = pygame.image.load(join('assets','image','orange4_wet.png')).convert()
+        self.mango_state1_wet = None##pygame.image.load(join('assets','image','mango1_wet.png')).convert()
+        self.mango_state2_wet = pygame.image.load(join('assets','image','mango2_wet.png')).convert()
+        self.mango_state3_wet = pygame.image.load(join('assets','image','mango3_wet.png')).convert()
+        self.mango_state4_wet = pygame.image.load(join('assets','image','mango4_wet.png')).convert()
+        self.apple_state1_wet = None##pygame.image.load(join('assets','image','apple1_wet.png')).convert()
+        self.apple_state2_wet = pygame.image.load(join('assets','image','apple2_wet.png')).convert()
+        self.apple_state3_wet = pygame.image.load(join('assets','image','apple3_wet.png')).convert()
+        self.apple_state4_wet = pygame.image.load(join('assets','image','apple4_wet.png')).convert()
+        self.melon_state1_wet = None##pygame.image.load(join('assets','image','melon1_wet.png')).convert()
+        self.melon_state2_wet = pygame.image.load(join('assets','image','melon2_wet.png')).convert()
+        self.melon_state3_wet = pygame.image.load(join('assets','image','melon3_wet.png')).convert()
+        self.melon_state4_wet = pygame.image.load(join('assets','image','melon4_wet.png')).convert()
+        self.grape_state1_wet = None##pygame.image.load(join('assets','image','grape1_wet.png')).convert()
+        self.grape_state2_wet = pygame.image.load(join('assets','image','grape2_wet.png')).convert()
+        self.grape_state3_wet = pygame.image.load(join('assets','image','grape3_wet.png')).convert()
+        self.grape_state4_wet = pygame.image.load(join('assets','image','grape4_wet.png')).convert()
 
-        self.wheat_state1_dry = None
-        self.wheat_state2_dry = None
-        self.wheat_state3_dry = None
-        self.wheat_state4_dry = None
-        self.cucumber_state1_dry = None
-        self.cucumber_state2_dry = None
-        self.cucumber_state3_dry = None
-        self.cucumber_state4_dry = None
-        self.tomato_state1_dry = None
-        self.tomato_state2_dry = None
-        self.tomato_state3_dry = None
-        self.tomato_state4_dry = None
-        self.potato_state1_dry = None
-        self.potato_state2_dry = None
-        self.potato_state3_dry = None
-        self.potato_state4_dry = None
-        self.redcabbage_state1_dry = None
-        self.redcabbage_state2_dry = None
-        self.redcabbage_state3_dry = None
-        self.redcabbage_state4_dry = None
-        self.orange_state1_dry = None
-        self.orange_state2_dry = None
-        self.orange_state3_dry = None
-        self.orange_state4_dry = None
-        self.mango_state1_dry = None
-        self.mango_state2_dry = None
-        self.mango_state3_dry = None
-        self.mango_state4_dry = None
-        self.apple_state1_dry = None
-        self.apple_state2_dry = None
-        self.apple_state3_dry = None
-        self.apple_state4_dry = None
-        self.melon_state1_dry = None
-        self.melon_state2_dry = None
-        self.melon_state3_dry = None
-        self.melon_state4_dry = None
-        self.grape_state1_dry = None
-        self.grape_state2_dry = None
-        self.grape_state3_dry = None
-        self.grape_state4_dry = None
+        self.wheat_state1_dry = None#pygame.image.load(join('assets','image','wheat1_wet.png')).convert()
+        self.wheat_state2_dry = pygame.image.load(join('assets','image','wheat2_dry.png')).convert()
+        self.wheat_state3_dry = pygame.image.load(join('assets','image','wheat3_dry.png')).convert()
+        self.wheat_state4_dry = pygame.image.load(join('assets','image','wheat4_dry.png')).convert()
+        self.cucumber_state1_dry = None#pygame.image.load(join('assets','image','cucumber1_dry.png')).convert()
+        self.cucumber_state2_dry = pygame.image.load(join('assets','image','cucumber2_dry.png')).convert()
+        self.cucumber_state3_dry = pygame.image.load(join('assets','image','cucumber3_dry.png')).convert()
+        self.cucumber_state4_dry = pygame.image.load(join('assets','image','cucumber4_dry.png')).convert()
+        self.tomato_state1_dry = None#pygame.image.load(join('assets','image','tomato1_dry.png')).convert()
+        self.tomato_state2_dry = pygame.image.load(join('assets','image','tomato2_dry.png')).convert()
+        self.tomato_state3_dry = pygame.image.load(join('assets','image','tomato3_dry.png')).convert()
+        self.tomato_state4_dry = pygame.image.load(join('assets','image','tomato4_dry.png')).convert()
+        self.potato_state1_dry = None#pygame.image.load(join('assets','image','potato1_dry.png')).convert()
+        self.potato_state2_dry = pygame.image.load(join('assets','image','potato2_dry.png')).convert()
+        self.potato_state3_dry = pygame.image.load(join('assets','image','potato3_dry.png')).convert()
+        self.potato_state4_dry = pygame.image.load(join('assets','image','potato4_dry.png')).convert()
+        self.redcabbage_state1_dry = None##pygame.image.load(join('assets','image','redcabbage1_dry.png')).convert()
+        self.redcabbage_state2_dry = pygame.image.load(join('assets','image','redcabbage2_dry.png')).convert()
+        self.redcabbage_state3_dry = pygame.image.load(join('assets','image','redcabbage3_dry.png')).convert()
+        self.redcabbage_state4_dry = pygame.image.load(join('assets','image','redcabbage4_dry.png')).convert()
+        self.orange_state1_dry = None##pygame.image.load(join('assets','image','orange1_dry.png')).convert()
+        self.orange_state2_dry = pygame.image.load(join('assets','image','orange2_dry.png')).convert()
+        self.orange_state3_dry = pygame.image.load(join('assets','image','orange3_dry.png')).convert()
+        self.orange_state4_dry = pygame.image.load(join('assets','image','orange4_dry.png')).convert()
+        self.mango_state1_dry = None##pygame.image.load(join('assets','image','mango1_dry.png')).convert()
+        self.mango_state2_dry = pygame.image.load(join('assets','image','mango2_dry.png')).convert()
+        self.mango_state3_dry = pygame.image.load(join('assets','image','mango3_dry.png')).convert()
+        self.mango_state4_dry = pygame.image.load(join('assets','image','mango4_dry.png')).convert()
+        self.apple_state1_dry = None##pygame.image.load(join('assets','image','apple1_dry.png')).convert()
+        self.apple_state2_dry = pygame.image.load(join('assets','image','apple2_dry.png')).convert()
+        self.apple_state3_dry = pygame.image.load(join('assets','image','apple3_dry.png')).convert()
+        self.apple_state4_dry = pygame.image.load(join('assets','image','apple4_dry.png')).convert()
+        self.melon_state1_dry = None##pygame.image.load(join('assets','image','melon1_dry.png')).convert()
+        self.melon_state2_dry = pygame.image.load(join('assets','image','melon2_dry.png')).convert()
+        self.melon_state3_dry = pygame.image.load(join('assets','image','melon3_dry.png')).convert()
+        self.melon_state4_dry = pygame.image.load(join('assets','image','melon4_dry.png')).convert()
+        self.grape_state1_dry = None##pygame.image.load(join('assets','image','grape1_dry.png')).convert()
+        self.grape_state2_dry = pygame.image.load(join('assets','image','grape2_dry.png')).convert()
+        self.grape_state3_dry = pygame.image.load(join('assets','image','grape3_dry.png')).convert()
+        self.grape_state4_dry = pygame.image.load(join('assets','image','grape4_dry.png')).convert()
         
 
 # Menu --------------------------- Menu
@@ -144,7 +144,7 @@ class Player_farm():
         
     
     def run(self):
-        print ('Runing at Player_farm')
+        pygame.display.set_caption("FARMER & THIEF : "+"Farm")
         global loaded_image
         global loaded_sound
         # loop per second 
@@ -154,24 +154,24 @@ class Player_farm():
         enter_farm_time = pygame.time.get_ticks()
 
         # วาดพื้นหลัง
-        self.draw_bg()
         seeding = False
         watering = False
         run = True
         while run:
-            self.draw_bg()
+            
+            
             # loop per second 
             clock.tick(40)
 
             # debuging display
             if seeding:
-                #print (pygame.mouse.get_pos(),'STATUS = SEEDIGN')
+                pygame.display.set_caption("FARMER & THIEF : "+"Select your farmland to plant your seed")
                 pass
             elif watering:
-                #print (pygame.mouse.get_pos(),'STATUS = WATERING')
+                pygame.display.set_caption("FARMER & THIEF : "+"Select your farmland to watering")
                 pass
             else:
-                #print (pygame.mouse.get_pos(),'STATUS = None')
+                pygame.display.set_caption("FARMER & THIEF : "+"Farm")
                 pass
 
 
@@ -199,6 +199,10 @@ class Player_farm():
                     
                     if stats[4] <= 0:# เพิ่ม state
                         self.grow_up_by_plot(plot)
+            
+            # วาดพื้นหลัง
+            self.draw_bg()
+            pygame.display.update()
 
             # input - output
             for event in pygame.event.get():
@@ -501,7 +505,7 @@ class Player_farm():
             if watering:
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state1_wet
             if not watering:
-                self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state1_dry
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state1_dry
         elif state == 2:
             if watering:
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state2_wet
@@ -512,12 +516,11 @@ class Player_farm():
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state3_wet
             if not watering:
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state3_dry
-        elif state == 4 or state == None:
+        elif (state == 4) or (state is None):
             if watering:
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state4_wet
             if not watering:
                 image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state4_dry
-
             
 
         return [name, watering, dry_time, state, remaining_growth_time, harvest, image_state]
@@ -626,8 +629,8 @@ class Player_farm():
         window.blit(loaded_image.farm_bg, (0, 0))
         
         plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
-        #for plot in plot_list:
-            #self.draw_farmland(plot)
+        for plot in plot_list:
+            self.draw_farmland(plot)
 
         # ปุ่มรดน้ำ
         pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
@@ -640,7 +643,6 @@ class Player_farm():
         # ปุ้มเลือก seed
         pygame.draw.rect(window, (150,150,0),[715,150, 55, 350], 3)
 
-        pygame.display.update()
 
     def draw_farmland(self, plot, watering=False):
         global loaded_image
@@ -663,7 +665,7 @@ class Player_farm():
         farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
         farmland_image = pygame.transform.scale(stats[6], farm_scale)
         
-        print ('DRAWFARMLAND ', plot)
+        #print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
             window.blit(farmland_image, (self.farmplot_position[index][0]))
             print 
@@ -673,17 +675,7 @@ class Player_farm():
             window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]))
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]))
-        pygame.display.update()
 
-
-
-        farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
-        pic = pygame.transform.scale(loaded_image.dry_farm, farm_scale)
-        for plot in self.farmplot_position:
-            window.blit(pic, (plot[0]))
-            window.blit(pic, (plot[0][0]+farm_scale[0] , plot[0][1]))
-            window.blit(pic, (plot[0][0], plot[0][1]+farm_scale[1]))
-            window.blit(pic, (plot[0][0]+farm_scale[0], plot[0][1]+farm_scale[1]))
     def draw_pop_up_msg(self, msg, position):
         pass
 # shop
@@ -764,7 +756,7 @@ class Main_menu():
         self.inprocess = True
     
     def run(self):
-        print ('Runing at Main_menu')
+        pygame.display.set_caption("FARMER & THIEF : "+"Main_menu")
         # drawing page ------------------- drawing page
         # background 
         window.blit(loaded_image.main_bg, (0, 0))
@@ -861,7 +853,7 @@ class Newgame_menu():
     def run(self):
         global loaded_image
         global loaded_sound
-        print ('Runing at Newgame_menu')
+        pygame.display.set_caption("FARMER & THIEF : "+"New game")
         run = True
         while run:
             for event in pygame.event.get():
@@ -877,7 +869,7 @@ class Load_menu():
         self.inprocess = True
     
     def run(self):
-        print ('Runing at Load_menu')
+        pygame.display.set_caption("FARMER & THIEF : "+"Load game")
         run = True
         while run:
             for event in pygame.event.get():
@@ -893,7 +885,7 @@ class Credit_menu():
         self.inprocess = True
     
     def run(self):
-        print ('Runing at Credit_menu')
+        pygame.display.set_caption("FARMER & THIEF : "+"Credit_menu")
         run = True
         while run:
             for event in pygame.event.get():
@@ -983,7 +975,7 @@ class Wheat():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
          
 
 class Cucumber():
@@ -1013,7 +1005,7 @@ class Cucumber():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Tomato():
     def __init__(self):
@@ -1042,7 +1034,7 @@ class Tomato():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Potato():
     def __init__(self):
@@ -1071,7 +1063,7 @@ class Potato():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Redcabbage():
     def __init__(self):
@@ -1100,7 +1092,7 @@ class Redcabbage():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Orange():
     def __init__(self):
@@ -1129,7 +1121,7 @@ class Orange():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Mango():
     def __init__(self):
@@ -1159,7 +1151,7 @@ class Mango():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Apple():
     def __init__(self):
@@ -1190,7 +1182,7 @@ class Apple():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Melon():
     def __init__(self):
@@ -1219,7 +1211,8 @@ class Melon():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
+
 class Grape():
     def __init__(self):
         global loaded_image
@@ -1247,7 +1240,7 @@ class Grape():
             self.harvestable = True
         else:   
             self.now_state += 1
-            self.remaining_growth_time = self.growing_time
+            self.remaining_growth_time = self.growing_time + self.remaining_growth_time
 
 class Empty():
     def __init__(self):
@@ -1270,7 +1263,7 @@ class Empty():
 pygame.init()
 resolution = (800,600)
 window = pygame.display.set_mode(resolution)
-pygame.display.set_caption("Cute, Ginger, Cat-ting Stealing Vegetables")
+pygame.display.set_caption("FARMER & THIEF : "+"Loading...")
 
 
 window.fill((255,255,255))
@@ -1282,7 +1275,7 @@ loaded_sound = Sound_()
 def main():
     global loaded_image
     global loaded_sound
-    print ('Runing at Main()')
+    pygame.display.set_caption("FARMER & THIEF : "+"Menu Selection")
     selected = 'main'
     run = True
     while run:
