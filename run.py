@@ -628,20 +628,9 @@ class Player_farm():
         # background 
         window.blit(loaded_image.farm_bg, (0, 0))
         
-        # farmland
-        a = self.farmplot_position[0][0][0]
-        b = self.farmplot_position[0][0][1]
-        x = self.farmplot_position[0][1][0]
-        y = self.farmplot_position[0][1][1]
-
-        farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
-        pic = pygame.transform.scale(loaded_image.dry_farm, farm_scale)
-        for plot in self.farmplot_position:
-            window.blit(pic, (plot[0]))
-            window.blit(pic, (plot[0][0]+farm_scale[0] , plot[0][1]))
-            window.blit(pic, (plot[0][0], plot[0][1]+farm_scale[1]))
-            window.blit(pic, (plot[0][0]+farm_scale[0], plot[0][1]+farm_scale[1]))
-
+        plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
+        for plot in plot_list:
+            self.draw_farmland(plot)
 
         # ปุ่มรดน้ำ
         pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
