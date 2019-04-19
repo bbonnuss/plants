@@ -35,14 +35,14 @@ class Image_():
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert()
         # crops growing state
-        self.wheat_state1_wet = None
-        self.wheat_state2_wet = None
-        self.wheat_state3_wet = None
-        self.wheat_state4_wet = None
-        self.cucumber_state1_wet = None
-        self.cucumber_state2_wet = None
-        self.cucumber_state3_wet = None
-        self.cucumber_state4_wet = None
+        self.wheat_state1_wet = pygame.image.load(join('assets','image','wheat1_wet.png')).convert()
+        self.wheat_state2_wet = pygame.image.load(join('assets','image','wheat2_wet.png')).convert()
+        self.wheat_state3_wet = pygame.image.load(join('assets','image','wheat3_wet.png')).convert()
+        self.wheat_state4_wet = pygame.image.load(join('assets','image','wheat4_wet.png')).convert()
+        self.cucumber_state1_wet = pygame.image.load(join('assets','image','cucumber1_wet.png')).convert()
+        self.cucumber_state2_wet = pygame.image.load(join('assets','image','cucumber2_wet.png')).convert()
+        self.cucumber_state3_wet = pygame.image.load(join('assets','image','cucumber3_wet.png')).convert()
+        self.cucumber_state4_wet = pygame.image.load(join('assets','image','cucumber4_wet.png')).convert()
         self.tomato_state1_wet = None
         self.tomato_state2_wet = None
         self.tomato_state3_wet = None
@@ -159,7 +159,7 @@ class Player_farm():
         watering = False
         run = True
         while run:
-
+            self.draw_bg()
             # loop per second 
             clock.tick(40)
 
@@ -202,7 +202,7 @@ class Player_farm():
 
             # input - output
             for event in pygame.event.get():
-                print (self.inv.get_inv())
+                #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -341,7 +341,6 @@ class Player_farm():
                         if watering:
                             print ('watering : ', '2'+str(index))
                             self.set_wet('2'+str(index))
-                            self.draw_farmland('2'+str(index), True)
                         elif seeding and crops_status[0] is None:
                             print ('seeding :', '2'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
@@ -366,7 +365,6 @@ class Player_farm():
                         if watering:
                             print ('watering : ', '3'+str(index))
                             self.set_wet('3'+str(index))
-                            self.draw_farmland('3'+str(index), True)
                         elif seeding and crops_status[0] is None:
                             print ('seeding :', '3'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
@@ -391,7 +389,6 @@ class Player_farm():
                         if watering:
                             print ('watering : ', '4'+str(index))
                             self.set_wet('4'+str(index))
-                            self.draw_farmland('4'+str(index), True)
                         elif seeding and crops_status[0] is None:
                             print ('seeding :', '4'+str(index))
                             self.inv.remove(seed_name+'_seed', 1)
@@ -629,8 +626,8 @@ class Player_farm():
         window.blit(loaded_image.farm_bg, (0, 0))
         
         plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
-        for plot in plot_list:
-            self.draw_farmland(plot)
+        #for plot in plot_list:
+            #self.draw_farmland(plot)
 
         # ปุ่มรดน้ำ
         pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
