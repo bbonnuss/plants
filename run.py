@@ -131,6 +131,9 @@ class Image_():
         self.melon_seed = pygame.image.load(join('assets','image','melon_seed.png')).convert_alpha()
         self.grape_seed = pygame.image.load(join('assets','image','grape_seed.png')).convert_alpha()
 
+        self.fruit_bag = pygame.image.load(join('assets','image','fruit_bag.png')).convert_alpha()
+        self.vegetable_bag = pygame.image.load(join('assets','image','vegetable_bag')).convert_alpha()
+
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
 class Player_farm():
