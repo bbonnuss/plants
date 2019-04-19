@@ -119,12 +119,23 @@ class Image_():
         self.grape_state3_dry = pygame.image.load(join('assets','image','grape3_dry.png')).convert_alpha()
         self.grape_state4_dry = pygame.image.load(join('assets','image','grape4_dry.png')).convert_alpha()
         
+        # seed bag
+        self.wheat_seed = pygame.image.load(join('assets','image','wheat_seed.png')).convert_alpha()
+        self.cucumber_seed = pygame.image.load(join('assets','image','cucumber_seed.png')).convert_alpha()
+        self.tomato_seed = pygame.image.load(join('assets','image','tomato_seed.png')).convert_alpha()
+        self.potato_seed = pygame.image.load(join('assets','image','potato_seed.png')).convert_alpha()
+        self.redcabbage_seed = pygame.image.load(join('assets','image','redcabbage_seed.png')).convert_alpha()
+        self.orange_seed = pygame.image.load(join('assets','image','orange_seed.png')).convert_alpha()
+        self.mango_seed = pygame.image.load(join('assets','image','mango_seed.png')).convert_alpha()
+        self.apple_seed = pygame.image.load(join('assets','image','apple_seed.png')).convert_alpha()
+        self.melon_seed = pygame.image.load(join('assets','image','melon_seed.png')).convert_alpha()
+        self.grape_seed = pygame.image.load(join('assets','image','grape_seed.png')).convert_alpha()
 
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
 class Player_farm():
-    def __init__(self):
-        self.player = Player()
+    def __init__(self, profile):
+        self.player = profile# Player()
         self.inv = self.player.inventory
         self.money = self.player.money
         self.farmplot = self.player.farmplot
@@ -241,12 +252,14 @@ class Player_farm():
                     pygame.display.update()
 
                 # ปุ่ม รดน้ำ 
-                if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]) and not seeding: # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง
+                if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
                     print ('Player_farm : watering')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-                    if clickdown:
+                    if clickdown :
+                        if seeding:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
+                            seeding = not seeding
                         watering = not watering
                 else:
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
@@ -281,12 +294,16 @@ class Player_farm():
                     pygame.display.update()
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
-                if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1])and not watering: # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
+                if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1]):
                     print ('Player_farm : Seed Selection')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
+                    
 
                     if clickdown and (not seeding): # ถ้าคลิกตอนไม่ปลูก
+                        if watering:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
+                            watering = not watering
+                            
                         seed_name = self.seed_index(mouse_pos)
                         print ('Select: %s'%seed_name)
                         if seed_name is not None:
@@ -625,7 +642,8 @@ class Player_farm():
             return None
             
     def save(self, profile_name):
-        pass
+        profile_name = str(self.player.name)
+        time = str(self.time)
 
     def draw_bg(self):
         global loaded_image
@@ -876,8 +894,11 @@ class Load_menu():
                 # Exit game 
                 if event.type == pygame.QUIT:
                     return 'exit'
-    
-            return 'player_farm'
+            profile = Player()
+            break
+        farm = Player_farm(profile)
+        out = farm.run()
+        return out
 
 # credit
 class Credit_menu():
@@ -899,9 +920,13 @@ class Credit_menu():
 # Mechanic ----------------------- Mechanic
 class Player():
     def __init__(self):
+        self.name = "profile"
         self.money = 0
         self.inventory = Inventory()
         self.farmplot = [Farmplot(), Farmplot(), Farmplot(), Farmplot()]
+    
+    def save(self):
+        pass
 
 class Inventory():
     def __init__(self):
