@@ -256,7 +256,6 @@ class Player_farm():
                     bot_harvest_rate = .1 # %
                     if stats[0] is None and bool(t_or_f_by_success_prop(bot_plant_rate)):#ชื่อผักเป็น None และ สุ่มติด
                         bot.random_plant(plot)
-                            
 
                     # growing ------------------------ growing
                     # set crops growing to next state
@@ -269,15 +268,12 @@ class Player_farm():
                         if stats[4] <= 0:# เพิ่ม state
                             bot.grow_up_by_plot(plot)
                 
-                    # สุ่มเก็บ
+                    # สุ่มเก็บ ------------------------ สุ่มเก็บ
                     if stats[5] and bool(t_or_f_by_success_prop(bot_plant_rate)): # ถ้าโตแล้ว
-                        pass
-
-
-
+                        bot.harvest(plot)
 
             # input - output
-        for event in pygame.event.get():
+            for event in pygame.event.get():
                 #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
