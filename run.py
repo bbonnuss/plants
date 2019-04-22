@@ -131,8 +131,19 @@ class Image_():
         self.melon_seed = pygame.image.load(join('assets','image','melon_seed.png')).convert_alpha()
         self.grape_seed = pygame.image.load(join('assets','image','grape_seed.png')).convert_alpha()
 
+        # icon
         self.fruit_bag = pygame.image.load(join('assets','image','fruit_bag.png')).convert_alpha()
         self.vegetable_bag = pygame.image.load(join('assets','image','vegetable_bag.png')).convert_alpha()
+        self.shop_shelf = pygame.image.load(join('assets','image','shop_shelf.png')).convert_alpha()
+        self.shop = pygame.image.load(join('assets','image','shop.png')).convert_alpha()
+        self.sale_icon = pygame.image.load(join('assets','image','sale.png')).convert_alpha()
+        self.process_icon = pygame.image.load(join('assets','image','process_button.png')).convert_alpha()
+        self.next_icon = pygame.image.load(join('assets','image','next_button.png')).convert_alpha()
+        self.home_icon = pygame.image.load(join('assets','image','home_button.png')).convert_alpha()
+        self.before_icon = pygame.image.load(join('assets','image','before_button.png')).convert_alpha()
+        self.weapond0_icon = pygame.image.load(join('assets','image','0.png')).convert_alpha()
+        self.weapond2_icon = pygame.image.load(join('assets','image','2.png')).convert_alpha()
+        self.weapond5_icon = pygame.image.load(join('assets','image','5.png')).convert_alpha()
 
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
@@ -145,11 +156,11 @@ class Player_farm():
         self.load_time = 0
         self.time = self.load_time + pygame.time.get_ticks()
 
-        self.shop_button = ((430, 20),(580,140))
-        self.storage_button = ((35,320),(90,385))
-        self.watering_button = ((35,205),(90,270))
-        self.mainmenu_button = ((390,500),(480,570))
-        self.seedselection_button = ((715,150),(770,500))
+        self.shop_button = ((545, 66),(720,220))
+        self.storage_button = ((63,295),(265,499))
+        self.watering_button = ((48,235),(120,280))
+        self.mainmenu_button = ((367,515),(432,586))
+        self.seedselection_button = ((520,515-10),(670,586-10))
         self.save_button = ((0,0),(0,0))
         self.saveexit_button = ((0,0),(0,0))
         
@@ -226,7 +237,7 @@ class Player_farm():
                 #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
                 if event.type == pygame.MOUSEBUTTONUP:
                     clickup = True
                 else:
@@ -246,64 +257,40 @@ class Player_farm():
                 # ปุ่ม ออกไป main_menu]
                 if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
                     print ('Player_farm : main_menu')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
                     if clickdown:
                         loaded_sound.click.play()
                         return 'main'
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
-
                 # ปุ่ม รดน้ำ 
                 if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
                     print ('Player_farm : watering')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
                     if clickdown :
                         if seeding:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
                             seeding = not seeding
                         watering = not watering
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
                 
                 # ปุ่ม คลัง
                 if is_hit_box(mouse_pos,self.storage_button[0], self.storage_button[1]):
                     print ('Player_farm : storage')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
                     if clickdown:
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money = storage.run()
                         self.draw_bg()
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
                 
                 # ปุ่ม ร้านค้า
                 if is_hit_box(mouse_pos,self.shop_button[0], self.shop_button[1]):
                     print ('Player_farm : shop')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
                     if clickdown:
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money = shop.run()
                         self.draw_bg()
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
                 if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1]):
-                    print ('Player_farm : Seed Selection')
-                    # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
-                    
+                    #print ('Player_farm : Seed Selection')                    
 
                     if clickdown and (not seeding): # ถ้าคลิกตอนไม่ปลูก
                         if watering:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
@@ -324,10 +311,6 @@ class Player_farm():
                         seeding = False
                         seed_name = None
                         print ('You cancle to plant that seed')
-
-                else:
-                    # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
-                    pygame.display.update()
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
@@ -356,9 +339,6 @@ class Player_farm():
                             self.inv.add(crops_status[0], 1)
                             self.set_crops('1'+str(index), 'empty')
 
-
-                        
-                        
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
@@ -379,7 +359,7 @@ class Player_farm():
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
-                        elif crops_status[5]:
+                        elif crops_status[5]:# harvest?
                             self.inv.add(crops_status[0], 1)
                             self.set_crops('2'+str(index), 'empty')
                 
@@ -403,7 +383,7 @@ class Player_farm():
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
-                        elif crops_status[5]:
+                        elif crops_status[5]:# harvest?
                             self.inv.add(crops_status[0], 1)
                             self.set_crops('3'+str(index), 'empty')
                 
@@ -427,7 +407,7 @@ class Player_farm():
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
-                        elif crops_status[5]:
+                        elif crops_status[5]:# harvest?
                             self.inv.add(crops_status[0], 1)
                             self.set_crops('4'+str(index), 'empty')
     
@@ -620,37 +600,43 @@ class Player_farm():
     
     def seed_index(self, mouse_pos):
         # method นี้ return ชื่อ ของผัก ที่กดบนปุ่มเลือก seed
-        length = (self.seedselection_button[0][1] - self.seedselection_button[1][1]) / 10
-        box = math.ceil((self.seedselection_button[0][1] - mouse_pos[1]) / length)
-        if box == 1:
-            return 'wheat'
-        if box == 2:
-            return 'cucumber'
-        if box == 3:
-            return 'tomato'
-        if box == 4:
-            return 'potato'
-        if box == 5:
-            return 'redcabbage'
-        if box == 6:
-            return 'orange'
-        if box == 7:
-            return 'mango'
-        if box == 8:
-            return 'apple'
-        if box == 9:
-            return 'melon'
-        if box == 10:
-            return 'grape'
-        else:
-            print ('SEED_INDEX : ',box)
-            return None
+        x_length = (self.seedselection_button[0][0] - self.seedselection_button[1][0]) / 5
+        y_length = (self.seedselection_button[0][1] - self.seedselection_button[1][1]) / 2
+
+        box_x = math.ceil((self.seedselection_button[0][0] - mouse_pos[0]) / x_length)
+        box_y = math.ceil((self.seedselection_button[0][1] - mouse_pos[1]) / y_length)
+        
+        if box_y == 1:
+            if box_x == 2:
+                return 'wheat'
+            if box_x == 3:
+                return 'cucumber'
+            if box_x == 4:
+                return 'tomato'
+            if box_x == 5:
+                return 'potato'
+            if box_x == 1:
+                return 'redcabbage'
+        elif box_y == 2:
+            if box_x == 3:
+                return 'orange'
+            if box_x == 2:
+                return 'mango'
+            if box_x == 5:
+                return 'apple'
+            if box_x == 1:
+                return 'melon'
+            if box_x == 4:
+                return 'grape'
+            
+        print ('SEED_INDEX : ',box_x,',',box_y)
+        return None
             
     def save(self, profile_name):
         profile_name = str(self.player.name)
         time = str(self.time)
 
-    def draw_bg(self):
+    def draw_bg(self, hitbox=False):
         global loaded_image
         global loaded_sound
         global resolution
@@ -662,16 +648,26 @@ class Player_farm():
             self.draw_farmland(plot)
 
         # ปุ่มรดน้ำ
-        pygame.draw.rect(window, (0,0,150),[35, 205, 55, 65], 3)
-        # ปุ่มยุ้งฉาง
-        pygame.draw.rect(window, (150,0,150),[35, 320, 55, 65], 3)
-        # ปุ่มร้านค้า
-        pygame.draw.rect(window, (0,150,150),[430, 20, 150, 120], 3)
-        # ปุ่มออกเกม
-        pygame.draw.rect(window, (150,150,0),[390,500, 90, 70], 3)
-        # ปุ้มเลือก seed
-        pygame.draw.rect(window, (150,150,0),[715,150, 55, 350], 3)
         
+        pygame.draw.rect(window, (0,0,150),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
+        
+        # ปุ่มยุ้งฉาง
+        pygame.draw.rect(window, (150,0,150),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
+        
+        # ปุ่มร้านค้า
+        pygame.draw.rect(window, (0,150,150),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
+        
+        # ปุ่มออกเกม
+        pygame.draw.rect(window, (150,150,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
+        
+        # ปุ้มเลือก seed
+        pygame.draw.rect(window, (150,150,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
+        over_up = 15
+        over_x = 15
+        seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
+        window.blit(pygame.transform.scale(loaded_image.shop_shelf, seed_scale), (self.seedselection_button[0][0]-over_x,self.seedselection_button[0][1]-over_up))
+        
+
     def draw_farmland(self, plot, watering=False):
         global loaded_image
         global loaded_sound
@@ -869,24 +865,6 @@ class Main_menu():
                     # วาดปุ่ม ปกติ (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
-# newgame
-class Newgame_menu():
-    def __init__(self):
-        self.inprocess = True
-    
-    def run(self):
-        global loaded_image
-        global loaded_sound
-        pygame.display.set_caption("FARMER & THIEF : "+"New game")
-        run = True
-        while run:
-            for event in pygame.event.get():
-                # Exit game 
-                if event.type == pygame.QUIT:
-                    return 'exit'
-                
-            return 'player_farm'
-    
 # loadgame
 class Load_menu():
     def __init__(self):
