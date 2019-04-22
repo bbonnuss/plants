@@ -32,7 +32,7 @@ class Image_():
         #pygame.display.set_caption("FARMER & THIEF : "+"Loading..."+"image")
         # background
         self.main_bg = pygame.image.load(join('assets','image','main_bg.png')).convert_alpha()
-        self.farm_bg = pygame.image.load(join('assets','image','farm_bg.png')).convert_alpha()
+        self.farm_bg = pygame.image.load(join('assets','image','farmbg.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -132,7 +132,7 @@ class Image_():
         self.grape_seed = pygame.image.load(join('assets','image','grape_seed.png')).convert_alpha()
 
         self.fruit_bag = pygame.image.load(join('assets','image','fruit_bag.png')).convert_alpha()
-        self.vegetable_bag = pygame.image.load(join('assets','image','vegetable_bag')).convert_alpha()
+        self.vegetable_bag = pygame.image.load(join('assets','image','vegetable_bag.png')).convert_alpha()
 
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
@@ -153,16 +153,17 @@ class Player_farm():
         self.save_button = ((0,0),(0,0))
         self.saveexit_button = ((0,0),(0,0))
         
-        self.farmplot_position = [[(145,180),(310,300)],    # ซ้ายบน
-                                [(520,170),(690,290)],      # ขวาบน
-                                [(160,380),(340,480)],      # ล่างซ้าย
-                                [(540,360),(690,470)]]      # ล่างขวา
+        self.farmplot_position = [[(449,257),(581,358)],    # ซ้ายบน
+                                [(624,257),(754,358)],      # ขวาบน
+                                [(449,386),(581,492)],      # ล่างซ้าย
+                                [(624,386),(754,492)]]      # ล่างขวา
         
     
     def run(self):
         pygame.display.set_caption("FARMER & THIEF : "+"Farm")
         global loaded_image
         global loaded_sound
+
         # loop per second 
         clock = pygame.time.Clock()
 
@@ -225,6 +226,7 @@ class Player_farm():
                 #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
                 if event.type == pygame.MOUSEBUTTONUP:
                     clickup = True
                 else:
@@ -651,8 +653,9 @@ class Player_farm():
     def draw_bg(self):
         global loaded_image
         global loaded_sound
+        global resolution
         # background 
-        window.blit(loaded_image.farm_bg, (0, 0))
+        window.blit(pygame.transform.scale(loaded_image.farm_bg, resolution), (0, 0))
         
         plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
         for plot in plot_list:
@@ -918,6 +921,7 @@ class Credit_menu():
                     return 'exit'
                 if event.type == pygame.MOUSEBUTTONUP:
                     return 'main'
+            return 'main'
 
 
 # Mechanic ----------------------- Mechanic
