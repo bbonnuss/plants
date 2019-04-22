@@ -19,8 +19,11 @@ def is_hit_box(position,box_a,box_b):
     return False
 
 def t_or_f_by_success_prop(prop):
-
-    index = math.random()*100
+    population = [1, 0]
+    prop_list =  [prop, 100-prop]
+    result = choices(population, prop_list)
+    return result[0]
+    
 
 
 # Class ========================== Class ========================== Class
@@ -160,7 +163,8 @@ class Player_farm():
         self.farmplot = self.player.farmplot
         self.load_time = 0
         self.time = self.load_time + pygame.time.get_ticks()
-        self.bot_list = [Bot_farm(), Bot_farm(), Bot_farm(), Bot_farm()]
+        self.bot_list = self.player.bot
+        self.bot_farm_list = list(map(lambda x: Bot_farm(x), self.bot_list))
 
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
@@ -238,19 +242,21 @@ class Player_farm():
             pygame.display.update()
 
             # AI background process
-            for bot in bot_list:
+            for bot in self.bot_farm_list:
                 plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
                 for plot in plot_list:
                     stats = bot.check_crops_status(plot)
+                    #print (stats)
                     # set farmland alway wet (bot is OP!!!! LOLLLL)
-                    bot.set_wet(plot)
+                    if not stats[1]:# watering
+                        bot.set_wet(plot)
+                    
                     # สุ่มปลูก -------------------------- สุ่มปลูก
-                    bot_plant_rate = 1 # %
-                    bot_harvest_rate = 1 # %
-                    if stats[0] is None and t_or_f_by_success_prop(bot_plant_rate):#ชื่อผักเป็น None
-                        pass
-
-
+                    bot_plant_rate = .1 # %
+                    bot_harvest_rate = .1 # %
+                    if stats[0] is None and bool(t_or_f_by_success_prop(bot_plant_rate)):#ชื่อผักเป็น None และ สุ่มติด
+                        bot.random_plant(plot)
+                            
 
                     # growing ------------------------ growing
                     # set crops growing to next state
@@ -263,15 +269,19 @@ class Player_farm():
                         if stats[4] <= 0:# เพิ่ม state
                             bot.grow_up_by_plot(plot)
                 
-                # สุ่มเก็บ
+                    # สุ่มเก็บ
+                    if stats[5] and bool(t_or_f_by_success_prop(bot_plant_rate)): # ถ้าโตแล้ว
+                        pass
+
+
 
 
             # input - output
-            for event in pygame.event.get():
+        for event in pygame.event.get():
                 #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
                 if event.type == pygame.MOUSEBUTTONUP:
                     clickup = True
                 else:
@@ -745,14 +755,310 @@ class Player_farm():
 
 class Bot_farm(Player_farm):
     def __init__(self, profile):
-        Player_farm.__init__(self)
-        Player_farm.draw_bg(self)
-        Player_farm.draw_farmland(self)
-        Player_farm.set_crops(self)
-        Player_farm.check_crops_status(self)
-        Player_farm.growing_by_plot(self)
-        Player_farm.grow_up_by_plot(self)
+        self.player = profile# Player()
+        self.inv = self.player.inventory
+        self.money = self.player.money
+        self.farmplot = self.player.farmplot
+
+        self.shop_button = ((545, 66),(720,220))
+        self.storage_button = ((63,295),(265,499))
+        self.watering_button = ((48,235),(120,280))
+        self.mainmenu_button = ((218,523),(283,593))
+        self.seedselection_button = ((486,499),(647,584))
+        self.save_button = ((0,0),(0,0))
+        self.saveexit_button = ((0,0),(0,0))
+        self.home_button = ((293,523),(356,593))
+        self.next_button = ((367,523),(432,593))
+        self.farmplot_position = [[(449,257),(581,358)],    # ซ้ายบน
+                                [(624,257),(754,358)],      # ขวาบน
+                                [(449,386),(581,492)],      # ล่างซ้าย
+                                [(624,386),(754,492)]]      # ล่างขวา
+
+    def set_crops(self, plot, seed_name):
+        print('Plot:%s was set to crop:%s !'%(plot, seed_name))
+        # plot เป็น str มี 2 อักษร คือ เลข และ a-d
+        # seed_name เป็น str ที่เป๋็นชื่อของพืช
+        if seed_name == 'wheat':
+            seed = Wheat()
+        elif seed_name == 'cucumber':
+            seed = Cucumber()
+        elif seed_name == 'tomato':
+            seed = Tomato()
+        elif seed_name == 'potato':
+            seed = Potato()
+        elif seed_name == 'redcabbage':
+            seed = Redcabbage()
+        elif seed_name == 'orange':
+            seed = Orange()
+        elif seed_name == 'mango':
+            seed = Mango()
+        elif seed_name == 'apple':
+            seed = Apple()
+        elif seed_name == 'melon':
+            seed = Melon()
+        elif seed_name == 'grape':
+            seed = Grape()
+        else :
+            seed = Empty()
+
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop = seed
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.growing_time
     
+    def set_wet(self, plot):
+        print ('Plot:%s is Wet!'%plot)
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].watering = True
+
+    def check_crops_status(self, plot):
+        # method นี้ return [ชื่อ, สถานะการรดน้ำ, เวลาฟาร์มแห้ง, state ปัจจุบัน, remaining_growth_time, harvestable?, image of cur_state]
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        name = self.farmplot[int(plot[0]) - 1].farmland[land].crop.name
+        watering = self.farmplot[int(plot[0]) - 1].farmland[land].watering
+        dry_time = self.farmplot[int(plot[0]) - 1].farmland[land].dry_time
+        if name is None:
+            state = None
+        elif self.farmplot[int(plot[0]) - 1].farmland[land].crop.now_state is None:
+            state = 4
+        else:
+            state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.now_state
+        remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time
+        harvest =  self.farmplot[int(plot[0]) - 1].farmland[land].crop.harvestable
+        if state == 1:
+            if watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state1_wet
+            if not watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state1_dry
+        elif state == 2:
+            if watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state2_wet
+            if not watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state2_dry
+        elif state == 3:
+            if watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state3_wet
+            if not watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state3_dry
+        elif (state == 4) or (state is None):
+            if watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state4_wet
+            if not watering:
+                image_state = self.farmplot[int(plot[0]) - 1].farmland[land].crop.crops_state4_dry
+            
+
+        return [name, watering, dry_time, state, remaining_growth_time, harvest, image_state]
+    
+    def growing_by_plot(self, plot, time_decrease):
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time -= time_decrease
+        
+    def grow_up_by_plot(self, plot):
+        if plot[1] == 'a' or plot[1] == '0':
+            land = 0
+        elif plot[1] == 'b' or plot[1] == '1':
+            land = 1
+        elif plot[1] == 'c' or plot[1] == '2':
+            land = 2
+        elif plot[1] == 'd' or plot[1] == '3':
+            land = 3
+        else:
+            land = int(plot[1])
+
+        self.farmplot[int(plot[0]) - 1].farmland[land].crop.grow_up()
+
+    def random_plant(self, plot):
+        seed_list = ['wheat', 'cucumber', 'tomato', 'potato', 'redcabbage', 'orange', 'mango', 'apple', 'melon', 'grape']
+        selected_seed = choices(seed_list)[0]
+        self.set_crops(plot, selected_seed)
+
+    def harvest(self, plot):
+        self.inv.add(self.check_crops_status(plot)[0], 1)
+        self.set_crops(plot, 'empty')
+
+
+    def farmplot_check_crops(self, farm, mouse_pos):
+        # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
+        # โดนที่ ถ้าเป็น ถ้าต้นa:return 0, ต้นb:return 1, ......
+        
+        # farm = [(145,180),(310,300)]
+        if is_hit_box(mouse_pos,farm[0], farm[1]):
+            # assign valuable
+            start_point = farm[0]
+            mid_point = (farm[0][0]+farm[1][0])/2,(farm[0][1]+farm[1][1])/2# (เฉลี่ย x,เฉลี่ย y)
+            final_point = farm[1]
+
+            # farm  a
+            a = start_point # (start x ,start y)
+            b = mid_point # (mid x ,mid y)
+            if is_hit_box(mouse_pos,a, b):  
+                #f ดึงข้อมูล ฟาร์ม a มาแสดงผล
+                return 'a'
+
+            # farm  b
+            a = (mid_point[0], start_point[1]) # (mid x ,start y)
+            b = (final_point[0], mid_point[1]) # (final x, mid y) 
+            if is_hit_box(mouse_pos,a, b):  
+                #f ดึงข้อมูล ฟาร์ม b มาแสดงผล
+                return 'b'
+
+            # farm  c
+            a = (start_point[0], mid_point[1]) # (start x, mid y) 
+            b = (mid_point[0], final_point[1]) # (mid x, final y)
+            if is_hit_box(mouse_pos,a, b):  
+                #f ดึงข้อมูล ฟาร์ม c มาแสดงผล
+                return 'c'
+
+            # farm  d
+            a = mid_point # (mid x ,mid y)
+            b = final_point #(final x, final y)
+            if is_hit_box(mouse_pos,a, b):  
+                #f ดึงข้อมูล ฟาร์ม d มาแสดงผล
+                return 'd'
+            return None
+    
+    def seed_index(self, mouse_pos):
+        # method นี้ return ชื่อ ของผัก ที่กดบนปุ่มเลือก seed
+        x_length = (self.seedselection_button[0][0] - self.seedselection_button[1][0]) / 5
+        y_length = (self.seedselection_button[0][1] - self.seedselection_button[1][1]) / 2
+
+        box_x = ceil((self.seedselection_button[0][0] - mouse_pos[0]) / x_length)
+        box_y = ceil((self.seedselection_button[0][1] - mouse_pos[1]) / y_length)
+        
+        if box_y == 1:
+            if box_x == 2:
+                return 'wheat'
+            if box_x == 3:
+                return 'cucumber'
+            if box_x == 4:
+                return 'tomato'
+            if box_x == 5:
+                return 'potato'
+            if box_x == 1:
+                return 'redcabbage'
+        elif box_y == 2:
+            if box_x == 3:
+                return 'orange'
+            if box_x == 2:
+                return 'mango'
+            if box_x == 5:
+                return 'apple'
+            if box_x == 1:
+                return 'melon'
+            if box_x == 4:
+                return 'grape'
+            
+        return None
+            
+
+    def draw_bg(self, hitbox=False):
+        global loaded_image
+        global loaded_sound
+        global resolution
+        # background 
+        window.blit(pygame.transform.scale(loaded_image.farm_bg, resolution), (0, 0))
+        
+        plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
+        for plot in plot_list:
+            self.draw_farmland(plot)
+
+        # ปุ่มรดน้ำ
+        pygame.draw.rect(window, (0,0,255),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
+        
+        # ปุ่มยุ้งฉาง
+        pygame.draw.rect(window, (255,0,255),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
+        
+        # ปุ่มร้านค้า
+        pygame.draw.rect(window, (0,255,255),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
+        
+        # ปุ่มออก main_menu
+        pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
+        
+        # ปุ่ม กลับบ้าน
+        pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
+        
+        # ปุ่ม loop AI
+        pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
+        
+        # ปุ้มเลือก seed
+        pygame.draw.rect(window, (0,255,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
+        #over_up = 15
+        #over_x = 15
+        #seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
+        #window.blit(pygame.transform.scale(loaded_image.shop_shelf, seed_scale), (self.seedselection_button[0][0]-over_x,self.seedselection_button[0][1]-over_up))
+        
+    def draw_farmland(self, plot, watering=False):
+        global loaded_image
+        global loaded_sound
+        stats = self.check_crops_status(plot)
+        # farmland
+        if plot[0] == '1' or plot[0] == 'a':
+            index = 0
+        elif plot[0] == '2' or plot[0] == 'b':
+            index = 1
+        elif plot[0] == '3' or plot[0] == 'c':
+            index = 2
+        elif plot[0] == '4' or plot[0] == 'd':
+            index = 3
+        a = self.farmplot_position[index][0][0]
+        b = self.farmplot_position[index][0][1]
+        x = self.farmplot_position[index][1][0]
+        y = self.farmplot_position[index][1][1]
+
+        farmland_overlap = 50
+        farm_scale = int(((a+x)/2)-a) , int(((b+y)/2)-b)
+        farmland_image = pygame.transform.scale(stats[6], (farm_scale[0],farm_scale[1]+farmland_overlap))
+        
+        #print ('DRAWFARMLAND ', plot)
+        if plot[1] == 'a' or plot[1] == '0':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]-farmland_overlap))
+            print 
+        elif plot[1] == 'b' or plot[1] == '1':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]-farmland_overlap))
+        elif plot[1] == 'c' or plot[1] == '2':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
+        elif plot[1] == 'd' or plot[1] == '3':
+            window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
+
     def run():
         pass
 
