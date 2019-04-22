@@ -1,8 +1,9 @@
 # Import ========================= Import ========================= Import
 import pygame
-import sys
-import math
+#import sys
+from math import ceil
 from os.path import join
+from random import choices
 
 # Function ======================= Function ======================= Function
 # เช็คว่าตำแหน่งเมาส์ โดนปุ่มไหม
@@ -16,6 +17,10 @@ def is_hit_box(position,box_a,box_b):
             return True
     
     return False
+
+def t_or_f_by_success_prop(prop):
+
+    index = math.random()*100
 
 
 # Class ========================== Class ========================== Class
@@ -155,6 +160,7 @@ class Player_farm():
         self.farmplot = self.player.farmplot
         self.load_time = 0
         self.time = self.load_time + pygame.time.get_ticks()
+        self.bot_list = [Bot_farm(), Bot_farm(), Bot_farm(), Bot_farm()]
 
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
@@ -187,7 +193,6 @@ class Player_farm():
         watering = False
         run = True
         while run:
-            
             
             # loop per second 
             clock.tick(40)
@@ -231,6 +236,35 @@ class Player_farm():
             # วาดพื้นหลัง
             self.draw_bg()
             pygame.display.update()
+
+            # AI background process
+            for bot in bot_list:
+                plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
+                for plot in plot_list:
+                    stats = bot.check_crops_status(plot)
+                    # set farmland alway wet (bot is OP!!!! LOLLLL)
+                    bot.set_wet(plot)
+                    # สุ่มปลูก -------------------------- สุ่มปลูก
+                    bot_plant_rate = 1 # %
+                    bot_harvest_rate = 1 # %
+                    if stats[0] is None and t_or_f_by_success_prop(bot_plant_rate):#ชื่อผักเป็น None
+                        pass
+
+
+
+                    # growing ------------------------ growing
+                    # set crops growing to next state
+                    if stats[4] is not None:
+                        # ถ้ามีเวลาคงเหลือ ลดเวลารอลง ถ้ารดน้ำไว้
+                        if stats[1] and not stats[5]:
+                            time_decrease = self.time - previous_time
+                            bot.growing_by_plot(plot, time_decrease)
+                    
+                        if stats[4] <= 0:# เพิ่ม state
+                            bot.grow_up_by_plot(plot)
+                
+                # สุ่มเก็บ
+
 
             # input - output
             for event in pygame.event.get():
@@ -317,7 +351,15 @@ class Player_farm():
                         seeding = False
                         seed_name = None
                         print('Stop Seeding')
+                
+                # ปุ่ม next AI
+                if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
+                    print ('Player_farm : Next AI')    
+                    if clickdown:
+                        selected_ai = 'home'
+                        while selected_ai != 'home':
 
+                            pass
                 # farmplot zone ----------------- farmplot zone
                 # top left
                 if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
@@ -597,8 +639,8 @@ class Player_farm():
         x_length = (self.seedselection_button[0][0] - self.seedselection_button[1][0]) / 5
         y_length = (self.seedselection_button[0][1] - self.seedselection_button[1][1]) / 2
 
-        box_x = math.ceil((self.seedselection_button[0][0] - mouse_pos[0]) / x_length)
-        box_y = math.ceil((self.seedselection_button[0][1] - mouse_pos[1]) / y_length)
+        box_x = ceil((self.seedselection_button[0][0] - mouse_pos[0]) / x_length)
+        box_y = ceil((self.seedselection_button[0][1] - mouse_pos[1]) / y_length)
         
         if box_y == 1:
             if box_x == 2:
@@ -665,7 +707,6 @@ class Player_farm():
         #seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
         #window.blit(pygame.transform.scale(loaded_image.shop_shelf, seed_scale), (self.seedselection_button[0][0]-over_x,self.seedselection_button[0][1]-over_up))
         
-
     def draw_farmland(self, plot, watering=False):
         global loaded_image
         global loaded_sound
@@ -701,6 +742,20 @@ class Player_farm():
 
     def draw_pop_up_msg(self, msg, position):
         pass
+
+class Bot_farm(Player_farm):
+    def __init__(self, profile):
+        Player_farm.__init__(self)
+        Player_farm.draw_bg(self)
+        Player_farm.draw_farmland(self)
+        Player_farm.set_crops(self)
+        Player_farm.check_crops_status(self)
+        Player_farm.growing_by_plot(self)
+        Player_farm.grow_up_by_plot(self)
+    
+    def run():
+        pass
+
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
@@ -902,13 +957,27 @@ class Credit_menu():
 
 # Mechanic ----------------------- Mechanic
 class Player():
-    def __init__(self):
-        self.name = "profile"
-        self.money = 0
+    def __init__(self, name="profile"):
+        self.name = name
+        self.money = 1000
+        self.inventory = Inventory()
+        self.farmplot = [Farmplot(), Farmplot(), Farmplot(), Farmplot()]
+        self.bot = [Bot('bot_1'), Bot('bot_2'), Bot('bot_3'), Bot('bot_4')]
+    
+    def save(self):
+        pass
+
+class Bot():
+    def __init__(self, name="bot"):
+        self.name = name
+        self.money = 1000
         self.inventory = Inventory()
         self.farmplot = [Farmplot(), Farmplot(), Farmplot(), Farmplot()]
     
-    def save(self):
+    def load(self):
+        pass
+    
+    def get_data(self):
         pass
 
 class Inventory():
