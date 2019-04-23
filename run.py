@@ -18,6 +18,33 @@ def is_hit_box(position,box_a,box_b):
     
     return False
 
+def rpc(player, bot):
+    # player คือ อาวุธของ player เป็นไปได้ '0', '2', '5'
+    # bot คือ อาวุธของ bot เป็นไปได้ '0', '2', '5'
+    if player == '0':
+        if bot == '0':
+            return 'draw'
+        if bot == '2':
+            return 'win'
+        if bot == '5':    
+            return 'lose'
+    elif player == '2':
+        if bot == '0':
+            return 'lose'
+        if bot == '2':
+            return 'draw'
+        if bot == '5': 
+            return 'win'   
+    elif player == '5':
+        if bot == '0':
+            return 'win'
+        if bot == '2':
+            return 'lose'
+        if bot == '5':   
+            return 'draw' 
+
+    return None
+
 # Class ========================== Class ========================== Class
 # resouce_manager ---------------- resouce_manager
 class Sound_():
@@ -311,15 +338,11 @@ class Player_farm():
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 #print (mouse_pos)
-                if event.type == pygame.MOUSEBUTTONUP:
-                    clickup = True
-                else:
-                    clickup = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
                 else:
                     clickdown = False
-                
+                    
                 # exit
                 if event.type == pygame.QUIT:
                     selected = 'exit'
@@ -807,11 +830,118 @@ class Bot_farm(Player_farm):
         self.paper_button = ((0,0),(0,0))
         self.scissors_button = ((0,0),(0,0))
     
+    def minigame(self):
+        pygame.display.set_caption("FARMER & THIEF : "+"Minigame")
+        global loaded_image
+        global loaded_sound
+
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        # วาดพื้นหลัง
+        self.draw_minigame()
+        pygame.display.update()
+        
+        # bot weapon
+        bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
+
+        player_weapon = None
+        steal = False
+        backhome = False
+        end = False
+        run = True
+        while run:
+            
+            # loop per second 
+            clock.tick(40)
+
+            # debuging display
+            pygame.display.set_caption("FARMER & THIEF : "+"Select your weapon !")
+            
+            # draw minigame bg and button (draw minigame UI)
+            if not end:
+                self.draw_minigame_selection()
+            else:
+                self.draw_minigame_show_result(result)
+
+            # input - output
+            for event in pygame.event.get():
+                #print (self.inv.get_inv())
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                #print (mouse_pos)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                # exit
+                if event.type == pygame.QUIT:
+                    # ไอ้พวกขี้ขลาด หักเงินมัน 100 ซะ !!!!!
+                    return 'lose' 
+                
+                # Botton ------------------------- Botton
+                
+                
+                # ปุ่ม home
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]) and end and backhome:
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                        return result
+                
+                # ปุ่ม ขโมย
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]) and end and steal:
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                        return result
+                
+                # ปุ่ม hammer
+                if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
+                    #print ('Bot_farm : hammer')
+
+                    if clickdown:
+                        player_weapon = '0'
+                # ปุ่ม paper
+                if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
+                    #print ('Bot_farm : paper')
+
+                    if clickdown:
+                        player_weapon = '5'
+                # ปุ่ม scissors
+                if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
+                    #print ('Bot_farm : scissors')
+
+                    if clickdown:
+                        player_weapon = '2'
+
+            # ตัดสินแพ้ / ชนะ
+            if player_weapon is not None:
+                result = rpc(player_weapon, bot_weapon)
+                end = True
+                if result == 'win':
+                    steal = True
+                else :
+                    backhome = True
+
+
+
     def run_bot_farm(self, inv, money):
         pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")
         global loaded_image
         global loaded_sound
 
+        # run minigame first
+        result = self.minigame()
+        if result == 'draw':
+            return inv, money, 'home', 60000
+        elif result == 'lose':
+            money -= 100
+            return inv, money, 'home', 60000
+        
         # loop per second 
         clock = pygame.time.Clock()
 
@@ -823,34 +953,18 @@ class Bot_farm(Player_farm):
         bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
 
         cooldown = 0
-        seeding = False
-        watering = False
         run = True
-        minigame = True
         while run:
             
             # loop per second 
             clock.tick(40)
 
             # debuging display
-            if minigame:
-                pygame.display.set_caption("FARMER & THIEF : "+"Select your weapon !")
-                pass
-            elif watering:
-                pygame.display.set_caption("FARMER & THIEF : "+"Select your farmland to watering")
-                pass
-            else:
-                pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
-                pass
+            pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
             
-            if minigame:
-                # draw minigame bg and button (draw minigame UI)
-                self.draw_minigame()
-
-            else:
-                # วาดพื้นหลัง
-                self.draw_bg()
-                pygame.display.update()
+            # วาดพื้นหลัง
+            self.draw_bg()
+            pygame.display.update()
 
             # input - output
             for event in pygame.event.get():
@@ -858,10 +972,6 @@ class Bot_farm(Player_farm):
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 #print (mouse_pos)
-                if event.type == pygame.MOUSEBUTTONUP:
-                    clickup = True
-                else:
-                    clickup = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
                 else:
@@ -870,18 +980,9 @@ class Bot_farm(Player_farm):
                 # exit
                 if event.type == pygame.QUIT:
                     # inv, money, go to?, cooldown
-                    return self.inv, money, 'exit', cooldown
+                    return inv, money, 'exit', cooldown
                 
                 # Botton ------------------------- Botton
-                
-
-                # ปุ่ม ออกไป main_menu
-                if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
-                    #print ('Bot_farm : main_menu')
-
-                    if clickdown:
-                        loaded_sound.click.play()
-                        return inv, money, 'main', cooldown
                 
                 # ปุ่ม home
                 if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
@@ -891,28 +992,10 @@ class Bot_farm(Player_farm):
                         loaded_sound.click.play()
                         return inv, money, 'home', cooldown
                 
-                # ปุ่ม hammer
-                if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]) and minigame:
-                    #print ('Bot_farm : hammer')
-
-                    if clickdown:
-                        loaded_sound.click.play()
-                # ปุ่ม paper
-                if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]) and minigame:
-                    #print ('Bot_farm : paper')
-
-                    if clickdown:
-                        loaded_sound.click.play()
-                # ปุ่ม scissors
-                if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]) and minigame:
-                    #print ('Bot_farm : scissors')
-
-                    if clickdown:
-                        loaded_sound.click.play()
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
-                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]) and not minigame:
+                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]) and cooldown == 0:
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
@@ -920,10 +1003,11 @@ class Bot_farm(Player_farm):
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
+                            cooldown = 60000
 
 
                 # top right
-                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]) and not minigame:
+                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]) and cooldown == 0:
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
@@ -931,9 +1015,10 @@ class Bot_farm(Player_farm):
                             crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
+                            cooldown = 60000
                 
                 # down left
-                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]) and not minigame:
+                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]) and cooldown == 0:
                     index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
@@ -941,9 +1026,10 @@ class Bot_farm(Player_farm):
                             crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
+                            cooldown = 60000
                 
                 # down right
-                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]) and not minigame:
+                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]) and cooldown == 0:
                     index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
@@ -951,7 +1037,9 @@ class Bot_farm(Player_farm):
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
-        return self.inv, self.money, 'home', cooldown
+                            cooldown = 60000
+
+        return inv, money, 'home', cooldown
 
     def set_crops(self, plot, seed_name):
         print('Plot:%s was set to crop:%s !'%(plot, seed_name))
@@ -1322,12 +1410,12 @@ class Main_menu():
 
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
                 # ปุ่ม newgame
                 newgame_a = (0,0)
                 newgame_b = (0,0)
                 if is_hit_box(mouse_pos,newgame_a, newgame_b):
-                    print ('Main_menu : newgame')
+                    #print ('Main_menu : newgame')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
@@ -1342,7 +1430,7 @@ class Main_menu():
                 continue_a = (560, 270)
                 continue_b = (780,375)
                 if is_hit_box(mouse_pos,continue_a, continue_b):
-                    print ('Main_menu : continue')
+                    #print ('Main_menu : continue')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
@@ -1357,7 +1445,7 @@ class Main_menu():
                 credit_a = (240,65)
                 credit_b = (610,250)
                 if is_hit_box(mouse_pos,credit_a, credit_b):
-                    print ('Main_menu : credit')
+                    #print ('Main_menu : credit')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
@@ -1372,7 +1460,7 @@ class Main_menu():
                 quit_a = (220,400)
                 quit_b = (500,500)
                 if is_hit_box(mouse_pos,quit_a, quit_b):
-                    print ('Main_menu : exit')
+                    #print ('Main_menu : exit')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
                     pygame.display.update()
 
