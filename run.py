@@ -146,6 +146,23 @@ class Image_():
         self.weapon2_icon = pygame.image.load(join('assets','image','2.png')).convert_alpha()
         self.weapon5_icon = pygame.image.load(join('assets','image','5.png')).convert_alpha()
 
+        self.apple = pygame.image.load(join('assets','image','apple.png')).convert_alpha()
+        self.cucumber = pygame.image.load(join('assets','image','cucumber.png')).convert_alpha()
+        self.grape = pygame.image.load(join('assets','image','grape.png')).convert_alpha()
+        self.mango = pygame.image.load(join('assets','image','mango.png')).convert_alpha()
+        self.melon = pygame.image.load(join('assets','image','melon.png')).convert_alpha()
+        self.melon2 = pygame.image.load(join('assets','image','melon2.png')).convert_alpha()
+        self.melon3 = pygame.image.load(join('assets','image','melon3.png')).convert_alpha()
+        self.orange = pygame.image.load(join('assets','image','orange.png')).convert_alpha()
+        self.orange2 = pygame.image.load(join('assets','image','orange2.png')).convert_alpha()
+        self.potato = pygame.image.load(join('assets','image','potato.png')).convert_alpha()
+        self.redcabbage = pygame.image.load(join('assets','image','redcabbage.png')).convert_alpha()
+        self.tomato = pygame.image.load(join('assets','image','tomato.png')).convert_alpha()
+        self.tomato2 = pygame.image.load(join('assets','image','tomato2.png')).convert_alpha()
+        self.wheat = pygame.image.load(join('assets','image','wheat.png')).convert_alpha()
+        self.wheat2 = pygame.image.load(join('assets','image','wheat2.png')).convert_alpha()
+
+
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
 class Player_farm():
