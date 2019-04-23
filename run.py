@@ -221,6 +221,11 @@ class Player_farm():
                                 [(624,257),(754,358)],      # ขวาบน
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
+        self.hammer_button = ((350,100),(450,200))
+        self.paper_button = ((350,200),(450,300))
+        self.scissors_button = ((350,300),(450,400))
+        self.steal_button = ((350,400),(450,500))
+        self.backhome_button = self.steal_button
         
     
     def run(self):
@@ -267,7 +272,7 @@ class Player_farm():
                 return 'exit'
             elif selected == 'main':
                 return 'main'
-            elif selected == 'ai_farm' and cooldown <= 59000:
+            elif selected == 'ai_farm' and cooldown <= 0:
                 for bot in self.bot_farm_list:
                     self.inv, self.money, selected, cooldown = bot.run_bot_farm(self.inv, self.money)
             elif selected == 'ai_farm' and cooldown > 0:
@@ -278,7 +283,7 @@ class Player_farm():
             self.previous_time = self.time
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
             if cooldown > 0 and self.previous_time < self.time:
-                cooldown -= (self.time-self.previous_time)
+                cooldown -= (self.time - self.previous_time)
 
             # ระบบ อัพเดตฟาร์ม/จัดการฟาร์ม
             plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
@@ -306,6 +311,24 @@ class Player_farm():
 
             # AI background process
             for bot in self.bot_farm_list:
+                
+                # steal process
+                if bot.steal_cooldown > 0 and self.previous_time < self.time:
+                    bot.steal_cooldown -= (self.time - self.previous_time)
+                
+                # randomly steal
+                bot_steal_rate = 0.00001
+                if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
+                    result = self.minigame()
+                    bot.steal_cooldown = 60000
+                    if result == 'win':
+                        bot.money -= 100
+                    elif result == 'lose':
+                        name = self.random_pickup()
+                        print ('Bot steal %s from your farm'%name)
+
+
+                # farm process
                 plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
                 for plot in plot_list:
                     stats = bot.check_crops_status(plot)
@@ -315,8 +338,8 @@ class Player_farm():
                         bot.set_wet(plot)
                     
                     # สุ่มปลูก -------------------------- สุ่มปลูก
-                    bot_plant_rate = .002 # %
-                    bot_harvest_rate = .001 # %
+                    bot_plant_rate = .002 
+                    bot_harvest_rate = .001 
                     if stats[0] is None and bool(choice([True,False],p=[bot_plant_rate, 1-bot_plant_rate])):#ชื่อผักเป็น None และ สุ่มติด
                         bot.random_plant(plot)
 
@@ -334,6 +357,7 @@ class Player_farm():
                     # สุ่มเก็บ ------------------------ สุ่มเก็บ
                     if stats[5] and bool(choice([True,False],p=[bot_harvest_rate, 1-bot_harvest_rate])): # ถ้าโตแล้ว
                         bot.harvest(plot)
+                        
 
             # input - output
             for event in pygame.event.get():
@@ -737,6 +761,119 @@ class Player_farm():
         profile_name = str(self.player.name)
         time = str(self.time)
 
+    def random_pickup(self):
+        plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
+        stealable_list = []
+        for plot in plot_list:
+            stats = self.check_crops_status(plot)
+            if stats[5]:
+                stealable_list.append(plot)
+        if len(stealable_list) == 0:
+            return None
+        len_list = len(stealable_list)
+        p_list = list(map(lambda x: (x*0)+(1/len_list),stealable_list))
+        selected_plot = choice(stealable_list, p=p_list)
+        return self.check_crops_status(selected_plot)[0]
+
+    def minigame(self):
+        pygame.display.set_caption("FARMER & THIEF : "+"Minigame")
+        global loaded_image
+        global loaded_sound
+
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        # วาดพื้นหลัง
+        self.draw_minigame()
+        pygame.display.update()
+        
+        # bot weapon
+        bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
+
+        player_weapon = None
+        steal = False
+        backhome = False
+        end = False
+        run = True
+        while run:
+            
+            # loop per second 
+            clock.tick(40)
+
+            # debuging display
+            pygame.display.set_caption("FARMER & THIEF : "+"Select your weapon !")
+            
+            # draw minigame bg and button (draw minigame UI)
+            if not end:
+                self.draw_minigame()
+            else:
+                self.draw_minigame_show_result(result)
+            pygame.display.update()
+
+            # input - output
+            for event in pygame.event.get():
+                #print (self.inv.get_inv())
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                #print (mouse_pos)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                # exit
+                if event.type == pygame.QUIT:
+                    # ไอ้พวกขี้ขลาด หักเงินมัน 100 ซะ !!!!!
+                    return 'lose' 
+                
+                # Botton ------------------------- Botton
+                
+                
+                # ปุ่ม home
+                if is_hit_box(mouse_pos,self.backhome_button[0], self.backhome_button[1]) and end and backhome:
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                        return result
+                
+                # ปุ่ม ขโมย
+                if is_hit_box(mouse_pos,self.steal_button[0], self.steal_button[1]) and end and steal:
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                        return result
+                
+                # ปุ่ม hammer
+                if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
+                    #print ('Bot_farm : hammer')
+
+                    if clickdown:
+                        player_weapon = '0'
+                # ปุ่ม paper
+                if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
+                    #print ('Bot_farm : paper')
+
+                    if clickdown:
+                        player_weapon = '5'
+                # ปุ่ม scissors
+                if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
+                    #print ('Bot_farm : scissors')
+
+                    if clickdown:
+                        player_weapon = '2'
+
+            # ตัดสินแพ้ / ชนะ
+            if player_weapon is not None:
+                result = rpc(player_weapon, bot_weapon)
+                end = True
+                if result == 'win':
+                    steal = True
+                else :
+                    backhome = True
+
+
     def draw_bg(self, hitbox=False):
         global loaded_image
         global loaded_sound
@@ -803,6 +940,49 @@ class Player_farm():
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
 
+    def draw_minigame(self):
+        global loaded_image
+        global loaded_sound
+        global resolution
+        # background
+        window.blit(pygame.transform.scale(loaded_image.minigame_bg, resolution), (0, 0))
+            
+        # ค้อน
+        size = (self.hammer_button[1][0] - self.hammer_button[0][0]), (self.hammer_button[1][1] - self.hammer_button[0][1])
+        window.blit(pygame.transform.scale(loaded_image.weapon0_icon, size), self.hammer_button[0])
+        
+        # กรรไกร
+        size = (self.scissors_button[1][0] - self.scissors_button[0][0]), (self.scissors_button[1][1] - self.scissors_button[0][1])
+        window.blit(pygame.transform.scale(loaded_image.weapon2_icon, size), self.scissors_button[0])
+        
+        # กระดาษ
+        size = (self.paper_button[1][0] - self.paper_button[0][0]), (self.paper_button[1][1] - self.paper_button[0][1])
+        window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0])        
+    
+    def draw_minigame_show_result(self, result):
+        global loaded_image
+        global loaded_sound
+        global resolution
+        # background
+        window.blit(pygame.transform.scale(loaded_image.minigame_bg, resolution), (0, 0))
+
+        
+        if result == 'win':
+            print ('You Win !!!')
+        elif result == 'lose':
+            print ('You Lose !!!')
+        else:
+            print ('Draw !!!')
+        
+        if result == 'win':
+            # ไปขโมย
+            size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
+            window.blit(pygame.transform.scale(loaded_image.next_icon, size), self.steal_button[0])
+        else:
+            # กลับไปทำมาหากินต่อ
+            size = (self.backhome_button[1][0] - self.backhome_button[0][0]), (self.backhome_button[1][1] - self.backhome_button[0][1])
+            window.blit(pygame.transform.scale(loaded_image.home_icon, size), self.backhome_button[0])
+
     def draw_pop_up_msg(self, msg, position):
         pass
 
@@ -812,6 +992,7 @@ class Bot_farm(Player_farm):
         self.inv = self.player.inventory
         self.money = self.player.money
         self.farmplot = self.player.farmplot
+        self.steal_cooldown = 60000
 
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
