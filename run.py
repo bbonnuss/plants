@@ -223,10 +223,11 @@ class Player_farm():
             elif selected == 'exit':
                 # save
                 return 'exit'
+            elif selected == 'main':
+                return 'main'
             elif selected == 'ai_farm':
                 for bot in self.bot_farm_list:
-
-                    self.inv, self.money, selected = bot.run(self.inv, self.money)
+                    self.inv, self.money, selected = bot.run_bot_farm(self.inv, self.money)
 
             # clock update (clock is millisec)
             previous_time = self.time
@@ -304,7 +305,7 @@ class Player_farm():
                 
                 # exit
                 if event.type == pygame.QUIT:
-                    return 'exit'
+                    selected = 'exit'
                 
                 # Botton ------------------------- Botton
                 
@@ -714,7 +715,7 @@ class Player_farm():
         pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
         
         # ปุ่ม กลับบ้าน
-        pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
+        #pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
         
         # ปุ่ม loop AI
         pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
@@ -783,7 +784,10 @@ class Bot_farm(Player_farm):
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
     
-    def run(self, inv, money):
+    def rps(self):
+        pass
+    
+    def run_bot_farm(self, inv, money):
         pygame.display.set_caption("FARMER & THIEF : "+"Farm")
         global loaded_image
         global loaded_sound
@@ -794,6 +798,7 @@ class Bot_farm(Player_farm):
         # clock
         enter_farm_time = pygame.time.get_ticks()
 
+        player_win = self.rps()
         # วาดพื้นหลัง
         seeding = False
         watering = False
@@ -814,20 +819,7 @@ class Bot_farm(Player_farm):
                 pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
                 pass
 
-            # ระบบ อัพเดตฟาร์ม/จัดการฟาร์ม
-            plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
-            for plot in plot_list:
-                stats = self.check_crops_status(plot)
-
-                # set crops growing to next state
-                if stats[4] is not None:
-                    # ถ้ามีเวลาคงเหลือ ลดเวลารอลง ถ้ารดน้ำไว้
-                    if stats[1] and not stats[5]:
-                        time_decrease = self.time - previous_time
-                        self.growing_by_plot(plot, time_decrease)
-                    
-                    if stats[4] <= 0:# เพิ่ม state
-                        self.grow_up_by_plot(plot)
+            
             
             # วาดพื้นหลัง
             self.draw_bg()
@@ -1055,7 +1047,6 @@ class Bot_farm(Player_farm):
         self.inv.add(self.check_crops_status(plot)[0], 1)
         self.set_crops(plot, 'empty')
 
-
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
         # โดนที่ ถ้าเป็น ถ้าต้นa:return 0, ต้นb:return 1, ......
@@ -1141,14 +1132,6 @@ class Bot_farm(Player_farm):
         for plot in plot_list:
             self.draw_farmland(plot)
 
-        # ปุ่มรดน้ำ
-        pygame.draw.rect(window, (0,0,255),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
-        
-        # ปุ่มยุ้งฉาง
-        pygame.draw.rect(window, (255,0,255),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
-        
-        # ปุ่มร้านค้า
-        pygame.draw.rect(window, (0,255,255),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
         
         # ปุ่มออก main_menu
         pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
@@ -1156,15 +1139,6 @@ class Bot_farm(Player_farm):
         # ปุ่ม กลับบ้าน
         pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
         
-        # ปุ่ม loop AI
-        pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
-        
-        # ปุ้มเลือก seed
-        pygame.draw.rect(window, (0,255,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
-        #over_up = 15
-        #over_x = 15
-        #seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
-        #window.blit(pygame.transform.scale(loaded_image.shop_shelf, seed_scale), (self.seedselection_button[0][0]-over_x,self.seedselection_button[0][1]-over_up))
         
     def draw_farmland(self, plot, watering=False):
         global loaded_image
@@ -1199,8 +1173,6 @@ class Bot_farm(Player_farm):
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
 
-    def run():
-        pass
 
 # shop
 class Shop_menu():
