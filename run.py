@@ -319,8 +319,9 @@ class Player_farm():
                 # randomly steal
                 bot_steal_rate = 0.00001
                 if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
+                    bot.steal_cooldown = 120000
                     result = self.minigame()
-                    bot.steal_cooldown = 60000
+                     
                     if result == 'win':
                         bot.money -= 100
                     elif result == 'lose':
