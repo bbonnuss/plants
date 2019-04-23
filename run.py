@@ -399,7 +399,7 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = (choice([1, 2, 3],p=[0.5, 0.35, 0.15]))
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
 
@@ -420,7 +420,7 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                 
@@ -441,7 +441,7 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                 
@@ -463,7 +463,7 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
     
