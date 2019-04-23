@@ -865,6 +865,7 @@ class Bot_farm(Player_farm):
                 self.draw_minigame()
             else:
                 self.draw_minigame_show_result(result)
+            pygame.display.update()
 
             # input - output
             for event in pygame.event.get():
@@ -960,8 +961,6 @@ class Bot_farm(Player_farm):
             
             # loop per second 
             clock.tick(40)
-
-            
             
             # วาดพื้นหลัง
             self.draw_bg()
