@@ -826,11 +826,11 @@ class Bot_farm(Player_farm):
                                 [(624,257),(754,358)],      # ขวาบน
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
-        self.hammer_button = ((0,0),(0,0))
-        self.paper_button = ((0,0),(0,0))
-        self.scissors_button = ((0,0),(0,0))
-        self.steal_button = ((0,0),(0,0))
-        self.backhome_button = ((0,0),(0,0))
+        self.hammer_button = ((350,100),(450,200))
+        self.paper_button = ((350,200),(450,300))
+        self.scissors_button = ((350,300),(450,400))
+        self.steal_button = ((350,400),(450,500))
+        self.backhome_button = self.steal_button
     
     def minigame(self):
         pygame.display.set_caption("FARMER & THIEF : "+"Minigame")
@@ -886,7 +886,7 @@ class Bot_farm(Player_farm):
                 
                 
                 # ปุ่ม home
-                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]) and end and backhome:
+                if is_hit_box(mouse_pos,self.backhome_button[0], self.backhome_button[1]) and end and backhome:
                     #print ('Bot_farm : home')
 
                     if clickdown:
@@ -894,7 +894,7 @@ class Bot_farm(Player_farm):
                         return result
                 
                 # ปุ่ม ขโมย
-                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]) and end and steal:
+                if is_hit_box(mouse_pos,self.steal_button[0], self.steal_button[1]) and end and steal:
                     #print ('Bot_farm : home')
 
                     if clickdown:
@@ -950,9 +950,9 @@ class Bot_farm(Player_farm):
         # วาดพื้นหลัง
         self.draw_bg()
         pygame.display.update()
-        
-        # bot weapon
-        bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
+
+        # debuging display
+        pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
 
         cooldown = 0
         run = True
@@ -961,8 +961,7 @@ class Bot_farm(Player_farm):
             # loop per second 
             clock.tick(40)
 
-            # debuging display
-            pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
+            
             
             # วาดพื้นหลัง
             self.draw_bg()
@@ -1006,7 +1005,7 @@ class Bot_farm(Player_farm):
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
                             cooldown = 60000
-
+                            pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
 
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]) and cooldown == 0:
@@ -1018,6 +1017,7 @@ class Bot_farm(Player_farm):
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                             cooldown = 60000
+                            pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]) and cooldown == 0:
@@ -1029,6 +1029,7 @@ class Bot_farm(Player_farm):
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                             cooldown = 60000
+                            pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]) and cooldown == 0:
@@ -1040,6 +1041,7 @@ class Bot_farm(Player_farm):
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
                             cooldown = 60000
+                            pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
 
         return inv, money, 'home', cooldown
 
@@ -1269,10 +1271,6 @@ class Bot_farm(Player_farm):
         for plot in plot_list:
             self.draw_farmland(plot)
 
-        
-        # ปุ่มออก main_menu
-        pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
-        
         # ปุ่ม กลับบ้าน
         pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
              
