@@ -54,6 +54,7 @@ class Sound_():
         self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
         self.click = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
         
+        
 
 class Image_():
     def __init__(self):
@@ -62,7 +63,10 @@ class Image_():
         self.main_bg = pygame.image.load(join('assets','image','main_bg.png')).convert_alpha()
         self.farm_bg = pygame.image.load(join('assets','image','farmbg.png')).convert_alpha()
         self.bot_bg = pygame.image.load(join('assets','image','bg_nowatering.png')).convert_alpha()
-        self.minigame_bg = pygame.image.load(join('assets','image','minigame_alpha.jpg')).convert_alpha()
+        self.minigame_bg = pygame.image.load(join('assets','image','minigame_bg.png')).convert_alpha()
+        self.win_bg = pygame.image.load(join('assets','image','win_bg.png')).convert_alpha()
+        self.draw_bg = pygame.image.load(join('assets','image','draw_bg.png')).convert_alpha()
+        self.lose_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -221,10 +225,10 @@ class Player_farm():
                                 [(624,257),(754,358)],      # ขวาบน
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
-        self.hammer_button = ((350,100),(450,200))
-        self.paper_button = ((350,200),(450,300))
-        self.scissors_button = ((350,300),(450,400))
-        self.steal_button = ((350,400),(450,500))
+        self.hammer_button = ((552,247),(760,484))
+        self.paper_button = ((298,247),(504,484))
+        self.scissors_button = ((40,247),(250,484))
+        self.steal_button = ((663,473),(757,580))
         self.backhome_button = self.steal_button
         
     
@@ -317,7 +321,7 @@ class Player_farm():
                     bot.steal_cooldown -= (self.time - self.previous_time)
                 
                 # randomly steal
-                bot_steal_rate = 0.00001
+                bot_steal_rate = 0.0001
                 if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
                     bot.steal_cooldown = 120000
                     result = self.minigame()
@@ -958,31 +962,31 @@ class Player_farm():
         
         # กระดาษ
         size = (self.paper_button[1][0] - self.paper_button[0][0]), (self.paper_button[1][1] - self.paper_button[0][1])
-        window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0])        
-    
+        window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0]) 
+
     def draw_minigame_show_result(self, result):
         global loaded_image
         global loaded_sound
         global resolution
-        # background
-        window.blit(pygame.transform.scale(loaded_image.minigame_bg, resolution), (0, 0))
 
         
         if result == 'win':
+            window.blit(pygame.transform.scale(loaded_image.win_bg, resolution), (0, 0))
             print ('You Win !!!')
         elif result == 'lose':
+            window.blit(pygame.transform.scale(loaded_image.lose_bg, resolution), (0, 0))
             print ('You Lose !!!')
         else:
+            window.blit(pygame.transform.scale(loaded_image.draw_bg, resolution), (0, 0))
             print ('Draw !!!')
-        
-        if result == 'win':
+        #if result == 'win':
             # ไปขโมย
-            size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
-            window.blit(pygame.transform.scale(loaded_image.next_icon, size), self.steal_button[0])
-        else:
+            #size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
+            #window.blit(pygame.transform.scale(loaded_image.next_icon, size), self.steal_button[0])
+        #else:
             # กลับไปทำมาหากินต่อ
-            size = (self.backhome_button[1][0] - self.backhome_button[0][0]), (self.backhome_button[1][1] - self.backhome_button[0][1])
-            window.blit(pygame.transform.scale(loaded_image.home_icon, size), self.backhome_button[0])
+            #size = (self.backhome_button[1][0] - self.backhome_button[0][0]), (self.backhome_button[1][1] - self.backhome_button[0][1])
+            #window.blit(pygame.transform.scale(loaded_image.home_icon, size), self.backhome_button[0])
 
     def draw_pop_up_msg(self, msg, position):
         pass
@@ -1008,10 +1012,10 @@ class Bot_farm(Player_farm):
                                 [(624,257),(754,358)],      # ขวาบน
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
-        self.hammer_button = ((350,100),(450,200))
-        self.paper_button = ((350,200),(450,300))
-        self.scissors_button = ((350,300),(450,400))
-        self.steal_button = ((350,400),(450,500))
+        self.hammer_button = ((552,247),(760,484))
+        self.paper_button = ((298,247),(504,484))
+        self.scissors_button = ((40,247),(250,484))
+        self.steal_button = ((663,473),(757,580))
         self.backhome_button = self.steal_button
     
     def minigame(self):
@@ -1506,6 +1510,7 @@ class Bot_farm(Player_farm):
         # กระดาษ
         size = (self.paper_button[1][0] - self.paper_button[0][0]), (self.paper_button[1][1] - self.paper_button[0][1])
         window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0])
+        print (pygame.mouse.get_pos())
 
         
     
@@ -1513,25 +1518,26 @@ class Bot_farm(Player_farm):
         global loaded_image
         global loaded_sound
         global resolution
-        # background
-        window.blit(pygame.transform.scale(loaded_image.minigame_bg, resolution), (0, 0))
-
         
         if result == 'win':
+            window.blit(pygame.transform.scale(loaded_image.win_bg, resolution), (0, 0))
             print ('You Win !!!')
         elif result == 'lose':
+            window.blit(pygame.transform.scale(loaded_image.lose_bg, resolution), (0, 0))
             print ('You Lose !!!')
         else:
+            window.blit(pygame.transform.scale(loaded_image.draw_bg, resolution), (0, 0))
             print ('Draw !!!')
+        print (pygame.mouse.get_pos())
         
-        if result == 'win':
-            # ไปขโมย
-            size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
-            window.blit(pygame.transform.scale(loaded_image.next_icon, size), self.steal_button[0])
-        else:
+        #if result == 'win':
+            ## ไปขโมย
+            #size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
+            #window.blit(pygame.transform.scale(loaded_image.next_icon, size), self.steal_button[0])
+        #else:
             # กลับไปทำมาหากินต่อ
-            size = (self.backhome_button[1][0] - self.backhome_button[0][0]), (self.backhome_button[1][1] - self.backhome_button[0][1])
-            window.blit(pygame.transform.scale(loaded_image.home_icon, size), self.backhome_button[0])
+            #size = (self.backhome_button[1][0] - self.backhome_button[0][0]), (self.backhome_button[1][1] - self.backhome_button[0][1])
+            #window.blit(pygame.transform.scale(loaded_image.home_icon, size), self.backhome_button[0])
 
 # shop
 class Shop_menu():
