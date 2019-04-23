@@ -1509,10 +1509,7 @@ class Bot_farm(Player_farm):
         
         # กระดาษ
         size = (self.paper_button[1][0] - self.paper_button[0][0]), (self.paper_button[1][1] - self.paper_button[0][1])
-        window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0])
-        print (pygame.mouse.get_pos())
-
-        
+        window.blit(pygame.transform.scale(loaded_image.weapon5_icon, size), self.paper_button[0])        
     
     def draw_minigame_show_result(self, result):
         global loaded_image
@@ -1521,14 +1518,12 @@ class Bot_farm(Player_farm):
         
         if result == 'win':
             window.blit(pygame.transform.scale(loaded_image.win_bg, resolution), (0, 0))
-            print ('You Win !!!')
+
         elif result == 'lose':
             window.blit(pygame.transform.scale(loaded_image.lose_bg, resolution), (0, 0))
-            print ('You Lose !!!')
+
         else:
             window.blit(pygame.transform.scale(loaded_image.draw_bg, resolution), (0, 0))
-            print ('Draw !!!')
-        print (pygame.mouse.get_pos())
         
         #if result == 'win':
             ## ไปขโมย
