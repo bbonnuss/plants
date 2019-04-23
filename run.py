@@ -155,7 +155,9 @@ class Player_farm():
         self.money = self.player.money
         self.farmplot = self.player.farmplot
         self.load_time = 0
+        
         self.time = self.load_time + pygame.time.get_ticks()
+        self.previous_time = self.time
         self.bot_list = self.player.bot
         self.bot_farm_list = list(map(lambda x: Bot_farm(x), self.bot_list))
 
@@ -223,13 +225,14 @@ class Player_farm():
                     self.inv, self.money, selected, cooldown = bot.run_bot_farm(self.inv, self.money)
             elif selected == 'ai_farm' and cooldown > 0:
                 print ('wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
-
-            # clock update (clock is millisec)
-            previous_time = self.time
-            self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
-            if cooldown > 0:
-                cooldown -= previous_time
+                selected = 'home'
             
+            # clock update (clock is millisec)
+            self.previous_time = self.time
+            self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
+            if cooldown > 0 and self.previous_time < self.time:
+                cooldown -= (self.time-self.previous_time)
+
             # ระบบ อัพเดตฟาร์ม/จัดการฟาร์ม
             plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
             for plot in plot_list:
@@ -243,8 +246,8 @@ class Player_farm():
                 # set crops growing to next state
                 if stats[4] is not None:
                     # ถ้ามีเวลาคงเหลือ ลดเวลารอลง ถ้ารดน้ำไว้
-                    if stats[1] and not stats[5]:
-                        time_decrease = self.time - previous_time
+                    if stats[1] and not stats[5] and self.previous_time < self.time:
+                        time_decrease = self.time - self.previous_time
                         self.growing_by_plot(plot, time_decrease)
                     
                     if stats[4] <= 0:# เพิ่ม state
@@ -274,8 +277,8 @@ class Player_farm():
                     # set crops growing to next state
                     if stats[4] is not None:
                         # ถ้ามีเวลาคงเหลือ ลดเวลารอลง ถ้ารดน้ำไว้
-                        if stats[1] and not stats[5]:
-                            time_decrease = self.time - previous_time
+                        if stats[1] and not stats[5] and self.previous_time < self.time:
+                            time_decrease = self.time - self.previous_time
                             bot.growing_by_plot(plot, time_decrease)
                     
                         if stats[4] <= 0:# เพิ่ม state
@@ -373,7 +376,7 @@ class Player_farm():
                 
                 # ปุ่ม next AI
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
-                    print ('Player_farm : Next AI')    
+                    #print ('Player_farm : Next AI')    
                     if clickdown:
                         selected = 'ai_farm'
                 # farmplot zone ----------------- farmplot zone
@@ -785,7 +788,7 @@ class Bot_farm(Player_farm):
                                 [(624,386),(754,492)]]      # ล่างขวา
         self.hammer_button = ((0,0),(0,0))
         self.paper_button = ((0,0),(0,0))
-        self.scisors_button = ((0,0),(0,0))
+        self.scissors_button = ((0,0),(0,0))
     
     def run_bot_farm(self, inv, money):
         pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")
@@ -813,8 +816,8 @@ class Bot_farm(Player_farm):
             clock.tick(40)
 
             # debuging display
-            if seeding:
-                pygame.display.set_caption("FARMER & THIEF : "+"Select your farmland to plant your seed")
+            if minigame:
+                pygame.display.set_caption("FARMER & THIEF : "+"Select your weapon !")
                 pass
             elif watering:
                 pygame.display.set_caption("FARMER & THIEF : "+"Select your farmland to watering")
@@ -877,11 +880,22 @@ class Bot_farm(Player_farm):
 
                     if clickdown:
                         loaded_sound.click.play()
-            
+                # ปุ่ม paper
+                if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]) and minigame:
+                    #print ('Bot_farm : paper')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                # ปุ่ม scissors
+                if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]) and minigame:
+                    #print ('Bot_farm : scissors')
+
+                    if clickdown:
+                        loaded_sound.click.play()
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
-                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]):
+                if is_hit_box(mouse_pos, self.farmplot_position[0][0], self.farmplot_position[0][1]) and not minigame:
                     index = self.farmplot_check_crops(self.farmplot_position[0], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
@@ -892,7 +906,7 @@ class Bot_farm(Player_farm):
 
 
                 # top right
-                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
+                if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]) and not minigame:
                     index = self.farmplot_check_crops(self.farmplot_position[1], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
@@ -902,7 +916,7 @@ class Bot_farm(Player_farm):
                             self.set_crops('2'+str(index), 'empty')
                 
                 # down left
-                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
+                if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]) and not minigame:
                     index = self.farmplot_check_crops(self.farmplot_position[2], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
@@ -912,7 +926,7 @@ class Bot_farm(Player_farm):
                             self.set_crops('3'+str(index), 'empty')
                 
                 # down right
-                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
+                if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]) and not minigame:
                     index = self.farmplot_check_crops(self.farmplot_position[3], mouse_pos)
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
@@ -920,7 +934,7 @@ class Bot_farm(Player_farm):
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
-        return self.inv, self.money, 'home'
+        return self.inv, self.money, 'home', cooldown
 
     def set_crops(self, plot, seed_name):
         print('Plot:%s was set to crop:%s !'%(plot, seed_name))
@@ -1787,7 +1801,7 @@ window = pygame.display.set_mode(resolution)
 pygame.display.set_caption("FARMER & THIEF : "+"Loading...")
 
 
-window.fill((255,255,255))
+window.fill((255,255,153))
 pygame.display.update()
 loaded_image = Image_()
 loaded_sound = Sound_()
@@ -1834,6 +1848,3 @@ main()
 
 # EXIT !
 pygame.quit()
-
-
-# ขออภัยที่โค้ดอาจจะรก หรือมีการ print มากมาย แต่ถ้าไม่มีมันทำไม่ได้! ภาพเอย เสียงเอย ยังไม่มีมาสักอย่าง ก็มีแต่ การ print นี่ละที่จะเป็น output ให้แก้บัค
