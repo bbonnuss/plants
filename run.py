@@ -142,9 +142,9 @@ class Image_():
         self.next_icon = pygame.image.load(join('assets','image','next_button.png')).convert_alpha()
         self.home_icon = pygame.image.load(join('assets','image','home_button.png')).convert_alpha()
         self.before_icon = pygame.image.load(join('assets','image','before_button.png')).convert_alpha()
-        self.weapond0_icon = pygame.image.load(join('assets','image','0.png')).convert_alpha()
-        self.weapond2_icon = pygame.image.load(join('assets','image','2.png')).convert_alpha()
-        self.weapond5_icon = pygame.image.load(join('assets','image','5.png')).convert_alpha()
+        self.weapon0_icon = pygame.image.load(join('assets','image','0.png')).convert_alpha()
+        self.weapon2_icon = pygame.image.load(join('assets','image','2.png')).convert_alpha()
+        self.weapon5_icon = pygame.image.load(join('assets','image','5.png')).convert_alpha()
 
 # Menu --------------------------- Menu
 # หน้าฟาร์มของผู้เล่น
@@ -189,6 +189,7 @@ class Player_farm():
         self.draw_bg()
         pygame.display.update()
 
+        cooldown = 60000
         seeding = False
         watering = False
         run = True
@@ -217,13 +218,17 @@ class Player_farm():
                 return 'exit'
             elif selected == 'main':
                 return 'main'
-            elif selected == 'ai_farm':
+            elif selected == 'ai_farm' and cooldown <= 0:
                 for bot in self.bot_farm_list:
-                    self.inv, self.money, selected = bot.run_bot_farm(self.inv, self.money)
+                    self.inv, self.money, selected, cooldown = bot.run_bot_farm(self.inv, self.money)
+            elif selected == 'ai_farm' and cooldown > 0:
+                print ('wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
 
             # clock update (clock is millisec)
             previous_time = self.time
             self.time = self.load_time + (pygame.time.get_ticks() - enter_farm_time)
+            if cooldown > 0:
+                cooldown -= previous_time
             
             # ระบบ อัพเดตฟาร์ม/จัดการฟาร์ม
             plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
@@ -260,8 +265,8 @@ class Player_farm():
                         bot.set_wet(plot)
                     
                     # สุ่มปลูก -------------------------- สุ่มปลูก
-                    bot_plant_rate = .02 # %
-                    bot_harvest_rate = .01 # %
+                    bot_plant_rate = .002 # %
+                    bot_harvest_rate = .001 # %
                     if stats[0] is None and bool(choice([True,False],p=[bot_plant_rate, 1-bot_plant_rate])):#ชื่อผักเป็น None และ สุ่มติด
                         bot.random_plant(plot)
 
@@ -790,9 +795,13 @@ class Bot_farm(Player_farm):
         # loop per second 
         clock = pygame.time.Clock()
 
-        # clock
-        enter_farm_time = pygame.time.get_ticks()
+        # วาดพื้นหลัง
+        self.draw_bg()
+        pygame.display.update()
         
+        # bot weapon
+        bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
+
         cooldown = 0
         seeding = False
         watering = False
@@ -815,14 +824,13 @@ class Bot_farm(Player_farm):
                 pass
             
             if minigame:
-
                 # draw minigame bg and button (draw minigame UI)
                 self.draw_minigame()
 
-            
-            # วาดพื้นหลัง
-            self.draw_bg()
-            pygame.display.update()
+            else:
+                # วาดพื้นหลัง
+                self.draw_bg()
+                pygame.display.update()
 
             # input - output
             for event in pygame.event.get():
@@ -849,7 +857,7 @@ class Bot_farm(Player_farm):
 
                 # ปุ่ม ออกไป main_menu
                 if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
-                    #print ('Player_farm : main_menu')
+                    #print ('Bot_farm : main_menu')
 
                     if clickdown:
                         loaded_sound.click.play()
@@ -857,15 +865,15 @@ class Bot_farm(Player_farm):
                 
                 # ปุ่ม home
                 if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
-                    #print ('Player_farm : home')
+                    #print ('Bot_farm : home')
 
                     if clickdown:
                         loaded_sound.click.play()
                         return inv, money, 'home', cooldown
                 
                 # ปุ่ม hammer
-                if is_hit_box(mouse_pos,self.hammer_button[0], self.mainmenu_button[1]):
-                    #print ('Player_farm : main_menu')
+                if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]) and minigame:
+                    #print ('Bot_farm : hammer')
 
                     if clickdown:
                         loaded_sound.click.play()
@@ -1146,8 +1154,7 @@ class Bot_farm(Player_farm):
         
         # ปุ่ม กลับบ้าน
         pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
-        
-        
+             
     def draw_farmland(self, plot, watering=False):
         global loaded_image
         global loaded_sound
@@ -1181,7 +1188,8 @@ class Bot_farm(Player_farm):
         elif plot[1] == 'd' or plot[1] == '3':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0], self.farmplot_position[index][0][1]+farm_scale[1]-farmland_overlap))
 
-
+    def draw_minigame(self):
+        pass
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
