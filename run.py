@@ -154,7 +154,7 @@ class Image_():
         self.melon2 = pygame.image.load(join('assets','image','melon2.png')).convert_alpha()
         self.melon3 = pygame.image.load(join('assets','image','melon3.png')).convert_alpha()
         self.orange = pygame.image.load(join('assets','image','orange.png')).convert_alpha()
-        self.orange2 = pygame.image.load(join('assets','image','orange2.png')).convert_alpha()
+        self.orange2 = pygame.image.load(join('assets','image','orange2.jpg')).convert_alpha()
         self.potato = pygame.image.load(join('assets','image','potato.png')).convert_alpha()
         self.redcabbage = pygame.image.load(join('assets','image','redcabbage.png')).convert_alpha()
         self.tomato = pygame.image.load(join('assets','image','tomato.png')).convert_alpha()
