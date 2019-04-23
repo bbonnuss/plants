@@ -268,8 +268,8 @@ class Player_farm():
                         bot.set_wet(plot)
                     
                     # สุ่มปลูก -------------------------- สุ่มปลูก
-                    bot_plant_rate = .2 # %
-                    bot_harvest_rate = .1 # %
+                    bot_plant_rate = .02 # %
+                    bot_harvest_rate = .01 # %
                     if stats[0] is None and bool(random_percentage([True,False],[bot_plant_rate, 1-bot_plant_rate])):#ชื่อผักเป็น None และ สุ่มติด
                         bot.random_plant(plot)
 
@@ -400,7 +400,7 @@ class Player_farm():
                             print ('This farm already planted')
                         elif crops_status[5]:
                             crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
-                            self.inv.add(crops_status[0], 1)
+                            self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
 
                 # top right
@@ -420,7 +420,8 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                 
                 # down left
@@ -440,7 +441,8 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                 
                 # down right
@@ -461,7 +463,8 @@ class Player_farm():
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
     
     def set_crops(self, plot, seed_name):
@@ -783,12 +786,12 @@ class Bot_farm(Player_farm):
                                 [(624,257),(754,358)],      # ขวาบน
                                 [(449,386),(581,492)],      # ล่างซ้าย
                                 [(624,386),(754,492)]]      # ล่างขวา
-    
-    def rps(self):
-        pass
+        self.hammer_button = ((0,0),(0,0))
+        self.paper_button = ((0,0),(0,0))
+        self.scisors_button = ((0,0),(0,0))
     
     def run_bot_farm(self, inv, money):
-        pygame.display.set_caption("FARMER & THIEF : "+"Farm")
+        pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")
         global loaded_image
         global loaded_sound
 
@@ -797,12 +800,12 @@ class Bot_farm(Player_farm):
 
         # clock
         enter_farm_time = pygame.time.get_ticks()
-
-        player_win = self.rps()
-        # วาดพื้นหลัง
+        
+        cooldown = 0
         seeding = False
         watering = False
         run = True
+        minigame = True
         while run:
             
             # loop per second 
@@ -818,8 +821,12 @@ class Bot_farm(Player_farm):
             else:
                 pygame.display.set_caption("FARMER & THIEF : "+"Click on the crop to steal")
                 pass
-
             
+            if minigame:
+
+                # draw minigame bg and button (draw minigame UI)
+                self.draw_minigame()
+
             
             # วาดพื้นหลัง
             self.draw_bg()
@@ -842,7 +849,8 @@ class Bot_farm(Player_farm):
                 
                 # exit
                 if event.type == pygame.QUIT:
-                    return self.inv, money, 'exit'
+                    # inv, money, go to?, cooldown
+                    return self.inv, money, 'exit', cooldown
                 
                 # Botton ------------------------- Botton
                 
@@ -853,7 +861,7 @@ class Bot_farm(Player_farm):
 
                     if clickdown:
                         loaded_sound.click.play()
-                        return inv, money, 'main'
+                        return inv, money, 'main', cooldown
                 
                 # ปุ่ม home
                 if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
@@ -861,7 +869,15 @@ class Bot_farm(Player_farm):
 
                     if clickdown:
                         loaded_sound.click.play()
-                        return inv, money, 'home'
+                        return inv, money, 'home', cooldown
+                
+                # ปุ่ม hammer
+                if is_hit_box(mouse_pos,self.hammer_button[0], self.mainmenu_button[1]):
+                    #print ('Player_farm : main_menu')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+            
 
                 # farmplot zone ----------------- farmplot zone
                 # top left
@@ -870,8 +886,8 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
                         if crops_status[5]:
-                            # เป่ายิงฉุบ
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],p=[0.5, 0.35, 0.15]))
+                            inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
 
 
@@ -881,8 +897,8 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
                         if crops_status[5]:# harvest?
-                            # เป่ายิงฉุบ
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                 
                 # down left
@@ -891,8 +907,8 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
                         if crops_status[5]:# harvest?
-                            # เป่ายิงฉุบ
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                 
                 # down right
@@ -901,8 +917,8 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
                         if crops_status[5]:# harvest?
-                            # เป่ายิงฉุบ
-                            self.inv.add(crops_status[0], 1)
+                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
         return self.inv, self.money, 'home'
 
