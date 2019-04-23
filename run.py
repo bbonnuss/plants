@@ -18,14 +18,6 @@ def is_hit_box(position,box_a,box_b):
     
     return False
 
-def random_percentage(population, prop_list):
-    #population = list ของ ข้อมูลเชิงคุณภาพ
-    #prop_list =  list ของ prop in every population
-    result = choice(population, p=prop_list)
-    return result
-    
-
-
 # Class ========================== Class ========================== Class
 # resouce_manager ---------------- resouce_manager
 class Sound_():
@@ -270,7 +262,7 @@ class Player_farm():
                     # สุ่มปลูก -------------------------- สุ่มปลูก
                     bot_plant_rate = .02 # %
                     bot_harvest_rate = .01 # %
-                    if stats[0] is None and bool(random_percentage([True,False],[bot_plant_rate, 1-bot_plant_rate])):#ชื่อผักเป็น None และ สุ่มติด
+                    if stats[0] is None and bool(choice([True,False],p=[bot_plant_rate, 1-bot_plant_rate])):#ชื่อผักเป็น None และ สุ่มติด
                         bot.random_plant(plot)
 
                     # growing ------------------------ growing
@@ -285,7 +277,7 @@ class Player_farm():
                             bot.grow_up_by_plot(plot)
                 
                     # สุ่มเก็บ ------------------------ สุ่มเก็บ
-                    if stats[5] and bool(random_percentage([True,False],[bot_harvest_rate, 1-bot_harvest_rate])): # ถ้าโตแล้ว
+                    if stats[5] and bool(choice([True,False],p=[bot_harvest_rate, 1-bot_harvest_rate])): # ถ้าโตแล้ว
                         bot.harvest(plot)
 
             # input - output
@@ -886,7 +878,7 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
                         if crops_status[5]:
-                            crop_collected = (random_percentage([1, 2, 3],p=[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
 
@@ -897,7 +889,7 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
                         if crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                 
@@ -907,7 +899,7 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
                         if crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                 
@@ -917,7 +909,7 @@ class Bot_farm(Player_farm):
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
                         if crops_status[5]:# harvest?
-                            crop_collected = (random_percentage([1, 2, 3],[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
         return self.inv, self.money, 'home'
@@ -1056,7 +1048,7 @@ class Bot_farm(Player_farm):
 
     def random_plant(self, plot):
         seed_list = ['wheat', 'cucumber', 'tomato', 'potato', 'redcabbage', 'orange', 'mango', 'apple', 'melon', 'grape']
-        selected_seed = random_percentage(seed_list, [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
+        selected_seed = choice(seed_list, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
         self.set_crops(plot, selected_seed)
 
     def harvest(self, plot):
