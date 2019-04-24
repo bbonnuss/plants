@@ -68,6 +68,9 @@ class Image_():
         self.draw_bg = pygame.image.load(join('assets','image','draw_bg.png')).convert_alpha()
         self.lose_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
         self.storage_bg = pygame.image.load(join('assets','image','storage_bg.png')).convert_alpha()
+        self.storage_bg_p1 = pygame.image.load(join('assets','image','storage_bg_p1.png')).convert_alpha()
+        self.storage_bg_p2 = pygame.image.load(join('assets','image','storage_bg_p2.png')).convert_alpha()
+        self.storage_bg_p3 = pygame.image.load(join('assets','image','storage_bg_p3.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -1651,6 +1654,9 @@ class Storage_menu():
 
                     if clickdown and page > 1:
                         page -= 1
+                    
+                    if clickdown and page <= 1:
+                        page = self.max_page
                 
                 # ปุ่ม next
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
@@ -1658,6 +1664,9 @@ class Storage_menu():
 
                     if clickdown and page < self.max_page:
                         page += 1
+
+                    if clickdown and page >= self.max_page:
+                        page = 1
 
                 # inv zone ------------------- inv zone 
                 for table_index in range(9):
@@ -1694,8 +1703,15 @@ class Storage_menu():
     def draw_bg(self, page):
         global loaded_image
         global loaded_sound
-        window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
-
+        global resolution
+        if page == 1:
+            window.blit(pygame.transform.scale(loaded_image.storage_bg_p1, resolution), (0, 0))
+        if page == 2:
+            window.blit(pygame.transform.scale(loaded_image.storage_bg_p2, resolution), (0, 0))
+        if page == 3:
+            window.blit(pygame.transform.scale(loaded_image.storage_bg_p3, resolution), (0, 0))
+        else:
+            window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
 
         item_name_index = []
         for name in self.inv.get_inv_only_have():
