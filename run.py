@@ -1607,6 +1607,7 @@ class Storage_menu():
 
             # draw bg
             self.draw_bg(page)
+            pygame.display.update()
 
             # สร้าง index ของ item ขึ้นมา เมื่อ init ด้วย inv
             item_name_index = []
@@ -1659,10 +1660,10 @@ class Storage_menu():
                         page += 1
 
                 # inv zone ------------------- inv zone 
-                for index in range(9):
-                    index = index + ((page-1)*9)
-                    if is_hit_box(mouse_pos,self.inv_slot_button[index][0], self.inv_slot_button[index][1]):
-                        print ('Storage : index ',index)
+                for table_index in range(9):
+                    index = table_index + ((page-1)*9)
+                    if is_hit_box(mouse_pos,self.inv_slot_button[table_index][0], self.inv_slot_button[table_index][1]):
+                        print ('Storage : index ',index, 'Page =',page, 'table =',table_index )
                         if clickdown and sell:
                             try:
                                 item_name = item_name_index[index]
@@ -1671,11 +1672,20 @@ class Storage_menu():
                                 continue
                             self.inv.remove(item_name, 1)
                             self.money += self.price_index[item_name]
+                            print ('sell:', item_name)
 
-                            if ceil(len(self.inv.get_inv_only_have())/9) < item_name_index: # ถ้าขายของไป แล้วทำให้ของหาย และ page นั้น ไม่มีของจะแสดง
+                            if ceil(len(self.inv.get_inv_only_have())/9) < ceil(len(item_name_index)/9): # ถ้าขายของไป แล้วทำให้ของหาย และ page นั้น ไม่มีของจะแสดง
+                                print (ceil(len(self.inv.get_inv_only_have())/9),' < ',ceil(len(item_name_index)/9))
                                 self.max_page -= 1
-                                page -= 1
-                                
+                                if page > 1:
+                                    page -= 1
+                            
+                        try:
+                            item_name = item_name_index[index]
+                        except IndexError:
+                            print ('have no item')
+                            continue 
+                        print ('here are ',self.inv.item_dict[item_name], ' item')           
 
 
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
@@ -1712,7 +1722,11 @@ class Storage_menu():
         # วาดผักลงในตาราง 
         for table_index in range(9):
             index = table_index + ((page-1)*9)
-            item_name = item_name_index[index]
+            try:
+                item_name = item_name_index[index]
+            except IndexError:
+                # print ('Here are no item')
+                continue
             xyab = self.inv_slot_button[table_index]
             size = (xyab[1][0] - xyab[0][0]), (xyab[1][1] - xyab[0][1])
             window.blit(pygame.transform.scale(self.icon_index[item_name], size), xyab[0])
@@ -1877,11 +1891,11 @@ class Inventory():
                     'tomato': 1, 'tomato_seed': 1,
                     'potato': 1,  'potato_seed': 1,
                     'redcabbage': 1, 'redcabbage_seed':1,
-                    'orange': 0, 'orange_seed': 0,
-                    'mango': 0, 'mango_seed': 0,
-                    'apple': 0, 'apple_seed': 0, 
-                    'melon': 0, 'melon_seed': 0, 
-                    'grape': 0, 'grape_seed': 0}
+                    'orange': 1, 'orange_seed': 1,
+                    'mango': 1, 'mango_seed': 1,
+                    'apple': 1, 'apple_seed': 1, 
+                    'melon': 1, 'melon_seed': 1, 
+                    'grape': 1, 'grape_seed': 1}
     
     # add item to Inventory
     def add(self, name, amout):
