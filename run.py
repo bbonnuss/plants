@@ -1565,13 +1565,13 @@ class Storage_menu():
         self.money = money
         self.max_page = None
 
-        self.sell_button = ((120, 0),(130,15))
-        self.home_button = ((140, 0),(150,15))
-        self.next_button = ((170, 0),(180,15))
-        self.previous_button = ((190, 0),(200,15))
-        self.inv_slot_button = [((46, 64),(195,195)), ((242, 64),(392,195)), ((439, 64),(588,195)),
-                                ((46, 235),(195,366)), ((242, 235),(392,366)), ((439, 235),(588,366)),
-                                ((46, 403),(195,535)), ((242, 403),(392,535)), ((439, 403),(588,535))]
+        self.sell_button = ((660, 151),(752,249))
+        self.home_button = ((658, 329),(752,428))
+        self.next_button = ((436, 514),(510,594))
+        self.previous_button = ((266, 514),(340,594))
+        self.inv_slot_button = [((158, 68),(281,179)), ((321, 68),(446,179)), ((486, 68),(609,179)),
+                                ((158, 216),(281,326)), ((321, 216),(446,326)), ((486, 216),(609,326)),
+                                ((158, 361),(281,472)), ((321, 361),(446,472)), ((486, 361),(588,472))]
         self.price_index = {'wheat': Wheat().sale_price, 'wheat_seed': Wheat().seed_price, 
                     'cucumber': Cucumber().sale_price, 'cucumber_seed': Cucumber().seed_price, 
                     'tomato': Tomato().sale_price, 'tomato_seed': Tomato().seed_price,
@@ -1616,7 +1616,8 @@ class Storage_menu():
             item_name_index = []
             for name in self.inv.get_inv_only_have():
                 item_name_index.append(name)
-                self.max_page = ceil(len(item_name_index)/9)
+            self.max_page = ceil(len(item_name_index)/9)
+            print ('max index ', self.max_page)
 
             for event in pygame.event.get():
                 # Exit game 
@@ -1652,20 +1653,21 @@ class Storage_menu():
                 if is_hit_box(mouse_pos,self.previous_button[0], self.previous_button[1]):
                     print ('Storage : previous')
 
-                    if clickdown and page > 1:
+                    if clickdown and (page > 1):
                         page -= 1
                     
-                    if clickdown and page <= 1:
+                    elif clickdown and (page <= 1):
                         page = self.max_page
                 
                 # ปุ่ม next
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
                     print ('Storage : next')
 
-                    if clickdown and page < self.max_page:
+                    if clickdown and (page < self.max_page):
                         page += 1
 
-                    if clickdown and page >= self.max_page:
+                    elif clickdown and (page >= self.max_page):
+                        print (page,' >= ', self.max_page)
                         page = 1
 
                 # inv zone ------------------- inv zone 
@@ -1706,9 +1708,9 @@ class Storage_menu():
         global resolution
         if page == 1:
             window.blit(pygame.transform.scale(loaded_image.storage_bg_p1, resolution), (0, 0))
-        if page == 2:
+        elif page == 2:
             window.blit(pygame.transform.scale(loaded_image.storage_bg_p2, resolution), (0, 0))
-        if page == 3:
+        elif page == 3:
             window.blit(pygame.transform.scale(loaded_image.storage_bg_p3, resolution), (0, 0))
         else:
             window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
@@ -1902,16 +1904,16 @@ class Bot():
 
 class Inventory():
     def __init__(self):
-        self.item_dict = {'wheat': 1, 'wheat_seed': 1, 
-                    'cucumber': 1, 'cucumber_seed': 1, 
-                    'tomato': 1, 'tomato_seed': 1,
-                    'potato': 1,  'potato_seed': 1,
-                    'redcabbage': 1, 'redcabbage_seed':1,
-                    'orange': 1, 'orange_seed': 1,
-                    'mango': 1, 'mango_seed': 1,
-                    'apple': 1, 'apple_seed': 1, 
-                    'melon': 1, 'melon_seed': 1, 
-                    'grape': 1, 'grape_seed': 1}
+        self.item_dict = {'wheat': 1, 'cucumber': 1, 
+                        'tomato': 1, 'potato': 1,  
+                        'redcabbage': 1, 'orange': 1, 
+                        'mango': 1, 'apple': 1,
+                        'melon': 1, 'grape': 1, 
+	                    'wheat_seed': 1, 'cucumber_seed': 1, 
+                        'tomato_seed': 1,'potato_seed': 1,
+                        'redcabbage_seed':1, 'orange_seed': 1,
+                        'mango_seed': 1, 'apple_seed': 1, 
+                        'melon_seed': 1, 'grape_seed': 1}
     
     # add item to Inventory
     def add(self, name, amout):
