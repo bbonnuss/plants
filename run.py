@@ -1562,13 +1562,13 @@ class Storage_menu():
         self.money = money
         self.max_page = None
 
-        self.sell_button = ((0, 0),(0,0))
-        self.home_button = ((0, 0),(0,0))
-        self.next_button = ((0, 0),(0,0))
-        self.previous_button = ((0, 0),(0,0))
-        self.inv_slot_button = [((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0)),
-                                ((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0)),
-                                ((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0))]
+        self.sell_button = ((120, 0),(130,15))
+        self.home_button = ((140, 0),(150,15))
+        self.next_button = ((170, 0),(180,15))
+        self.previous_button = ((190, 0),(200,15))
+        self.inv_slot_button = [((46, 64),(195,195)), ((242, 64),(392,195)), ((439, 64),(588,195)),
+                                ((46, 235),(195,366)), ((242, 235),(392,366)), ((439, 235),(588,366)),
+                                ((46, 403),(195,535)), ((242, 403),(392,535)), ((439, 403),(588,535))]
         self.price_index = {'wheat': Wheat().sale_price, 'wheat_seed': Wheat().seed_price, 
                     'cucumber': Cucumber().sale_price, 'cucumber_seed': Cucumber().seed_price, 
                     'tomato': Tomato().sale_price, 'tomato_seed': Tomato().seed_price,
@@ -1621,6 +1621,7 @@ class Storage_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1681,7 +1682,6 @@ class Storage_menu():
         return self.inv, self.money, 'home'
 
     def draw_bg(self, page):
-        print ('draw bg of storage')
         global loaded_image
         global loaded_sound
         window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
@@ -1690,7 +1690,21 @@ class Storage_menu():
         item_name_index = []
         for name in self.inv.get_inv_only_have():
             item_name_index.append(name)
-            
+        
+        # debuging
+        # next
+        pygame.draw.rect(window, (0,0,255),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
+        
+        # previous
+        pygame.draw.rect(window, (255,0,255),[self.previous_button[0][0], self.previous_button[0][1], self.previous_button[1][0] - self.previous_button[0][0], self.previous_button[1][1] - self.previous_button[0][1]], 3)
+        
+        # home
+        pygame.draw.rect(window, (0,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
+        
+        # sell
+        pygame.draw.rect(window, (255,255,0),[self.sell_button[0][0], self.sell_button[0][1], self.sell_button[1][0] - self.sell_button[0][0], self.sell_button[1][1] - self.sell_button[0][1]], 3)
+        
+
         # ถ้าไม่มีอะไรเลย ไม่ต้องวาด 
         if len(item_name_index) == 0:
             return True
@@ -1698,7 +1712,6 @@ class Storage_menu():
         # วาดผักลงในตาราง 
         for table_index in range(9):
             index = table_index + ((page-1)*9)
-            print (index, table_index, item_name_index)
             item_name = item_name_index[index]
             xyab = self.inv_slot_button[table_index]
             size = (xyab[1][0] - xyab[0][0]), (xyab[1][1] - xyab[0][1])
@@ -1859,11 +1872,11 @@ class Bot():
 
 class Inventory():
     def __init__(self):
-        self.item_dict = {'wheat': 0, 'wheat_seed': 0, 
-                    'cucumber': 0, 'cucumber_seed': 0, 
-                    'tomato': 0, 'tomato_seed': 0,
-                    'potato': 0,  'potato_seed': 0,
-                    'redcabbage': 0, 'redcabbage_seed':0,
+        self.item_dict = {'wheat': 1, 'wheat_seed': 1, 
+                    'cucumber': 1, 'cucumber_seed': 1, 
+                    'tomato': 1, 'tomato_seed': 1,
+                    'potato': 1,  'potato_seed': 1,
+                    'redcabbage': 1, 'redcabbage_seed':1,
                     'orange': 0, 'orange_seed': 0,
                     'mango': 0, 'mango_seed': 0,
                     'apple': 0, 'apple_seed': 0, 
