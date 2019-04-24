@@ -67,7 +67,7 @@ class Image_():
         self.win_bg = pygame.image.load(join('assets','image','win_bg.png')).convert_alpha()
         self.draw_bg = pygame.image.load(join('assets','image','draw_bg.png')).convert_alpha()
         self.lose_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
-        self.storage_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
+        self.storage_bg = pygame.image.load(join('assets','image','storage_bg.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -1557,9 +1557,10 @@ class Shop_menu():
 # คลัง
 class Storage_menu():
     def __init__(self,inventory, money):
+        global loaded_image
         self.inv = inventory
         self.money = money
-        
+        self.max_page = None
 
         self.sell_button = ((0, 0),(0,0))
         self.home_button = ((0, 0),(0,0))
@@ -1578,13 +1579,23 @@ class Storage_menu():
                     'apple': Apple().sale_price, 'apple_seed': Apple().seed_price, 
                     'melon': Melon().sale_price, 'melon_seed': Melon().seed_price, 
                     'grape': Grape().sale_price, 'grape_seed': Grape().seed_price}
+        self.icon_index = {'wheat': loaded_image.wheat, 'wheat_seed': loaded_image.wheat_seed, 
+                    'cucumber': loaded_image.cucumber, 'cucumber_seed': loaded_image.cucumber_seed, 
+                    'tomato': loaded_image.tomato, 'tomato_seed': loaded_image.tomato_seed,
+                    'potato': loaded_image.potato,  'potato_seed': loaded_image.potato_seed,
+                    'redcabbage': loaded_image.redcabbage, 'redcabbage_seed': loaded_image.redcabbage_seed,
+                    'orange': loaded_image.orange, 'orange_seed': loaded_image.orange_seed,
+                    'mango': loaded_image.mango, 'mango_seed': loaded_image.mango_seed,
+                    'apple': loaded_image.apple, 'apple_seed': loaded_image.apple_seed, 
+                    'melon': loaded_image.melon, 'melon_seed': loaded_image.melon_seed, 
+                    'grape': loaded_image.grape, 'grape_seed': loaded_image.grape_seed}
 
     def run(self):
         # FPS
         clock = pygame.time.Clock()
 
         # วาดพื้นหลัง
-        self.draw_bg()
+        self.draw_bg(1)
         pygame.display.update()  
 
         run = True
@@ -1601,7 +1612,7 @@ class Storage_menu():
             item_name_index = []
             for name in self.inv.get_inv_only_have():
                 item_name_index.append(name)
-                max_page = ceil(len(item_name_index)/9)
+                self.max_page = ceil(len(item_name_index)/9)
 
             for event in pygame.event.get():
                 # Exit game 
@@ -1647,23 +1658,51 @@ class Storage_menu():
                         page += 1
 
                 # inv zone ------------------- inv zone 
-                if is_hit_box(mouse_pos,self.inv_slot_button[index][0], self.inv_slot_button[index][1]):
-                    print ('Storage : index 0')
-                    if clickdown and sell:
-                        item_name = item_name_index[index]
-                        self.inv.remove(item_name, 1)
-                        self.money += self.price_index[item_name]
+                for index in range(9):
+                    index = index + ((page-1)*9)
+                    if is_hit_box(mouse_pos,self.inv_slot_button[index][0], self.inv_slot_button[index][1]):
+                        print ('Storage : index ',index)
+                        if clickdown and sell:
+                            try:
+                                item_name = item_name_index[index]
+                            except IndexError:
+                                print ('have no item')
+                                continue
+                            self.inv.remove(item_name, 1)
+                            self.money += self.price_index[item_name]
+
+                            if ceil(len(self.inv.get_inv_only_have())/9) < item_name_index: # ถ้าขายของไป แล้วทำให้ของหาย และ page นั้น ไม่มีของจะแสดง
+                                self.max_page -= 1
+                                page -= 1
+                                
 
 
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
-        return self.inv, self.money
+        return self.inv, self.money, 'home'
 
     def draw_bg(self, page):
+        print ('draw bg of storage')
         global loaded_image
         global loaded_sound
         window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
 
-        # ผัก
+
+        item_name_index = []
+        for name in self.inv.get_inv_only_have():
+            item_name_index.append(name)
+            
+        # ถ้าไม่มีอะไรเลย ไม่ต้องวาด 
+        if len(item_name_index) == 0:
+            return True
+
+        # วาดผักลงในตาราง 
+        for table_index in range(9):
+            index = table_index + ((page-1)*9)
+            print (index, table_index, item_name_index)
+            item_name = item_name_index[index]
+            xyab = self.inv_slot_button[table_index]
+            size = (xyab[1][0] - xyab[0][0]), (xyab[1][1] - xyab[0][1])
+            window.blit(pygame.transform.scale(self.icon_index[item_name], size), xyab[0])
         
 
 # main menu
