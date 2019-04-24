@@ -67,6 +67,7 @@ class Image_():
         self.win_bg = pygame.image.load(join('assets','image','win_bg.png')).convert_alpha()
         self.draw_bg = pygame.image.load(join('assets','image','draw_bg.png')).convert_alpha()
         self.lose_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
+        self.storage_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -409,7 +410,7 @@ class Player_farm():
 
                     if clickdown:
                         storage = Storage_menu(self.inv, self.money)
-                        self.inv, self.money = storage.run()
+                        self.inv, self.money, selected = storage.run()
                         self.draw_bg()
                 
                 # ปุ่ม ร้านค้า
@@ -800,6 +801,7 @@ class Player_farm():
         backhome = False
         end = False
         run = True
+        result = None
         while run:
             
             # loop per second 
@@ -991,7 +993,7 @@ class Player_farm():
     def draw_pop_up_msg(self, msg, position):
         pass
 
-class Bot_farm(Player_farm):
+class Bot_farm():
     def __init__(self, profile):
         self.player = profile# Player()
         self.inv = self.player.inventory
@@ -1038,6 +1040,7 @@ class Bot_farm(Player_farm):
         backhome = False
         end = False
         run = True
+        result = None
         while run:
             
             # loop per second 
@@ -1115,8 +1118,6 @@ class Bot_farm(Player_farm):
                     steal = True
                 else :
                     backhome = True
-
-
 
     def run_bot_farm(self, inv, money):
         pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")
@@ -1556,56 +1557,115 @@ class Shop_menu():
 # คลัง
 class Storage_menu():
     def __init__(self,inventory, money):
-        self.inventory = inventory
+        self.inv = inventory
         self.money = money
+        
+
+        self.sell_button = ((0, 0),(0,0))
+        self.home_button = ((0, 0),(0,0))
+        self.next_button = ((0, 0),(0,0))
+        self.previous_button = ((0, 0),(0,0))
+        self.inv_slot_button = [((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0)),
+                                ((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0)),
+                                ((0, 0),(0,0)), ((0, 0),(0,0)), ((0, 0),(0,0))]
+        self.price_index = {'wheat': Wheat().sale_price, 'wheat_seed': Wheat().seed_price, 
+                    'cucumber': Cucumber().sale_price, 'cucumber_seed': Cucumber().seed_price, 
+                    'tomato': Tomato().sale_price, 'tomato_seed': Tomato().seed_price,
+                    'potato': Potato().sale_price,  'potato_seed': Potato().seed_price,
+                    'redcabbage': Redcabbage().sale_price, 'redcabbage_seed':Redcabbage().seed_price,
+                    'orange': Orange().sale_price, 'orange_seed': Orange().seed_price,
+                    'mango': Mango().sale_price, 'mango_seed': Mango().seed_price,
+                    'apple': Apple().sale_price, 'apple_seed': Apple().seed_price, 
+                    'melon': Melon().sale_price, 'melon_seed': Melon().seed_price, 
+                    'grape': Grape().sale_price, 'grape_seed': Grape().seed_price}
 
     def run(self):
-        window.fill((255,255,255))
-        pygame.display.update()
+        # FPS
+        clock = pygame.time.Clock()
+
+        # วาดพื้นหลัง
+        self.draw_bg()
+        pygame.display.update()  
+
         run = True
+        page = 1
+        sell = False
         while run:
+            # loop per second  (FPS)
+            clock.tick(40)
+
+            # draw bg
+            self.draw_bg(page)
+
+            # สร้าง index ของ item ขึ้นมา เมื่อ init ด้วย inv
+            item_name_index = []
+            for name in self.inv.get_inv_only_have():
+                item_name_index.append(name)
+                max_page = ceil(len(item_name_index)/9)
+
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                   return self.inventory, self.money
+                    return self.inv, self.money, 'exit'
+                
+                # mouse pos
+                mouse_pos = pygame.mouse.get_pos()
+
+                # click
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+
+                # Botton ------------------------- Botton
+                # ปุ่ม ออกไป farm
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
+                    print ('Storage : home')
+
+                    if clickdown:
+                        return self.inv, self.money,'home'
+                
+                # ปุ่ม sell
+                if is_hit_box(mouse_pos,self.sell_button[0], self.sell_button[1]):
+                    print ('Storage : sell')
+
+                    if clickdown:
+                        sell = not sell
+                
+                # ปุ่ม previous
+                if is_hit_box(mouse_pos,self.previous_button[0], self.previous_button[1]):
+                    print ('Storage : previous')
+
+                    if clickdown and page > 1:
+                        page -= 1
+                
+                # ปุ่ม next
+                if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
+                    print ('Storage : next')
+
+                    if clickdown and page < self.max_page:
+                        page += 1
+
+                # inv zone ------------------- inv zone 
+                if is_hit_box(mouse_pos,self.inv_slot_button[index][0], self.inv_slot_button[index][1]):
+                    print ('Storage : index 0')
+                    if clickdown and sell:
+                        item_name = item_name_index[index]
+                        self.inv.remove(item_name, 1)
+                        self.money += self.price_index[item_name]
+
 
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
-        return self.inventory, self.money
+        return self.inv, self.money
 
-# แปรรูป
-class Process_menu():
-    def __init__(self,inventory, money):
-        self.inventory = inventory
-        self.money = money
-    
-    def run(self):
-        window.fill((255,255,255))
-        pygame.display.update()
-        run = True
-        while run:
-            # Exit game 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return self.inventory, self.money
+    def draw_bg(self, page):
+        global loaded_image
+        global loaded_sound
+        window.blit(pygame.transform.scale(loaded_image.storage_bg, resolution), (0, 0))
+
+        # ผัก
         
-        # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากหน้าแปรรูปด้วย
-        return self.inventory, self.money
 
-# Achievement
-class Achievement_manu():
-    def __init__(self):
-        self.inprocess = True
-    
-    def run(self):
-        run = True
-        while run:
-            for event in pygame.event.get():
-                # Exit game 
-                if event.type == pygame.QUIT:
-                    return 'exit'
-                if event.type == pygame.MOUSEBUTTONUP:
-                    pass
-                
 # main menu
 class Main_menu():
     def __init__(self):
@@ -1760,17 +1820,16 @@ class Bot():
 
 class Inventory():
     def __init__(self):
-        self.item_dict = {'wheat': 0, 'wheat_seed': 2, 
-                    'cucumber': 0, 'cucumber_seed': 2, 
-                    'tomato': 0, 'tomato_seed': 2,
-                    'potato': 0,  'potato_seed': 2,
-                    'redcabbage': 0, 'redcabbage_seed':2,
-                    'orange': 0, 'orange_seed': 2,
-                    'mango': 0, 'mango_seed': 2,
-                    'apple': 0, 'apple_seed': 2, 
-                    'melon': 0, 'melon_seed': 2, 
-                    'grape': 0, 'grape_seed': 2,
-                    'pug_process': 0,'fruit_process': 0 }
+        self.item_dict = {'wheat': 0, 'wheat_seed': 0, 
+                    'cucumber': 0, 'cucumber_seed': 0, 
+                    'tomato': 0, 'tomato_seed': 0,
+                    'potato': 0,  'potato_seed': 0,
+                    'redcabbage': 0, 'redcabbage_seed':0,
+                    'orange': 0, 'orange_seed': 0,
+                    'mango': 0, 'mango_seed': 0,
+                    'apple': 0, 'apple_seed': 0, 
+                    'melon': 0, 'melon_seed': 0, 
+                    'grape': 0, 'grape_seed': 0}
     
     # add item to Inventory
     def add(self, name, amout):
@@ -2148,10 +2207,6 @@ def main():
             main = Main_menu()
             selected = main.run()
         
-        if selected == 'newgame':
-            newgame = Newgame_menu()
-            selected = newgame.run()
-        
         if selected == 'load':
             load = Load_menu()
             selected = load.run()
@@ -2159,14 +2214,6 @@ def main():
         if selected == 'credit':
             credit = Credit_menu()
             selected = credit.run()
-        
-        if selected == 'player_farm':
-            player_farm = Player_farm()
-            selected = player_farm.run()
-        
-        if selected == 'acheivement':
-            acheivement = Achievement_manu()
-            selected = acheivement.run()
 
         if selected == 'exit':
             run = False
