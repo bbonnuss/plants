@@ -780,7 +780,7 @@ class Player_farm():
         if len(stealable_list) == 0:
             return None
         len_list = len(stealable_list)
-        p_list = list(map(lambda x: (x*0)+(1/len_list),stealable_list))
+        p_list = list(map(lambda x: (1/len_list),stealable_list))
         selected_plot = choice(stealable_list, p=p_list)
         return self.check_crops_status(selected_plot)[0]
 
@@ -1545,8 +1545,20 @@ class Shop_menu():
         self.money = money
         self.home_button = ((0,0),(0,0))
         self.buy_button = ((0,0),(0,0))
-        self.seedselection_button = [((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))
-                                    , ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))]
+        self.seedselection_button = [((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)),
+                                    ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))]
+        self.seedselection_order = ['redcabbage_seed', 'wheat_seed', 'cucumber_seed', 'tomato_seed', 'potato_seed', 
+                                    'melon_seed', 'mango_seed', 'orange_seed', 'grape_seed', 'apple_seed']
+        self.price_index = { 'wheat_seed': Wheat().seed_price, 
+                            'cucumber_seed': Cucumber().seed_price, 
+                            'tomato_seed': Tomato().seed_price, 
+                            'potato_seed': Potato().seed_price,
+                            'redcabbage_seed':Redcabbage().seed_price,
+                            'orange_seed': Orange().seed_price,
+                            'mango_seed': Mango().seed_price,
+                            'apple_seed': Apple().seed_price, 
+                            'melon_seed': Melon().seed_price, 
+                            'grape_seed': Grape().seed_price}
 
 
     def run(self):
@@ -1585,10 +1597,21 @@ class Shop_menu():
                 
                 # ปุ่ม buy
                 if is_hit_box(mouse_pos,self.buy_button[0], self.buy_button[1]):
-                    print ('Shop : home')
+                    print ('Shop : buy')
 
                     if clickdown:
-                        return self.inv, self.money, 'home'
+                        buy = not buy
+                
+                # buy zone ------------------------- buy zone
+                index = 0
+                for slot in self.seedselection_button:
+                    if is_hit_box(mouse_pos,slot[0], slot[1]) and buy:
+                        print ('Shop : buy')
+                        seed_name = self.seedselection_order[index]
+                        if clickdown:
+                            self.inv.add(seed_name, 1)
+                            self.money -= self.price_index[seed_name]
+                    index += 1
 
                 
 
@@ -1599,7 +1622,13 @@ class Shop_menu():
         return self.inv, self.money, 'home'
 
     def draw_bg(self):
-        pass
+        global loaded_image
+        global loaded_sound
+        global resolution
+        # bg
+        
+        window.blit(pygame.transform.scale(loaded_image.shop_bg, resolution), (0, 0))
+        
 
 # คลัง
 class Storage_menu():
@@ -1661,7 +1690,7 @@ class Storage_menu():
             for name in self.inv.get_inv_only_have():
                 item_name_index.append(name)
             self.max_page = ceil(len(item_name_index)/9)
-            print ('max index ', self.max_page)
+            #print ('max index ', self.max_page)
 
             for event in pygame.event.get():
                 # Exit game 
@@ -1680,21 +1709,21 @@ class Storage_menu():
                 # Botton ------------------------- Botton
                 # ปุ่ม ออกไป farm
                 if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
-                    print ('Storage : home')
+                    #print ('Storage : home')
 
                     if clickdown:
                         return self.inv, self.money,'home'
                 
                 # ปุ่ม sell
                 if is_hit_box(mouse_pos,self.sell_button[0], self.sell_button[1]):
-                    print ('Storage : sell')
+                    #print ('Storage : sell')
 
                     if clickdown:
                         sell = not sell
                 
                 # ปุ่ม previous
                 if is_hit_box(mouse_pos,self.previous_button[0], self.previous_button[1]):
-                    print ('Storage : previous')
+                    #print ('Storage : previous')
 
                     if clickdown and (page > 1):
                         page -= 1
@@ -1704,25 +1733,25 @@ class Storage_menu():
                 
                 # ปุ่ม next
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
-                    print ('Storage : next')
+                    #print ('Storage : next')
 
                     if clickdown and (page < self.max_page):
                         page += 1
 
                     elif clickdown and (page >= self.max_page):
-                        print (page,' >= ', self.max_page)
+                        #print (page,' >= ', self.max_page)
                         page = 1
 
                 # inv zone ------------------- inv zone 
                 for table_index in range(9):
                     index = table_index + ((page-1)*9)
                     if is_hit_box(mouse_pos,self.inv_slot_button[table_index][0], self.inv_slot_button[table_index][1]):
-                        print ('Storage : index ',index, 'Page =',page, 'table =',table_index )
+                        #print ('Storage : index ',index, 'Page =',page, 'table =',table_index )
                         if clickdown and sell:
                             try:
                                 item_name = item_name_index[index]
                             except IndexError:
-                                print ('have no item')
+                                #print ('have no item')
                                 continue
                             self.inv.remove(item_name, 1)
                             self.money += self.price_index[item_name]
@@ -1737,9 +1766,9 @@ class Storage_menu():
                         try:
                             item_name = item_name_index[index]
                         except IndexError:
-                            print ('have no item')
+                            #print ('have no item')
                             continue 
-                        print ('here are ',self.inv.item_dict[item_name], ' item')           
+                        #print ('here are ',self.inv.item_dict[item_name], ' item')           
 
 
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากคลังด้วย
@@ -1749,6 +1778,7 @@ class Storage_menu():
         global loaded_image
         global loaded_sound
         global resolution
+        # bg
         if page == 1:
             window.blit(pygame.transform.scale(loaded_image.storage_bg_p1, resolution), (0, 0))
         elif page == 2:
