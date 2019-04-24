@@ -422,7 +422,7 @@ class Player_farm():
 
                     if clickdown:
                         shop = Shop_menu(self.inv, self.money)
-                        self.inv, self.money = shop.run()
+                        self.inv, self.money, selected = shop.run()
                         self.draw_bg()
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
@@ -1541,21 +1541,65 @@ class Bot_farm():
 # shop
 class Shop_menu():
     def __init__(self,inventory, money):
-        self.inventory = inventory
+        self.inv = inventory
         self.money = money
+        self.home_button = ((0,0),(0,0))
+        self.buy_button = ((0,0),(0,0))
+        self.seedselection_button = [((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))
+                                    , ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))]
+
 
     def run(self):
         window.fill((0,0,0))
         pygame.display.update()
+
+        buy = False
         run = True
         while run:
+            # draw bg
+            self.draw_bg()
+            pygame.display.update()
+            # input - output
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
-                    return self.inventory, self.money
+                    return self.inv, self.money, 'exit'
+                
+                # mouse pos
+                mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
+
+                # click
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+
+                # Botton ------------------------- Botton
+                # ปุ่ม ออกไป farm
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
+                    print ('Shop : home')
+
+                    if clickdown:
+                        return self.inv, self.money, 'home'
+                
+                # ปุ่ม buy
+                if is_hit_box(mouse_pos,self.buy_button[0], self.buy_button[1]):
+                    print ('Shop : home')
+
+                    if clickdown:
+                        return self.inv, self.money, 'home'
+
+                
+
+                
+                
         
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากร้านด้วย
-        return self.inventory, self.money
+        return self.inv, self.money, 'home'
+
+    def draw_bg(self):
+        pass
 
 # คลัง
 class Storage_menu():
@@ -1626,7 +1670,6 @@ class Storage_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
