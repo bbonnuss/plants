@@ -45,6 +45,24 @@ def rpc(player, bot):
 
     return None
 
+def money_str(money,comma=True, len_=13):
+    money = str(money)
+    while len(money) < len_:
+        money = ' '+ money
+    if not comma:
+        return money
+    # ใส่คอมม่าให้ด้วย
+    count = 0
+    result = []
+    for index in range(-1, -(len(money)),-1):
+        money[index]
+        if (count == 3) and (money[index] != ' '):
+            count = 0
+            result.insert(0, ',')
+        result.insert(0, money[index])
+        count += 1
+    return ''.join(result)
+
 # Class ========================== Class ========================== Class
 # resouce_manager ---------------- resouce_manager
 class Sound_():
@@ -230,6 +248,8 @@ class Player_farm():
         self.bot_list = self.player.bot
         self.bot_farm_list = list(map(lambda x: Bot_farm(x), self.bot_list))
 
+        self.money_dispay = ((94,42),(247,76))
+
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
         self.watering_button = ((48,235),(120,280))
@@ -354,8 +374,16 @@ class Player_farm():
                 bot_steal_rate = 0.0001
                 if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
                     bot.steal_cooldown = 120000
+
+                    # pause theme song
+                    pygame.mixer.music.pause()
+                    
                     result = self.minigame()
-                     
+
+                    # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+                    pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+                    pygame.mixer.music.play(loops=-1)
+
                     if result == 'win':
                         bot.money -= 100
                     elif result == 'lose':
@@ -399,7 +427,7 @@ class Player_farm():
                 #print (self.inv.get_inv())
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                #print (mouse_pos)
+                print (mouse_pos)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
                 else:
@@ -902,8 +930,9 @@ class Player_farm():
         self.draw_minigame()
         pygame.display.update()
 
-        # play sound theif_notice
-        loaded_sound.theif_notice.play() 
+        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+        pygame.mixer.music.load(join('assets','sound','theif_notice.wav'))
+        pygame.mixer.music.play(loops=-1)
         
         # bot weapon
         bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
@@ -968,19 +997,19 @@ class Player_farm():
                 
                 # ปุ่ม hammer
                 if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
-                    #print ('Bot_farm : hammer')
+                    print ('Bot_farm : hammer')
 
                     if clickdown:
                         player_weapon = '0'
                 # ปุ่ม paper
                 if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
-                    #print ('Bot_farm : paper')
+                    print ('Bot_farm : paper')
 
                     if clickdown:
                         player_weapon = '5'
                 # ปุ่ม scissors
                 if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
-                    #print ('Bot_farm : scissors')
+                    print ('Bot_farm : scissors')
 
                     if clickdown:
                         player_weapon = '2'
@@ -989,6 +1018,9 @@ class Player_farm():
             if (player_weapon is not None) and (not end):
                 result = rpc(player_weapon, bot_weapon)
                 end = True
+                # stop sound
+                pygame.mixer.music.stop()
+
                 if result == 'win':
                     # play sound win 
                     loaded_sound.win.play() 
@@ -1015,23 +1047,32 @@ class Player_farm():
         for plot in plot_list:
             self.draw_farmland(plot)
 
+        # วาด text แสดงจำนวน
+        # เงิน
+        # วาดจำนวนเงิน
+        font_size = pygame.font.SysFont("comicsansms",60)
+        msg = font_size.render(money_str(self.money), True, (0,128,0))
+        txt_size = self.money_dispay[1][0] - self.money_dispay[0][0], self.money_dispay[1][1] - self.money_dispay[0][1]
+        window.blit(pygame.transform.scale(msg, txt_size), self.money_dispay[0])
+
+        # seed 
         # ปุ่มรดน้ำ
-        pygame.draw.rect(window, (0,0,255),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
+        #pygame.draw.rect(window, (0,0,255),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
         
         # ปุ่มยุ้งฉาง
-        pygame.draw.rect(window, (255,0,255),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
+        #pygame.draw.rect(window, (255,0,255),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
         
         # ปุ่มร้านค้า
-        pygame.draw.rect(window, (0,255,255),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
+        #pygame.draw.rect(window, (0,255,255),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
         
         # ปุ่มออก main_menu
-        pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
+        #pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
         
         # ปุ่ม loop AI
-        pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
+        #pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
         
         # ปุ้มเลือก seed
-        pygame.draw.rect(window, (0,255,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
+        #pygame.draw.rect(window, (0,255,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
         #over_up = 15
         #over_x = 15
         #seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
@@ -1154,6 +1195,10 @@ class Bot_farm():
         # วาดพื้นหลัง
         self.draw_minigame()
         pygame.display.update()
+
+        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+        pygame.mixer.music.load(join('assets','sound','minigame_starting.wav'))
+        pygame.mixer.music.play()
         
         # bot weapon
         bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
@@ -1216,27 +1261,31 @@ class Bot_farm():
                 
                 # ปุ่ม hammer
                 if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
-                    #print ('Bot_farm : hammer')
+                    print ('Bot_farm : hammer')
 
                     if clickdown:
                         player_weapon = '0'
                 # ปุ่ม paper
                 if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
-                    #print ('Bot_farm : paper')
+                    print ('Bot_farm : paper')
 
                     if clickdown:
                         player_weapon = '5'
                 # ปุ่ม scissors
                 if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
-                    #print ('Bot_farm : scissors')
+                    print ('Bot_farm : scissors')
 
                     if clickdown:
                         player_weapon = '2'
 
             # ตัดสินแพ้ / ชนะ
-            if player_weapon is not None:
+            if (player_weapon is not None) and (not end):
                 result = rpc(player_weapon, bot_weapon)
                 end = True
+
+                # stop sound
+                pygame.mixer.music.stop()
+
                 if result == 'win':
                     # play sound win 
                     loaded_sound.win.play() 
@@ -1583,7 +1632,7 @@ class Bot_farm():
         global loaded_sound
         global resolution
         # background 
-        window.blit(pygame.transform.scale(loaded_image.bot_bg, resolution), (0, 0))
+        window.blit(pygame.transform.scale(loaded_image.farm_bg, resolution), (0, 0))
         
         plot_list = ['1a', '1b', '1c', '1d', '2a', '2b', '2c', '2d', '3a', '3b', '3c', '3d', '4a', '4b', '4c', '4d']
         for plot in plot_list:
@@ -1672,6 +1721,19 @@ class Shop_menu():
     def __init__(self,inventory, money):
         self.inv = inventory
         self.money = money
+        
+        self.money_dispay = ((109,33),(311,80))
+        self.seed_dispay = { 'wheat_seed': ((498,18),(553,42)), 
+                            'cucumber_seed': ((576,18),(629,42)), 
+                            'tomato_seed': ((650,18),(704,42)), 
+                            'potato_seed': ((727,18),(785,42)),
+                            'redcabbage_seed':((423,18),(478,42)),
+                            'orange_seed': ((576,174),(629,197)),
+                            'mango_seed': ((498,174),(553,197)),
+                            'apple_seed': ((727,174),(785,197)), 
+                            'melon_seed': ((423,174),(478,197)), 
+                            'grape_seed': ((650,174),(704,197))}
+
         self.home_button = ((586,360),(637,418))
         self.buy_button = ((575,267),(647,341))
         self.seedselection_button = [((43,190),(114,298)), ((114,190),(185,298)), ((185,190),(257,298)), ((257,190),(328,298)), ((328,190),(399,298)),
@@ -1691,6 +1753,9 @@ class Shop_menu():
 
 
     def run(self):
+        # display
+        pygame.display.set_caption("FARMER & THIEF : "+"Shop")
+
         window.fill((0,0,0))
         pygame.display.update()
         
@@ -1714,7 +1779,7 @@ class Shop_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
-                #print (mouse_pos)
+                print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1771,8 +1836,20 @@ class Shop_menu():
         global loaded_sound
         global resolution
         # bg
-        
         window.blit(pygame.transform.scale(loaded_image.shop_bg, resolution), (0, 0))
+
+        # วาดจำนวนเงิน
+        font_size = pygame.font.SysFont("comicsansms",60)
+        msg = font_size.render(money_str(self.money), True, (0,128,0))
+        txt_size = self.money_dispay[1][0] - self.money_dispay[0][0], self.money_dispay[1][1] - self.money_dispay[0][1]
+        window.blit(pygame.transform.scale(msg, txt_size), self.money_dispay[0])
+        
+        # วาดจำนวน seed
+        for seed_name in self.seed_dispay:
+            font_size = pygame.font.SysFont("comicsansms",60)
+            msg = font_size.render(money_str(self.inv.item_dict[seed_name], False, 5), True, (128,0,128))
+            txt_size = self.seed_dispay[seed_name][1][0] - self.seed_dispay[seed_name][0][0], self.seed_dispay[seed_name][1][1] - self.seed_dispay[seed_name][0][1]
+            window.blit(pygame.transform.scale(msg, txt_size), self.seed_dispay[seed_name][0])
         
 
 # คลัง
@@ -1783,13 +1860,16 @@ class Storage_menu():
         self.money = money
         self.max_page = None
 
-        self.sell_button = ((660, 151),(752,249))
-        self.home_button = ((658, 329),(752,428))
-        self.next_button = ((436, 514),(510,594))
-        self.previous_button = ((266, 514),(340,594))
-        self.inv_slot_button = [((158, 68),(281,179)), ((321, 68),(446,179)), ((486, 68),(609,179)),
-                                ((158, 216),(281,326)), ((321, 216),(446,326)), ((486, 216),(609,326)),
-                                ((158, 361),(281,472)), ((321, 361),(446,472)), ((486, 361),(588,472))]
+        self.money_display = ((100,35),(272, 80))
+        
+        self.money_dispay = ((100,36),(272,78))
+        self.sell_button = ((670, 151),(761,249))
+        self.home_button = ((670, 324),(764,423))
+        self.next_button = ((449, 514),(523,594))
+        self.previous_button = ((286, 514),(360,594))
+        self.inv_slot_button = [((176, 110),(299,210)), ((339, 110),(464,210)), ((504, 110),(626,210)),
+                                ((176, 242),(299,343)), ((339, 242),(464,343)), ((504, 242),(626,343)),
+                                ((176, 375),(299,474)), ((339, 375),(464,474)), ((504, 375),(626,474))]
         self.price_index = {'wheat': Wheat().sale_price, 'wheat_seed': Wheat().seed_price, 
                     'cucumber': Cucumber().sale_price, 'cucumber_seed': Cucumber().seed_price, 
                     'tomato': Tomato().sale_price, 'tomato_seed': Tomato().seed_price,
@@ -1812,6 +1892,8 @@ class Storage_menu():
                     'grape': loaded_image.grape, 'grape_seed': loaded_image.grape_seed}
 
     def run(self):
+        # display
+        pygame.display.set_caption("FARMER & THIEF : "+"Storage")
         # FPS
         clock = pygame.time.Clock()
 
@@ -1850,6 +1932,7 @@ class Storage_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
+                print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1964,18 +2047,11 @@ class Storage_menu():
         for name in self.inv.get_inv_only_have():
             item_name_index.append(name)
         
-        # debuging
-        # next
-        pygame.draw.rect(window, (0,0,255),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
-        
-        # previous
-        pygame.draw.rect(window, (255,0,255),[self.previous_button[0][0], self.previous_button[0][1], self.previous_button[1][0] - self.previous_button[0][0], self.previous_button[1][1] - self.previous_button[0][1]], 3)
-        
-        # home
-        pygame.draw.rect(window, (0,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
-        
-        # sell
-        pygame.draw.rect(window, (255,255,0),[self.sell_button[0][0], self.sell_button[0][1], self.sell_button[1][0] - self.sell_button[0][0], self.sell_button[1][1] - self.sell_button[0][1]], 3)
+        # วาดจำนวนเงิน
+        font_size = pygame.font.SysFont("comicsansms",60)
+        msg = font_size.render(money_str(self.money), True, (0,128,0))
+        txt_size = self.money_dispay[1][0] - self.money_dispay[0][0], self.money_dispay[1][1] - self.money_dispay[0][1]
+        window.blit(pygame.transform.scale(msg, txt_size), self.money_dispay[0])
         
 
         # ถ้าไม่มีอะไรเลย ไม่ต้องวาด 
@@ -1993,6 +2069,15 @@ class Storage_menu():
             xyab = self.inv_slot_button[table_index]
             size = (xyab[1][0] - xyab[0][0]), (xyab[1][1] - xyab[0][1])
             window.blit(pygame.transform.scale(self.icon_index[item_name], size), xyab[0])
+            
+            # วาดจำนวน ผัก
+            font_size = pygame.font.SysFont("comicsansms",60)
+            msg = font_size.render(str(self.inv.item_dict[item_name]), True, (255,255,255))
+            txt_size = int(size[0]*0.3), int(size[1]*0.5)
+            locate = int((xyab[0][0])+(size[0]*0.7)), int((xyab[0][1])+(size[1]*0.5))
+            window.blit(pygame.transform.scale(msg, txt_size), locate)
+
+
         
 
 # main menu
