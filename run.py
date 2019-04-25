@@ -1562,6 +1562,7 @@ class Bot_farm():
     def harvest(self, plot):
         crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
         self.inv.add(self.check_crops_status(plot)[0], crop_collected)
+        crops_name = self.check_crops_status(plot)[0].lower()
         self.set_crops(plot, 'empty')
         price_index = { 'wheat': Wheat().sale_price, 
                             'cucumber': Cucumber().sale_price, 
@@ -1574,8 +1575,9 @@ class Bot_farm():
                             'melon': Melon().sale_price, 
                             'grape': Grape().sale_price,
                             None:0}
-        self.money += (price_index[self.check_crops_status(plot)[0]]*crop_collected)
-
+        print ('Harvested:',crops_name,' x ',crop_collected,', cost:',(price_index[crops_name]*crop_collected),', money_b:',self.money,end=', ')                    
+        self.money += (price_index[crops_name]*crop_collected)
+        print(self.money)
 
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
