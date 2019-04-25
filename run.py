@@ -249,6 +249,16 @@ class Player_farm():
         self.bot_farm_list = list(map(lambda x: Bot_farm(x), self.bot_list))
 
         self.money_dispay = ((94,42),(247,76))
+        self.seed_dispay = { 'wheat_seed': ((518,539),(551,549)), 
+                            'cucumber_seed': ((551,539),(584,549)), 
+                            'tomato_seed': ((584,539),(615,549)), 
+                            'potato_seed': ((615,539),(648,549)),
+                            'redcabbage_seed':((486,539),(518,549)),
+                            'orange_seed': ((551,588),(584,598)),
+                            'mango_seed': ((518,588),(551,598)),
+                            'apple_seed': ((615,588),(648,598)), 
+                            'melon_seed': ((486,588),(518,598)), 
+                            'grape_seed': ((584,588),(615,598))}
 
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
@@ -371,7 +381,7 @@ class Player_farm():
                     bot.steal_cooldown -= (self.time - self.previous_time)
                 
                 # randomly steal
-                bot_steal_rate = 0.0001
+                bot_steal_rate = 0.001
                 if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
                     bot.steal_cooldown = 120000
 
@@ -425,13 +435,18 @@ class Player_farm():
             # input - output
             for event in pygame.event.get():
                 #print (self.inv.get_inv())
+
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
                 print (mouse_pos)
+                if watering:
+                    window.blit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
                 else:
                     clickdown = False
+                
+                # hot key
                     
                 # exit
                 if event.type == pygame.QUIT:
@@ -574,7 +589,7 @@ class Player_farm():
                             # play sound effect harvest
                             loaded_sound.planting.play()
 
-                            crop_collected = (choice([1, 2, 3],p=[0.5, 0.35, 0.15]))
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
 
@@ -1055,28 +1070,12 @@ class Player_farm():
         txt_size = self.money_dispay[1][0] - self.money_dispay[0][0], self.money_dispay[1][1] - self.money_dispay[0][1]
         window.blit(pygame.transform.scale(msg, txt_size), self.money_dispay[0])
 
-        # seed 
-        # ปุ่มรดน้ำ
-        #pygame.draw.rect(window, (0,0,255),[self.watering_button[0][0], self.watering_button[0][1], self.watering_button[1][0] - self.watering_button[0][0], self.watering_button[1][1] - self.watering_button[0][1]], 3)
-        
-        # ปุ่มยุ้งฉาง
-        #pygame.draw.rect(window, (255,0,255),[self.storage_button[0][0], self.storage_button[0][1], self.storage_button[1][0] - self.storage_button[0][0], self.storage_button[1][1] - self.storage_button[0][1]], 3)
-        
-        # ปุ่มร้านค้า
-        #pygame.draw.rect(window, (0,255,255),[self.shop_button[0][0], self.shop_button[0][1], self.shop_button[1][0] - self.shop_button[0][0], self.shop_button[1][1] - self.shop_button[0][1]], 3)
-        
-        # ปุ่มออก main_menu
-        #pygame.draw.rect(window, (255,255,0),[self.mainmenu_button[0][0], self.mainmenu_button[0][1], self.mainmenu_button[1][0] - self.mainmenu_button[0][0], self.mainmenu_button[1][1] - self.mainmenu_button[0][1]], 3)
-        
-        # ปุ่ม loop AI
-        #pygame.draw.rect(window, (255,0,0),[self.next_button[0][0], self.next_button[0][1], self.next_button[1][0] - self.next_button[0][0], self.next_button[1][1] - self.next_button[0][1]], 3)
-        
-        # ปุ้มเลือก seed
-        #pygame.draw.rect(window, (0,255,0),[self.seedselection_button[0][0], self.seedselection_button[0][1], self.seedselection_button[1][0] - self.seedselection_button[0][0], self.seedselection_button[1][1] - self.seedselection_button[0][1]], 3)
-        #over_up = 15
-        #over_x = 15
-        #seed_scale = self.seedselection_button[1][0]-self.seedselection_button[0][0]+(over_x*2) , self.seedselection_button[1][1]-self.seedselection_button[0][1]+(over_up*2)
-        #window.blit(pygame.transform.scale(loaded_image.shop_shelf, seed_scale), (self.seedselection_button[0][0]-over_x,self.seedselection_button[0][1]-over_up))
+        # วาดจำนวน seed
+        for seed_name in self.seed_dispay:
+            font_size = pygame.font.SysFont("comicsansms",25)
+            msg = font_size.render(money_str(self.inv.item_dict[seed_name], False, 3), True, (128,0,128))
+            txt_size = self.seed_dispay[seed_name][1][0] - self.seed_dispay[seed_name][0][0], self.seed_dispay[seed_name][1][1] - self.seed_dispay[seed_name][0][1]
+            window.blit(pygame.transform.scale(msg, txt_size), self.seed_dispay[seed_name][0])
         
     def draw_farmland(self, plot, watering=False):
         global loaded_image
@@ -1164,6 +1163,8 @@ class Bot_farm():
         self.money = self.player.money
         self.farmplot = self.player.farmplot
         self.steal_cooldown = 60000
+
+        self.money_dispay = ((94,42),(247,76))
 
         self.shop_button = ((545, 66),(720,220))
         self.storage_button = ((63,295),(265,499))
@@ -1380,7 +1381,7 @@ class Bot_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
                         if crops_status[5]:# harvest?
-                            crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
                             cooldown = 60000
@@ -1392,7 +1393,7 @@ class Bot_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
                         if crops_status[5]:# harvest?
-                            crop_collected = choice([1, 2, 3],[0.5, 0.35, 0.15])
+                            crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
                             cooldown = 60000
@@ -1548,10 +1549,35 @@ class Bot_farm():
         seed_list = ['wheat', 'cucumber', 'tomato', 'potato', 'redcabbage', 'orange', 'mango', 'apple', 'melon', 'grape']
         selected_seed = choice(seed_list, p=[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
         self.set_crops(plot, selected_seed)
+        price_index = { 'wheat': Wheat().seed_price, 
+                            'cucumber': Cucumber().seed_price, 
+                            'tomato': Tomato().seed_price, 
+                            'potato': Potato().seed_price,
+                            'redcabbage':Redcabbage().seed_price,
+                            'orange': Orange().seed_price,
+                            'mango': Mango().seed_price,
+                            'apple': Apple().seed_price, 
+                            'melon': Melon().seed_price, 
+                            'grape': Grape().seed_price}
+        self.money -= price_index[selected_seed]
 
     def harvest(self, plot):
-        self.inv.add(self.check_crops_status(plot)[0], 1)
+        crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
+        self.inv.add(self.check_crops_status(plot)[0], crop_collected)
         self.set_crops(plot, 'empty')
+        price_index = { 'wheat': Wheat().sale_price, 
+                            'cucumber': Cucumber().sale_price, 
+                            'tomato': Tomato().sale_price, 
+                            'potato': Potato().sale_price,
+                            'redcabbage':Redcabbage().sale_price,
+                            'orange': Orange().sale_price,
+                            'mango': Mango().sale_price,
+                            'apple': Apple().sale_price, 
+                            'melon': Melon().sale_price, 
+                            'grape': Grape().sale_price,
+                            None:0}
+        self.money += (price_index[self.check_crops_status(plot)[0]]*crop_collected)
+
 
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
@@ -1638,9 +1664,13 @@ class Bot_farm():
         for plot in plot_list:
             self.draw_farmland(plot)
 
-        # ปุ่ม กลับบ้าน
-        pygame.draw.rect(window, (255,255,255),[self.home_button[0][0], self.home_button[0][1], self.home_button[1][0] - self.home_button[0][0], self.home_button[1][1] - self.home_button[0][1]], 3)
-             
+        # วาดจำนวนเงิน
+        font_size = pygame.font.SysFont("comicsansms",60)
+        msg = font_size.render(money_str(self.money), True, (0,128,0))
+        txt_size = self.money_dispay[1][0] - self.money_dispay[0][0], self.money_dispay[1][1] - self.money_dispay[0][1]
+        window.blit(pygame.transform.scale(msg, txt_size), self.money_dispay[0])
+
+
     def draw_farmland(self, plot, watering=False):
         global loaded_image
         global loaded_sound
@@ -1723,16 +1753,16 @@ class Shop_menu():
         self.money = money
         
         self.money_dispay = ((109,33),(311,80))
-        self.seed_dispay = { 'wheat_seed': ((498,18),(553,42)), 
-                            'cucumber_seed': ((576,18),(629,42)), 
-                            'tomato_seed': ((650,18),(704,42)), 
-                            'potato_seed': ((727,18),(785,42)),
-                            'redcabbage_seed':((423,18),(478,42)),
-                            'orange_seed': ((576,174),(629,197)),
-                            'mango_seed': ((498,174),(553,197)),
-                            'apple_seed': ((727,174),(785,197)), 
-                            'melon_seed': ((423,174),(478,197)), 
-                            'grape_seed': ((650,174),(704,197))}
+        self.seed_dispay = { 'wheat_seed': ((498,36),(553,60)), 
+                            'cucumber_seed': ((576,36),(629,60)), 
+                            'tomato_seed': ((650,36),(704,60)), 
+                            'potato_seed': ((727,36),(785,60)),
+                            'redcabbage_seed':((423,36),(478,60)),
+                            'orange_seed': ((576,192),(629,215)),
+                            'mango_seed': ((498,192),(553,215)),
+                            'apple_seed': ((727,192),(785,215)), 
+                            'melon_seed': ((423,192),(478,215)), 
+                            'grape_seed': ((650,192),(704,215))}
 
         self.home_button = ((586,360),(637,418))
         self.buy_button = ((575,267),(647,341))
@@ -2234,16 +2264,16 @@ class Bot():
 
 class Inventory():
     def __init__(self):
-        self.item_dict = {'wheat': 1, 'cucumber': 1, 
-                        'tomato': 1, 'potato': 1,  
-                        'redcabbage': 1, 'orange': 1, 
-                        'mango': 1, 'apple': 1,
-                        'melon': 1, 'grape': 1, 
-	                    'wheat_seed': 1, 'cucumber_seed': 1, 
-                        'tomato_seed': 1,'potato_seed': 1,
-                        'redcabbage_seed':1, 'orange_seed': 1,
-                        'mango_seed': 1, 'apple_seed': 1, 
-                        'melon_seed': 1, 'grape_seed': 1}
+        self.item_dict = {'wheat': 0, 'cucumber': 0, 
+                        'tomato': 0, 'potato': 0,  
+                        'redcabbage': 0, 'orange': 0, 
+                        'mango': 0, 'apple': 0,
+                        'melon': 0, 'grape': 0, 
+	                    'wheat_seed': 0, 'cucumber_seed': 0, 
+                        'tomato_seed': 0,'potato_seed': 0,
+                        'redcabbage_seed':0, 'orange_seed': 0,
+                        'mango_seed': 0, 'apple_seed': 0, 
+                        'melon_seed': 0, 'grape_seed': 0}
     
     # add item to Inventory
     def add(self, name, amout):
