@@ -1238,8 +1238,17 @@ class Bot_farm():
                 result = rpc(player_weapon, bot_weapon)
                 end = True
                 if result == 'win':
+                    # play sound win 
+                    loaded_sound.win.play() 
+
                     steal = True
-                else :
+                elif result == 'draw':
+                    # play sound draw
+                    loaded_sound.draw.play() 
+                    backhome = True
+                else:
+                    # play sound lose2
+                    loaded_sound.lose2.play() 
                     backhome = True
 
     def run_bot_farm(self, inv, money):
