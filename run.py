@@ -65,12 +65,14 @@ class Image_():
         self.bot_bg = pygame.image.load(join('assets','image','bg_nowatering.png')).convert_alpha()
         self.minigame_bg = pygame.image.load(join('assets','image','minigame_bg.png')).convert_alpha()
         self.win_bg = pygame.image.load(join('assets','image','win_bg.png')).convert_alpha()
+        self.win_defend_bg = pygame.image.load(join('assets','image','win_defend_bg.png')).convert_alpha()
         self.draw_bg = pygame.image.load(join('assets','image','draw_bg.png')).convert_alpha()
         self.lose_bg = pygame.image.load(join('assets','image','lose_bg.png')).convert_alpha()
         self.storage_bg = pygame.image.load(join('assets','image','storage_bg.png')).convert_alpha()
         self.storage_bg_p1 = pygame.image.load(join('assets','image','storage_bg_p1.png')).convert_alpha()
         self.storage_bg_p2 = pygame.image.load(join('assets','image','storage_bg_p2.png')).convert_alpha()
         self.storage_bg_p3 = pygame.image.load(join('assets','image','storage_bg_p3.png')).convert_alpha()
+        self.shop_bg = pygame.image.load(join('assets','image','shop_bg.png')).convert_alpha()
         
         self.dry_farm = pygame.image.load(join('assets','image','dry_farm.png')).convert_alpha()
         self.wet_farm = pygame.image.load(join('assets','image','wet_farm.png')).convert_alpha()
@@ -976,7 +978,7 @@ class Player_farm():
 
         
         if result == 'win':
-            window.blit(pygame.transform.scale(loaded_image.win_bg, resolution), (0, 0))
+            window.blit(pygame.transform.scale(loaded_image.win_defend_bg, resolution), (0, 0))
             print ('You Win !!!')
         elif result == 'lose':
             window.blit(pygame.transform.scale(loaded_image.lose_bg, resolution), (0, 0))
@@ -1543,10 +1545,10 @@ class Shop_menu():
     def __init__(self,inventory, money):
         self.inv = inventory
         self.money = money
-        self.home_button = ((0,0),(0,0))
-        self.buy_button = ((0,0),(0,0))
-        self.seedselection_button = [((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)),
-                                    ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0)), ((0,0),(0,0))]
+        self.home_button = ((586,360),(637,418))
+        self.buy_button = ((575,267),(647,341))
+        self.seedselection_button = [((43,190),(114,298)), ((114,190),(185,298)), ((185,190),(257,298)), ((257,190),(328,298)), ((328,190),(399,298)),
+                                    ((43,326),(114,433)), ((114,326),(185,433)), ((185,326),(257,433)), ((257,326),(328,433)), ((328,326),(399,433))]
         self.seedselection_order = ['redcabbage_seed', 'wheat_seed', 'cucumber_seed', 'tomato_seed', 'potato_seed', 
                                     'melon_seed', 'mango_seed', 'orange_seed', 'grape_seed', 'apple_seed']
         self.price_index = { 'wheat_seed': Wheat().seed_price, 
@@ -1608,7 +1610,8 @@ class Shop_menu():
                     if is_hit_box(mouse_pos,slot[0], slot[1]) and buy:
                         print ('Shop : buy')
                         seed_name = self.seedselection_order[index]
-                        if clickdown:
+                        if clickdown and (self.money > self.price_index[seed_name]):
+                            print ('buy: ',seed_name, ' ,price: ', self.price_index[seed_name], ' ,You balance: ',self.money)
                             self.inv.add(seed_name, 1)
                             self.money -= self.price_index[seed_name]
                     index += 1
