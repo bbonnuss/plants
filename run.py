@@ -51,10 +51,22 @@ class Sound_():
     def __init__(self):
         #pygame.display.set_caption("FARMER & THIEF : "+"Loading..."+"sound")
         self.main_theme = None
+        self.farm_theme = pygame.mixer.Sound(join('assets','sound','Get_Outside_farm.wav'))
+        self.shop_theme = pygame.mixer.Sound(join('assets','sound','Mr_Turtle_shop.wav'))
+        self.storage_theme = pygame.mixer.Sound(join('assets','sound','Path_to_Follow_shop_storage.wav'))
+
         self.change_page = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
         self.click = pygame.mixer.Sound(join('assets','sound','change_page.wav'))
-        
-        
+        self.lose1 = pygame.mixer.Sound(join('assets','sound','lose1.wav'))
+        self.lose2 = pygame.mixer.Sound(join('assets','sound','lose2.wav'))
+        self.draw = pygame.mixer.Sound(join('assets','sound','draw.wav'))
+        self.coin = pygame.mixer.Sound(join('assets','sound','coin.wav'))
+        self.win = pygame.mixer.Sound(join('assets','sound','win.wav'))
+        self.watering = pygame.mixer.Sound(join('assets','sound','watering.wav'))
+        self.theif_notice = pygame.mixer.Sound(join('assets','sound','theif_notice.wav'))
+        self.planting = pygame.mixer.Sound(join('assets','sound','planting.wav'))
+        self.minigame_start = pygame.mixer.Sound(join('assets','sound','minigame_starting.wav'))
+   
 
 class Image_():
     def __init__(self):
@@ -253,6 +265,10 @@ class Player_farm():
         self.draw_bg()
         pygame.display.update()
 
+        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+        pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+        pygame.mixer.music.play(loops=-1)
+
         cooldown = 60000
         seeding = False
         watering = False
@@ -284,7 +300,15 @@ class Player_farm():
                 return 'main'
             elif selected == 'ai_farm' and cooldown <= 0:
                 for bot in self.bot_farm_list:
+                    # pause theme song
+                    pygame.mixer.music.pause()
+
                     self.inv, self.money, selected, cooldown = bot.run_bot_farm(self.inv, self.money)
+                    
+                    # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+                    pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+                    pygame.mixer.music.play(loops=-1)
+
             elif selected == 'ai_farm' and cooldown > 0:
                 print ('wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
                 selected = 'home'
@@ -383,6 +407,9 @@ class Player_farm():
                     
                 # exit
                 if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+
                     selected = 'exit'
                 
                 # Botton ------------------------- Botton
@@ -393,13 +420,20 @@ class Player_farm():
                     #print ('Player_farm : main_menu')
 
                     if clickdown:
-                        loaded_sound.click.play()
+                        # stop theme song
+                        pygame.mixer.music.stop()
+
+                        # play sound effect change_page
+                        loaded_sound.change_page.play()
                         return 'main'
                 # ปุ่ม รดน้ำ 
                 if is_hit_box(mouse_pos,self.watering_button[0], self.watering_button[1]):
                     #print ('Player_farm : watering')
 
                     if clickdown :
+                        # play sound effect click
+                        loaded_sound.click.play()
+                        
                         if seeding:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
                             seeding = not seeding
                             print('Stop Seeding')
@@ -414,18 +448,36 @@ class Player_farm():
                     #print ('Player_farm : storage')
 
                     if clickdown:
+                        # pause theme song
+                        pygame.mixer.music.pause()
+
+                        # play sound effect change_page
+                        loaded_sound.change_page.play()
+
                         storage = Storage_menu(self.inv, self.money)
                         self.inv, self.money, selected = storage.run()
-                        self.draw_bg()
+                        
+                        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+                        pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+                        pygame.mixer.music.play(loops=-1)
                 
                 # ปุ่ม ร้านค้า
                 if is_hit_box(mouse_pos,self.shop_button[0], self.shop_button[1]):
                     #print ('Player_farm : shop')
 
                     if clickdown:
+                        # pause theme song
+                        pygame.mixer.music.pause()
+
+                        # play sound effect change_page
+                        loaded_sound.change_page.play()
+
                         shop = Shop_menu(self.inv, self.money)
                         self.inv, self.money, selected = shop.run()
-                        self.draw_bg()
+                        
+                        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+                        pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+                        pygame.mixer.music.play(loops=-1)
                 
                 # ปุ่มเลือก seed และ จัดการ inv เรื่อง seed
                 if is_hit_box(mouse_pos,self.seedselection_button[0], self.seedselection_button[1]):
@@ -439,6 +491,8 @@ class Player_farm():
                         seed_name = self.seed_index(mouse_pos)
                         print ('Start Seeding: %s'%seed_name)
                         if seed_name is not None:
+                            # play sound effect click
+                            loaded_sound.click.play()
 
                             if self.inv.item_dict[seed_name+'_seed'] > 0:
                                 seeding = True
@@ -456,6 +510,9 @@ class Player_farm():
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
                     #print ('Player_farm : Next AI')    
                     if clickdown:
+                        # play sound effect click
+                        loaded_sound.click.play()
+
                         selected = 'ai_farm'
                 # farmplot zone ----------------- farmplot zone
                 # top left
@@ -464,19 +521,31 @@ class Player_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('1'+str(index))
                         if watering:
+                            # play sound effect watering
+                            loaded_sound.watering.play()
+
                             self.set_wet('1'+str(index))
                             self.draw_farmland('1'+str(index), True)
                         elif seeding and crops_status[0] is None:
+                            # play sound effect planting
+                            loaded_sound.planting.play()
+
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('1'+str(index), seed_name)
                 
                             seeding = False
                             seed_name = None
                         elif seeding and crops_status[0] is not None:
+                            # play sound effect unplanting
+                            loaded_sound.planting.play()
+
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
-                        elif crops_status[5]:
+                        elif crops_status[5]:# harvest?
+                            # play sound effect harvest
+                            loaded_sound.planting.play()
+
                             crop_collected = (choice([1, 2, 3],p=[0.5, 0.35, 0.15]))
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
@@ -487,17 +556,29 @@ class Player_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('2'+str(index))
                         if watering:
+                            # play sound effect watering
+                            loaded_sound.watering.play()
+
                             self.set_wet('2'+str(index))
                         elif seeding and crops_status[0] is None:
+                            # play sound effect planting
+                            loaded_sound.planting.play()
+
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('2'+str(index), seed_name)
                             seeding = False
                             seed_name = None
                         elif seeding and crops_status[0] is not None:
+                            # play sound effect unplanting
+                            loaded_sound.planting.play()
+
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
+                            # play sound effect harvest
+                            loaded_sound.planting.play()
+
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
@@ -508,17 +589,29 @@ class Player_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('3'+str(index))
                         if watering:
+                            # play sound effect watering
+                            loaded_sound.watering.play()
+
                             self.set_wet('3'+str(index))
                         elif seeding and crops_status[0] is None:
+                            # play sound effect planting
+                            loaded_sound.planting.play()
+
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('3'+str(index), seed_name)
                             seeding = False
                             seed_name = None
                         elif seeding and crops_status[0] is not None:
+                            # play sound effect unplanting
+                            loaded_sound.planting.play()
+
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
+                            # play sound effect harvest
+                            loaded_sound.planting.play()
+
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
@@ -529,18 +622,29 @@ class Player_farm():
                     if clickdown and (index != None):
                         crops_status = self.check_crops_status('4'+str(index))
                         if watering:
+                            # play sound effect watering
+                            loaded_sound.watering.play()
+                        
                             self.set_wet('4'+str(index))
                         elif seeding and crops_status[0] is None:
-                            print ('seeding :', '4'+str(index))
+                            # play sound effect planting
+                            loaded_sound.planting.play()
+                            
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('4'+str(index), seed_name)
                             seeding = False
                             seed_name = None
                         elif seeding and crops_status[0] is not None:
+                            # play sound effect unplanting
+                            loaded_sound.planting.play()
+
                             seeding = False
                             seed_name = None
                             print ('This farm already planted')
                         elif crops_status[5]:# harvest?
+                            # play sound effect harvest
+                            loaded_sound.planting.play()
+
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
@@ -797,6 +901,9 @@ class Player_farm():
         # วาดพื้นหลัง
         self.draw_minigame()
         pygame.display.update()
+
+        # play sound theif_notice
+        loaded_sound.theif_notice.play() 
         
         # bot weapon
         bot_weapon = choice(['0', '2', '5'],p=[1/3, 1/3, 1/3])
@@ -846,7 +953,8 @@ class Player_farm():
                     #print ('Bot_farm : home')
 
                     if clickdown:
-                        loaded_sound.click.play()
+                        # play sound change_page
+                        loaded_sound.change_page.play() 
                         return result
                 
                 # ปุ่ม ขโมย
@@ -854,7 +962,8 @@ class Player_farm():
                     #print ('Bot_farm : home')
 
                     if clickdown:
-                        loaded_sound.click.play()
+                        # play sound change_page
+                        loaded_sound.change_page.play() 
                         return result
                 
                 # ปุ่ม hammer
@@ -877,12 +986,21 @@ class Player_farm():
                         player_weapon = '2'
 
             # ตัดสินแพ้ / ชนะ
-            if player_weapon is not None:
+            if (player_weapon is not None) and (not end):
                 result = rpc(player_weapon, bot_weapon)
                 end = True
                 if result == 'win':
+                    # play sound win 
+                    loaded_sound.win.play() 
+
                     steal = True
-                else :
+                elif result == 'draw':
+                    # play sound draw
+                    loaded_sound.draw.play() 
+                    backhome = True
+                else:
+                    # play sound lose1 
+                    loaded_sound.lose1.play() 
                     backhome = True
 
 
@@ -1566,6 +1684,10 @@ class Shop_menu():
     def run(self):
         window.fill((0,0,0))
         pygame.display.update()
+        
+        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+        pygame.mixer.music.load(join('assets','sound','Mr_Turtle_shop.wav'))
+        pygame.mixer.music.play(loops=-1)
 
         buy = False
         run = True
@@ -1577,11 +1699,13 @@ class Shop_menu():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
                     return self.inv, self.money, 'exit'
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1592,35 +1716,44 @@ class Shop_menu():
                 # Botton ------------------------- Botton
                 # ปุ่ม ออกไป farm
                 if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
-                    print ('Shop : home')
+                    #print ('Shop : home')
 
                     if clickdown:
+                        # stop theme song
+                        pygame.mixer.music.stop()
+
+                        # play sound change_page
+                        loaded_sound.change_page.play() 
+
                         return self.inv, self.money, 'home'
                 
                 # ปุ่ม buy
                 if is_hit_box(mouse_pos,self.buy_button[0], self.buy_button[1]):
-                    print ('Shop : buy')
+                    #print ('Shop : buy')
 
                     if clickdown:
+                        # play sound click
+                        loaded_sound.click.play() 
+                        
                         buy = not buy
                 
                 # buy zone ------------------------- buy zone
                 index = 0
                 for slot in self.seedselection_button:
                     if is_hit_box(mouse_pos,slot[0], slot[1]) and buy:
-                        print ('Shop : buy')
                         seed_name = self.seedselection_order[index]
-                        if clickdown and (self.money > self.price_index[seed_name]):
-                            print ('buy: ',seed_name, ' ,price: ', self.price_index[seed_name], ' ,You balance: ',self.money)
+                        #print ('Shop : buy ',seed_name)
+                        if clickdown and (self.money >= self.price_index[seed_name]):
+                            # play sound coin
+                            loaded_sound.coin.play() 
+                            #print ('buy: ',seed_name, ' ,price: ', self.price_index[seed_name], ' ,You balance: ',self.money)
                             self.inv.add(seed_name, 1)
                             self.money -= self.price_index[seed_name]
+                        elif clickdown and (self.money < self.price_index[seed_name]):
+                            #print ('You don\'t have money to buy buy: ',seed_name, ' ,price: ', self.price_index[seed_name], ' ,You balance: ',self.money)
+                            pass
                     index += 1
-
-                
-
-                
-                
-        
+                    
         # คืนค่า self.inventory, self.money เมื่อผู้เล่นออกจากร้านด้วย
         return self.inv, self.money, 'home'
 
@@ -1677,6 +1810,10 @@ class Storage_menu():
         self.draw_bg(1)
         pygame.display.update()  
 
+        # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+        pygame.mixer.music.load(join('assets','sound','Path_to_Follow_shop_storage.wav'))
+        pygame.mixer.music.play(loops=-1)
+
         run = True
         page = 1
         sell = False
@@ -1698,6 +1835,8 @@ class Storage_menu():
             for event in pygame.event.get():
                 # Exit game 
                 if event.type == pygame.QUIT:
+                    # stop theme song
+                    pygame.mixer.music.stop()
                     return self.inv, self.money, 'exit'
                 
                 # mouse pos
@@ -1715,6 +1854,8 @@ class Storage_menu():
                     #print ('Storage : home')
 
                     if clickdown:
+                        # stop theme song
+                        pygame.mixer.music.stop()
                         return self.inv, self.money,'home'
                 
                 # ปุ่ม sell
@@ -1722,6 +1863,9 @@ class Storage_menu():
                     #print ('Storage : sell')
 
                     if clickdown:
+                        # play sound click
+                        loaded_sound.click.play() 
+
                         sell = not sell
                 
                 # ปุ่ม previous
@@ -1729,9 +1873,15 @@ class Storage_menu():
                     #print ('Storage : previous')
 
                     if clickdown and (page > 1):
+                        # play sound change_page
+                        loaded_sound.change_page.play()
+
                         page -= 1
                     
                     elif clickdown and (page <= 1):
+                        # play sound change_page
+                        loaded_sound.change_page.play() 
+
                         page = self.max_page
                 
                 # ปุ่ม next
@@ -1739,10 +1889,16 @@ class Storage_menu():
                     #print ('Storage : next')
 
                     if clickdown and (page < self.max_page):
+                        # play sound change_page
+                        loaded_sound.change_page.play()
+
                         page += 1
 
                     elif clickdown and (page >= self.max_page):
                         #print (page,' >= ', self.max_page)
+                        # play sound change_page
+                        loaded_sound.change_page.play()
+
                         page = 1
 
                 # inv zone ------------------- inv zone 
@@ -1756,6 +1912,10 @@ class Storage_menu():
                             except IndexError:
                                 #print ('have no item')
                                 continue
+
+                            # play sound coin
+                            loaded_sound.coin.play()
+
                             self.inv.remove(item_name, 1)
                             self.money += self.price_index[item_name]
                             print ('sell:', item_name)
