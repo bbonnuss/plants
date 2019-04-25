@@ -438,9 +438,8 @@ class Player_farm():
 
                 # pointer
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
-                if watering:
-                    window.blit()
+                #print (mouse_pos)
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickdown = True
                 else:
@@ -1012,19 +1011,19 @@ class Player_farm():
                 
                 # ปุ่ม hammer
                 if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
-                    print ('Bot_farm : hammer')
+                    #print ('Bot_farm : hammer')
 
                     if clickdown:
                         player_weapon = '0'
                 # ปุ่ม paper
                 if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
-                    print ('Bot_farm : paper')
+                    #print ('Bot_farm : paper')
 
                     if clickdown:
                         player_weapon = '5'
                 # ปุ่ม scissors
                 if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
-                    print ('Bot_farm : scissors')
+                    #print ('Bot_farm : scissors')
 
                     if clickdown:
                         player_weapon = '2'
@@ -1102,7 +1101,6 @@ class Player_farm():
         #print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
             window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]-farmland_overlap))
-            print 
         elif plot[1] == 'b' or plot[1] == '1':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]-farmland_overlap))
         elif plot[1] == 'c' or plot[1] == '2':
@@ -1137,13 +1135,13 @@ class Player_farm():
         
         if result == 'win':
             window.blit(pygame.transform.scale(loaded_image.win_defend_bg, resolution), (0, 0))
-            print ('You Win !!!')
+            #print ('You Win !!!')
         elif result == 'lose':
             window.blit(pygame.transform.scale(loaded_image.lose_bg, resolution), (0, 0))
-            print ('You Lose !!!')
+            #print ('You Lose !!!')
         else:
             window.blit(pygame.transform.scale(loaded_image.draw_bg, resolution), (0, 0))
-            print ('Draw !!!')
+            #print ('Draw !!!')
         #if result == 'win':
             # ไปขโมย
             #size = (self.steal_button[1][0] - self.steal_button[0][0]), (self.steal_button[1][1] - self.steal_button[0][1])
@@ -1262,19 +1260,19 @@ class Bot_farm():
                 
                 # ปุ่ม hammer
                 if is_hit_box(mouse_pos,self.hammer_button[0], self.hammer_button[1]):
-                    print ('Bot_farm : hammer')
+                    #print ('Bot_farm : hammer')
 
                     if clickdown:
                         player_weapon = '0'
                 # ปุ่ม paper
                 if is_hit_box(mouse_pos,self.paper_button[0], self.paper_button[1]):
-                    print ('Bot_farm : paper')
+                    #print ('Bot_farm : paper')
 
                     if clickdown:
                         player_weapon = '5'
                 # ปุ่ม scissors
                 if is_hit_box(mouse_pos,self.scissors_button[0], self.scissors_button[1]):
-                    print ('Bot_farm : scissors')
+                    #print ('Bot_farm : scissors')
 
                     if clickdown:
                         player_weapon = '2'
@@ -1696,7 +1694,6 @@ class Bot_farm():
         #print ('DRAWFARMLAND ', plot)
         if plot[1] == 'a' or plot[1] == '0':
             window.blit(farmland_image, (self.farmplot_position[index][0][0], self.farmplot_position[index][0][1]-farmland_overlap))
-            print 
         elif plot[1] == 'b' or plot[1] == '1':
             window.blit(farmland_image, (self.farmplot_position[index][0][0]+farm_scale[0] , self.farmplot_position[index][0][1]-farmland_overlap))
         elif plot[1] == 'c' or plot[1] == '2':
@@ -1809,7 +1806,7 @@ class Shop_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1962,7 +1959,7 @@ class Storage_menu():
                 
                 # mouse pos
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
 
                 # click
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -2043,7 +2040,7 @@ class Storage_menu():
                             print ('sell:', item_name)
 
                             if ceil(len(self.inv.get_inv_only_have())/9) < ceil(len(item_name_index)/9): # ถ้าขายของไป แล้วทำให้ของหาย และ page นั้น ไม่มีของจะแสดง
-                                print (ceil(len(self.inv.get_inv_only_have())/9),' < ',ceil(len(item_name_index)/9))
+                                #print (ceil(len(self.inv.get_inv_only_have())/9),' < ',ceil(len(item_name_index)/9))
                                 self.max_page -= 1
                                 if page > 1:
                                     page -= 1
