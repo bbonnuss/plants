@@ -2119,7 +2119,7 @@ class Main_menu():
         # background 
         window.blit(pygame.transform.scale(loaded_image.main_bg, resolution), (0, 0))
         # exit botton
-        pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
+        #pygame.draw.rect(window, (150,0,0),[220, 400, 380, 100], 3)
 
         pygame.display.update()
 
@@ -2183,8 +2183,8 @@ class Main_menu():
                     pygame.display.update()
 
                 # ปุ่ม exit
-                quit_a = (220,400)
-                quit_b = (500,500)
+                quit_a = (0,0)#(220,400)
+                quit_b = (0,0)#(500,500)
                 if is_hit_box(mouse_pos,quit_a, quit_b):
                     #print ('Main_menu : exit')
                     # วาดปุ่มเรืองแสง (ถ้าว่างค่อยทำ)
