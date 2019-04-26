@@ -340,7 +340,7 @@ class Player_farm():
                     pygame.mixer.music.play(loops=-1)
 
             elif selected == 'ai_farm' and cooldown > 0:
-                print ('wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
+                print ('Player => wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
                 selected = 'home'
             
             # clock update (clock is millisec)
@@ -381,11 +381,12 @@ class Player_farm():
                     bot.steal_cooldown -= (self.time - self.previous_time)
                 
                 # randomly steal
-                bot_steal_rate = 0.001
+                bot_steal_rate = 0.0001 # 0.1% ทุกๆ 40 ครั้ง ใน 1 วินาที
                 success = bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate]))
-                print (str(bot.steal_cooldown),success)
+                #print (str(bot.steal_cooldown),success)
                 if bot.steal_cooldown <= 0 and success:
-                    bot.steal_cooldown = 120000
+                    print ('AI => AI try to steal your crops!!')
+                    bot.steal_cooldown = 60000
 
                     # pause theme song
                     pygame.mixer.music.pause()
@@ -400,7 +401,7 @@ class Player_farm():
                         bot.money -= 100
                     elif result == 'lose':
                         name = self.random_pickup()
-                        print ('Bot steal %s from your farm'%name)
+                        print ('Player => AI steal %s from your farm'%name)
 
 
                 # farm process
@@ -480,12 +481,12 @@ class Player_farm():
                         
                         if seeding:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
                             seeding = not seeding
-                            print('Stop Seeding')
+                            print('Player => Stop Seeding')
                         watering = not watering
                         if watering:
-                            print('Start Watering')
+                            print('Player => Start Watering')
                         else:
-                            print('Stop Watering')
+                            print('Player => Stop Watering')
                 
                 # ปุ่ม คลัง
                 if is_hit_box(mouse_pos,self.storage_button[0], self.storage_button[1]):
@@ -530,10 +531,10 @@ class Player_farm():
                     if clickdown and (not seeding): # ถ้าคลิกตอนไม่ปลูก
                         if watering:  # คุณจะปลูกพร้อมรดน้ำไม่ได้ !!! ทำทีละอย่างนะจ๊ะ มือมีแค่ 2 ข้าง:
                             watering = not watering
-                            print('Stop Watering')
+                            print('Player => Stop Watering')
                             
                         seed_name = self.seed_index(mouse_pos)
-                        print ('Start Seeding: %s'%seed_name)
+                        print ('Player => Start Seeding: %s'%seed_name)
                         if seed_name is not None:
                             # play sound effect click
                             loaded_sound.click.play()
@@ -544,11 +545,11 @@ class Player_farm():
                             else:
                                 seeding = False
                                 seed_name = None
-                                print ('You don\'t have enough seed to plant it')
+                                print ('Player => You don\'t have enough seed to plant it')
                     elif clickdown and seeding: # ถ้าคลิกตอนกำลังเลือกแปลง = ยกเลิกการปลูก
                         seeding = False
                         seed_name = None
-                        print('Stop Seeding')
+                        print('Player => Stop Seeding')
                 
                 # ปุ่ม next AI
                 if is_hit_box(mouse_pos,self.next_button[0], self.next_button[1]):
@@ -573,19 +574,20 @@ class Player_farm():
                         elif seeding and crops_status[0] is None:
                             # play sound effect planting
                             loaded_sound.planting.play()
-
+                            
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('1'+str(index), seed_name)
+                            
+                            # ถ้า seed หมด ยกเลิกการปลูกไปเลย
+                            if self.inv.item_dict[seed_name+'_seed'] <= 0:
+                                seed_name = None
+                                seeding = False
                 
-                            seeding = False
-                            seed_name = None
                         elif seeding and crops_status[0] is not None:
                             # play sound effect unplanting
                             loaded_sound.planting.play()
 
-                            seeding = False
-                            seed_name = None
-                            print ('This farm already planted')
+                            print ('Player => This farm already planted')
                         elif crops_status[5]:# harvest?
                             # play sound effect harvest
                             loaded_sound.planting.play()
@@ -593,6 +595,7 @@ class Player_farm():
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('1'+str(index), 'empty')
+                            print ('Player => Harvested: %s x %s'%(crops_status[0], crop_collected))
 
                 # top right
                 if is_hit_box(mouse_pos, self.farmplot_position[1][0], self.farmplot_position[1][1]):
@@ -610,15 +613,17 @@ class Player_farm():
 
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('2'+str(index), seed_name)
-                            seeding = False
-                            seed_name = None
+
+                            # ถ้า seed หมด ยกเลิกการปลูกไปเลย
+                            if self.inv.item_dict[seed_name+'_seed'] <= 0:
+                                seed_name = None
+                                seeding = False
+                            
                         elif seeding and crops_status[0] is not None:
                             # play sound effect unplanting
                             loaded_sound.planting.play()
-
-                            seeding = False
-                            seed_name = None
-                            print ('This farm already planted')
+                            
+                            print ('Player => This farm already planted')
                         elif crops_status[5]:# harvest?
                             # play sound effect harvest
                             loaded_sound.planting.play()
@@ -626,6 +631,7 @@ class Player_farm():
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('2'+str(index), 'empty')
+                            print ('Player => Harvested: %s x %s'%(crops_status[0], crop_collected))
                 
                 # down left
                 if is_hit_box(mouse_pos, self.farmplot_position[2][0], self.farmplot_position[2][1]):
@@ -640,18 +646,20 @@ class Player_farm():
                         elif seeding and crops_status[0] is None:
                             # play sound effect planting
                             loaded_sound.planting.play()
-
+                            
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('3'+str(index), seed_name)
-                            seeding = False
-                            seed_name = None
+
+                            # ถ้า seed หมด ยกเลิกการปลูกไปเลย
+                            if self.inv.item_dict[seed_name+'_seed'] <= 0:
+                                seed_name = None
+                                seeding = False
+                            
                         elif seeding and crops_status[0] is not None:
                             # play sound effect unplanting
                             loaded_sound.planting.play()
-
-                            seeding = False
-                            seed_name = None
-                            print ('This farm already planted')
+                            
+                            print ('Player => This farm already planted')
                         elif crops_status[5]:# harvest?
                             # play sound effect harvest
                             loaded_sound.planting.play()
@@ -659,6 +667,7 @@ class Player_farm():
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('3'+str(index), 'empty')
+                            print ('Player => Harvested: %s x %s'%(crops_status[0], crop_collected))
                 
                 # down right
                 if is_hit_box(mouse_pos, self.farmplot_position[3][0], self.farmplot_position[3][1]):
@@ -673,18 +682,20 @@ class Player_farm():
                         elif seeding and crops_status[0] is None:
                             # play sound effect planting
                             loaded_sound.planting.play()
-                            
+                           
                             self.inv.remove(seed_name+'_seed', 1)
                             self.set_crops('4'+str(index), seed_name)
-                            seeding = False
-                            seed_name = None
+
+                            # ถ้า seed หมด ยกเลิกการปลูกไปเลย
+                            if self.inv.item_dict[seed_name+'_seed'] <= 0:
+                                seed_name = None
+                                seeding = False
+                            
                         elif seeding and crops_status[0] is not None:
                             # play sound effect unplanting
                             loaded_sound.planting.play()
 
-                            seeding = False
-                            seed_name = None
-                            print ('This farm already planted')
+                            print ('Player => This farm already planted')
                         elif crops_status[5]:# harvest?
                             # play sound effect harvest
                             loaded_sound.planting.play()
@@ -692,9 +703,10 @@ class Player_farm():
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             self.inv.add(crops_status[0], crop_collected)
                             self.set_crops('4'+str(index), 'empty')
+                            print ('Player => Harvested: %s x %s'%(crops_status[0], crop_collected))
     
     def set_crops(self, plot, seed_name):
-        print('Plot:%s was set to crop:%s !'%(plot, seed_name))
+        print('Player => Plot:%s was set to crop:%s !'%(plot, seed_name))
         # plot เป็น str มี 2 อักษร คือ เลข และ a-d
         # seed_name เป็น str ที่เป๋็นชื่อของพืช
         if seed_name == 'wheat':
@@ -735,7 +747,7 @@ class Player_farm():
         self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.growing_time
             
     def set_dry(self, plot):
-        print ('Plot:%s is Dry!'%plot)
+        print ('Player => Plot:%s is Dry!'%plot)
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
         elif plot[1] == 'b' or plot[1] == '1':
@@ -751,7 +763,7 @@ class Player_farm():
         self.farmplot[int(plot[0]) - 1].farmland[land].dry_time = None
     
     def set_wet(self, plot):
-        print ('Plot:%s is Wet!'%plot)
+        print ('Player => Plot:%s is Wet!'%plot)
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
         elif plot[1] == 'b' or plot[1] == '1':
@@ -1162,7 +1174,7 @@ class Bot_farm():
         self.inv = self.player.inventory
         self.money = self.player.money
         self.farmplot = self.player.farmplot
-        self.steal_cooldown = 60000
+        self.steal_cooldown = 120000
 
         self.money_dispay = ((94,42),(247,76))
 
@@ -1312,6 +1324,7 @@ class Bot_farm():
             return inv, money, 'home', 60000
         elif result == 'lose':
             money -= 100
+            print ('Player => You fail to steal crops.You are charged 100 ฿!')
             return inv, money, 'home', 60000
         
         # loop per second 
@@ -1371,6 +1384,7 @@ class Bot_farm():
                         if crops_status[5]:
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
+                            print ('Player => You steal %s x %s from AI.'%(crops_status[0], crop_collected))
                             self.set_crops('1'+str(index), 'empty')
                             cooldown = 60000
                             pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
@@ -1383,6 +1397,7 @@ class Bot_farm():
                         if crops_status[5]:# harvest?
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
+                            print ('Player => You steal %s x %s from AI.'%(crops_status[0], crop_collected))
                             self.set_crops('2'+str(index), 'empty')
                             cooldown = 60000
                             pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
@@ -1395,6 +1410,7 @@ class Bot_farm():
                         if crops_status[5]:# harvest?
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
+                            print ('Player => You steal %s x %s from AI.'%(crops_status[0], crop_collected))
                             self.set_crops('3'+str(index), 'empty')
                             cooldown = 60000
                             pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
@@ -1407,6 +1423,7 @@ class Bot_farm():
                         if crops_status[5]:# harvest?
                             crop_collected = choice([1, 2, 3],p=[0.5, 0.35, 0.15])
                             inv.add(crops_status[0], crop_collected)
+                            print ('Player => You steal %s x %s from AI.'%(crops_status[0], crop_collected))
                             self.set_crops('4'+str(index), 'empty')
                             cooldown = 60000
                             pygame.display.set_caption("FARMER & THIEF : "+"Time to go home")
@@ -1414,7 +1431,7 @@ class Bot_farm():
         return inv, money, 'home', cooldown
 
     def set_crops(self, plot, seed_name):
-        print('Plot:%s was set to crop:%s !'%(plot, seed_name))
+        print('AI => Plot:%s was set to crop:%s !'%(plot, seed_name))
         # plot เป็น str มี 2 อักษร คือ เลข และ a-d
         # seed_name เป็น str ที่เป๋็นชื่อของพืช
         if seed_name == 'wheat':
@@ -1455,7 +1472,7 @@ class Bot_farm():
         self.farmplot[int(plot[0]) - 1].farmland[land].crop.remaining_growth_time = self.farmplot[int(plot[0]) - 1].farmland[land].crop.growing_time
     
     def set_wet(self, plot):
-        print ('Plot:%s is Wet!'%plot)
+        print ('AI => Plot:%s is Wet!'%plot)
         if plot[1] == 'a' or plot[1] == '0':
             land = 0
         elif plot[1] == 'b' or plot[1] == '1':
@@ -1577,9 +1594,8 @@ class Bot_farm():
                             'melon': Melon().sale_price, 
                             'grape': Grape().sale_price,
                             None:0}
-        print ('Harvested:',crops_name,' x ',crop_collected,', cost:',(price_index[crops_name]*crop_collected),', money_b:',self.money,end=', ')                    
+        print ('AI => Harvested:',crops_name,' x ',crop_collected, ', AI_money:',self.money)                    
         self.money += (price_index[crops_name]*crop_collected)
-        print(self.money)
 
     def farmplot_check_crops(self, farm, mouse_pos):
         # method นี้ return ตำแหน่งของต้นไม้ที่ถูกเม้าส์ชี้ใน farm ที่ input เข้ามาเป้น parameter
