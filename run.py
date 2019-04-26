@@ -2138,7 +2138,7 @@ class Main_menu():
 
                 # Botton ------------------------- Botton
                 mouse_pos = pygame.mouse.get_pos()
-                print (mouse_pos)
+                #print (mouse_pos)
                 # ปุ่ม newgame
                 newgame_a = (0,0)
                 newgame_b = (0,0)
