@@ -382,7 +382,9 @@ class Player_farm():
                 
                 # randomly steal
                 bot_steal_rate = 0.001
-                if bot.steal_cooldown <= 0 and bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate])):
+                success = bool(choice([True,False],p=[bot_steal_rate, 1-bot_steal_rate]))
+                print (str(bot.steal_cooldown),success)
+                if bot.steal_cooldown <= 0 and success:
                     bot.steal_cooldown = 120000
 
                     # pause theme song
