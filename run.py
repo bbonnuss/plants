@@ -342,6 +342,19 @@ class Player_farm():
             elif selected == 'ai_farm' and cooldown > 0:
                 print ('Player => wait for %s sec. To steal AI\'s crop'%(str(cooldown)[:-3]))
                 selected = 'home'
+            elif selected == 'scout':
+                for bot in self.bot_farm_list:
+                    # stop theme song
+                    pygame.mixer.music.stop()
+
+                    # play sound effect change_page
+                    loaded_sound.change_page.play()
+
+                    selected = bot.look_bot_farm()
+
+                    # music theme (ต้อง load ใหม่ เพื่อเปิดเสียงแยกจาก effect)
+                    pygame.mixer.music.load(join('assets','sound','Get_Outside_farm.wav'))
+                    pygame.mixer.music.play(loops=-1)
             
             # clock update (clock is millisec)
             self.previous_time = self.time
@@ -458,7 +471,12 @@ class Player_farm():
                     selected = 'exit'
                 
                 # Botton ------------------------- Botton
-                
+                # ปุ่ม ส่อง AI
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        selected = 'scout'
 
                 # ปุ่ม ออกไป main_menu
                 if is_hit_box(mouse_pos,self.mainmenu_button[0], self.mainmenu_button[1]):
@@ -1312,6 +1330,56 @@ class Bot_farm():
                     # play sound lose2
                     loaded_sound.lose2.play() 
                     backhome = True
+
+    def look_bot_farm(self):
+        pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")
+        global loaded_image
+        global loaded_sound
+
+        # loop per second 
+        clock = pygame.time.Clock()
+
+        # วาดพื้นหลัง
+        self.draw_bg()
+        pygame.display.update()
+
+        run = True
+        while run:
+            
+            # loop per second 
+            clock.tick(40)
+            
+            # วาดพื้นหลัง
+            self.draw_bg()
+            pygame.display.update()
+
+            # input - output
+            for event in pygame.event.get():
+                #print (self.inv.get_inv())
+                # pointer
+                mouse_pos = pygame.mouse.get_pos()
+                #print (mouse_pos)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clickdown = True
+                else:
+                    clickdown = False
+                
+                # exit
+                if event.type == pygame.QUIT:
+                    # inv, money, go to?, cooldown
+                    return 'exit'
+                
+                # Botton ------------------------- Botton
+                
+                # ปุ่ม home
+                if is_hit_box(mouse_pos,self.home_button[0], self.home_button[1]):
+                    #print ('Bot_farm : home')
+
+                    if clickdown:
+                        loaded_sound.click.play()
+                        return'home'
+        return 'home'
+
 
     def run_bot_farm(self, inv, money):
         pygame.display.set_caption("FARMER & THIEF : "+"AI Farm")

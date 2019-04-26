@@ -1,4 +1,5 @@
-- ปรับปรุง Log ให้ทราบว่า Process นั้นเป็นของ player หรือ AI
-- ปรับให้การปลูกผัก ปลูกต่อเนื่องได้เหมือน การรดน้ำ
-- คูลดาวน์การขโมยผักเริ่มต้นของ AI ถูกปรับเป็น 2 นาที (120000 ms)
-- คูลดาวน์การขโมยผักของ AI ถูกปรับเป็น 1 นาที (60000 ms)
+- Improve 'GameLog' .
+- You can plant  your crops continuously.(feedback update)
+- Cooldown of  AI steal at the first time was set to 2 Minutes. (120000 ms)
+- Cooldown of  AI steal after first time was set to 1 Minute. (60000 ms)
+- Click on Home_button at  your farm now move you to scout  AI farm. (feedback update)
