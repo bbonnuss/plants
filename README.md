@@ -10,10 +10,10 @@
  * [Python 3.7](https://www.python.org/) 
  * [Pygame v 1.9.5](https://www.pygame.org/download.shtml)
 ### How to Run ?
- Install Python and then Pygame. Run run.pyw through command-line interface.
+ Install Python and then Pygame. Run run.py through command-line interface.
  
   ```
-  python run.pyw  
+  python run.py  
   ```
   
 ## Authors
