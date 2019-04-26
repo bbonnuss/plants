@@ -1,8 +1,0 @@
-core 
-- [bot]ระบบข้อความแสดงจำนวน (เงิน/inv) 
-- ทำระบบเงินให้ bot
-- เปลี่ยน icon mouse เพื่อแจ้งสถานะ watering/seeding/buy/sell
-- เพิ่มปุ่ม ออกเกมใน main_menu
-
-optional
-- debug AI บุก & แพ้ แล้วสุ่มขโมย ตรง lambda
